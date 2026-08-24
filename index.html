@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SerenitySearch - AA & Recovery Literature Finder</title>
+  
+  <script>
+    try {
+      var storedMode = localStorage.getItem('theme-mode');
+      if (storedMode === 'dark' || (!storedMode && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      var storedColorTheme = localStorage.getItem('color-theme');
+      if (storedColorTheme && storedColorTheme !== 'default') {
+        document.documentElement.classList.add(storedColorTheme);
+      }
+    } catch(e) {}
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+          },
+          colors: {
+            app: {
+              bg: 'var(--color-bg)',
+              card: 'var(--color-card)',
+              border: 'var(--color-border)',
+              text: 'var(--color-text)',
+              muted: 'var(--color-muted)',
+              brand: 'var(--color-brand)',
+              brandHover: 'var(--color-brand-hover)',
+              brandSoft: 'var(--color-brand-soft)',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    /* Smooth transitions for theme switching */
+    body, div, p, h1, h2, h3, button, header, input, select, textarea, a {
+      transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    }
+
+    .glass-nav { backdrop-filter: saturate(180%) blur(20px); }
+    
+    /* Nav Button Active States */
+    .nav-btn.active { background-color: var(--color-card); box-shadow: 0 1px 3px rgba(0,0,0,0.1); color: var(--color-brand); }
+    .dark .nav-btn.active { box-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+    
+    /* Custom Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: var(--color-border); border-radius: 10px; }
+    
+    /* Hover Effects */
+    .sleek-card { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.4s ease; }
+    .sleek-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+    .dark .sleek-card:hover { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
+
+    select option { background-color: var(--color-bg); color: var(--color-text); }
+
+    /* THEME 1: SERENITY GOLD */
+    :root { --color-bg: #F4EFE6; --color-card: #FCFAF5; --color-border: #DFD5C2; --color-text: #18181b; --color-muted: #52525b; --color-brand: #B58C3D; --color-brand-hover: #9A732E; --color-brand-soft: rgba(181, 140, 61, 0.15); }
+    .dark { --color-bg: #09090b; --color-card: #18181b; --color-border: #27272a; --color-text: #f4f4f5; --color-muted: #a1a1aa; --color-brand: #B58C3D; --color-brand-hover: #D5C3A1; --color-brand-soft: rgba(181, 140, 61, 0.2); }
+
+    /* THEME 2: SAPPHIRE DEEP */
+    :root.theme-sapphire { --color-bg: #e6f0fd; --color-card: #f4f8ff; --color-border: #cce0ff; --color-text: #0f172a; --color-muted: #475569; --color-brand: #2563eb; --color-brand-hover: #1d4ed8; --color-brand-soft: rgba(37, 99, 235, 0.12); }
+    :root.dark.theme-sapphire { --color-bg: #1a2639; --color-card: #24334a; --color-border: #354a69; --color-text: #cbd5e1; --color-muted: #8ba0c4; --color-brand: #60a5fa; --color-brand-hover: #93c5fd; --color-brand-soft: rgba(96, 165, 250, 0.15); }
+
+    /* THEME 3: FOREST EMERALD */
+    :root.theme-emerald { --color-bg: #F4EFE6; --color-card: #FCFAF5; --color-border: #DFD5C2; --color-text: #064e3b; --color-muted: #166534; --color-brand: #10b981; --color-brand-hover: #059669; --color-brand-soft: rgba(16, 185, 129, 0.15); }
+    :root.dark.theme-emerald { --color-bg: #022c22; --color-card: #064e3b; --color-border: #065f46; --color-text: #ecfdf5; --color-muted: #6ee7b7; --color-brand: #10b981; --color-brand-hover: #34d399; --color-brand-soft: rgba(16, 185, 129, 0.2); }
+
+    /* THEME 4: ROYAL AMETHYST */
+    :root.theme-amethyst { --color-bg: #faf5ff; --color-card: #ffffff; --color-border: #f3e8ff; --color-text: #3b0764; --color-muted: #6b21a8; --color-brand: #9333ea; --color-brand-hover: #7e22ce; --color-brand-soft: rgba(147, 51, 234, 0.12); }
+    :root.dark.theme-amethyst { --color-bg: #141218; --color-card: #1f1b29; --color-border: #332b42; --color-text: #faf5ff; --color-muted: #c4b5fd; --color-brand: #a855f7; --color-brand-hover: #c084fc; --color-brand-soft: rgba(168, 85, 247, 0.2); }
+
+    /* THEME 5: OXBLOOD CRIMSON */
+    :root.theme-crimson { --color-bg: #fff1f2; --color-card: #ffffff; --color-border: #ffe4e6; --color-text: #4c0519; --color-muted: #881337; --color-brand: #e11d48; --color-brand-hover: #be123c; --color-brand-soft: rgba(225, 29, 72, 0.12); }
+    :root.dark.theme-crimson { --color-bg: #2a161b; --color-card: #381f25; --color-border: #522d36; --color-text: #fff1f2; --color-muted: #fecdd3; --color-brand: #f43f5e; --color-brand-hover: #fb7185; --color-brand-soft: rgba(244, 63, 94, 0.15); }
+
+    /* THEME 6: OCEAN REEF */
+    :root.theme-reef { --color-bg: #e0fbfc; --color-card: #f4fbff; --color-border: #c2dfe3; --color-text: #293241; --color-muted: #5c6b73; --color-brand: #ee6c4d; --color-brand-hover: #d55334; --color-brand-soft: rgba(238, 108, 77, 0.12); }
+    :root.dark.theme-reef { --color-bg: #16202e; --color-card: #293241; --color-border: #3e5c76; --color-text: #e0fbfc; --color-muted: #98c1d9; --color-brand: #ff8c69; --color-brand-hover: #ffa68a; --color-brand-soft: rgba(255, 140, 105, 0.15); }
+
+    /* THEME 7: SUNSET BLOOM */
+    :root.theme-sunset { --color-bg: #fcf0ee; --color-card: #ffffff; --color-border: #f8dfd8; --color-text: #4a2b3d; --color-muted: #8a5a73; --color-brand: #e07a5f; --color-brand-hover: #c65f44; --color-brand-soft: rgba(224, 122, 95, 0.12); }
+    :root.dark.theme-sunset { --color-bg: #2b1924; --color-card: #3d2433; --color-border: #59354a; --color-text: #fcf0ee; --color-muted: #d4a3b7; --color-brand: #f4a261; --color-brand-hover: #e76f51; --color-brand-soft: rgba(244, 162, 97, 0.15); }
+
+    /* THEME 8: WILDFLOWER */
+    :root.theme-wildflower { --color-bg: #f5f3ff; --color-card: #ffffff; --color-border: #ede9fe; --color-text: #312e81; --color-muted: #4f46e5; --color-brand: #f43f5e; --color-brand-hover: #e11d48; --color-brand-soft: rgba(244, 63, 94, 0.12); }
+    :root.dark.theme-wildflower { --color-bg: #1e1b4b; --color-card: #2c2869; --color-border: #433e85; --color-text: #e0e7ff; --color-muted: #818cf8; --color-brand: #fb7185; --color-brand-hover: #fda4af; --color-brand-soft: rgba(251, 113, 133, 0.15); }
+
+    /* THEME 9: CARNIVAL FLORA (Pale Yellow Text) */
+    :root.theme-carnival { 
+      --color-bg: #fce7f3; 
+      --color-card: #ffffff;
+      --color-border: #fbcfe8;
+      --color-text: #4a044e;
+      --color-muted: #86198f;
+      --color-brand: #059669;
+      --color-brand-hover: #047857;
+      --color-brand-soft: rgba(5, 150, 105, 0.12);
+    }
+    :root.dark.theme-carnival { 
+      --color-bg: #2a1128; 
+      --color-card: #381836; 
+      --color-border: #52254f; 
+      --color-text: #fef3c7; /* Pale yellow text */
+      --color-muted: #fde68a; /* Soft warm yellow */
+      --color-brand: #10b981; 
+      --color-brand-hover: #34d399;
+      --color-brand-soft: rgba(16, 185, 129, 0.2); 
+    }
+
+    /* THEME 10: MONOCHROME MINIMALIST */
+    :root.theme-monochrome { --color-bg: #f4f4f5; --color-card: #ffffff; --color-border: #e4e4e7; --color-text: #09090b; --color-muted: #71717a; --color-brand: #000000; --color-brand-hover: #3f3f46; --color-brand-soft: rgba(0, 0, 0, 0.08); }
+    :root.dark.theme-monochrome { --color-bg: #000000; --color-card: #121212; --color-border: #27272a; --color-text: #ffffff; --color-muted: #a1a1aa; --color-brand: #ffffff; --color-brand-hover: #d4d4d8; --color-brand-soft: rgba(255, 255, 255, 0.15); }
+
+    /* THEME 11: DESERT OASIS (Inverted Blue/Green for Dark Mode) */
+    :root.theme-oasis { --color-bg: #f5ebe6; --color-card: #ffffff; --color-border: #e6d5cb; --color-text: #4a3028; --color-muted: #8a6b60; --color-brand: #52796f; --color-brand-hover: #354f48; --color-brand-soft: rgba(82, 121, 111, 0.15); }
+    :root.dark.theme-oasis { 
+      --color-bg: #2b1e1a;
+      --color-card: #3d2b26;
+      --color-border: #5c433b;
+      --color-text: #d1fae5; 
+      --color-muted: #84a98c; 
+      --color-brand: #38bdf8; 
+      --color-brand-hover: #0ea5e9;
+      --color-brand-soft: rgba(56, 189, 248, 0.2); 
+    }
+
+    /* THEME 12: MIAMI SYNTHWAVE */
+    :root.theme-miami-synth { --color-bg: #f8fafc; --color-card: #ffffff; --color-border: #fde047; --color-text: #082f49; --color-muted: #0284c7; --color-brand: #db2777; --color-brand-hover: #be185d; --color-brand-soft: rgba(219, 39, 119, 0.15); }
+    :root.dark.theme-miami-synth { --color-bg: #083344; --color-card: #164e63; --color-border: #db2777; --color-text: #fdf4ff; --color-muted: #fde047; --color-brand: #f472b6; --color-brand-hover: #fbcfe8; --color-brand-soft: rgba(244, 114, 182, 0.2); }
+  </style>
+</head>
+<body class="h-full flex flex-col font-sans bg-app-bg text-app-text overflow-x-hidden custom-scrollbar selection:bg-app-brand/30">
+
+  <div class="bg-app-card text-app-text text-[11px] text-center py-2 px-4 tracking-wide border-b border-app-border">
+    <i class="fa-solid fa-triangle-exclamation text-app-brand mr-2"></i>
+    AI-powered study tool. Quotes and citations may be approximated.
+  </div>
+
+  <header class="sticky top-0 z-40 glass-nav bg-app-bg/80 border-b border-app-border px-4 lg:px-8 py-4">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-4 lg:gap-10">
+      
+      <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer shrink-0" onclick="switchTab('search')">
+        <div class="flex items-center justify-center text-app-brand">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-8 h-8 sm:w-10 sm:h-10 text-app-brand fill-app-card drop-shadow-sm transition-colors duration-400">
+            <g stroke="currentColor" stroke-width="5" stroke-linejoin="miter">
+              <path d="M48,82 C20,92 5,82 8,72 C18,78 30,78 40,75 Z" />
+              <path d="M52,82 C80,92 95,82 92,72 C82,78 70,78 60,75 Z" />
+              <path d="M40,78 C12,72 5,48 8,42 C16,52 26,55 32,55 Z" />
+              <path d="M60,78 C88,72 95,48 92,42 C84,52 74,55 68,55 Z" />
+              <path d="M48,75 C20,62 18,30 26,22 C32,36 42,46 48,50 Z" />
+              <path d="M52,75 C80,62 82,30 74,22 C68,36 58,46 52,50 Z" />
+              <path d="M50,78 C42,84 45,98 50,98 C55,98 58,84 50,78 Z" />
+              <path d="M50,78 C35,60 40,20 50,12 C60,20 65,60 50,78 Z" />
+            </g>
+          </svg>
+        </div>
+        <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-app-text">
+          SerenitySearch
+        </h1>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-1.5 bg-app-card p-1.5 rounded-xl border border-app-border">
+        <button id="nav-search" onclick="switchTab('search')" class="nav-btn active px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-colors flex items-center gap-2">
+          <i class="fa-solid fa-magnifying-glass"></i>Search
+        </button>
+        <button id="nav-steps" onclick="switchTab('steps')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-colors flex items-center gap-2">
+          <i class="fa-solid fa-list-ol"></i>12 Steps
+        </button>
+        <button id="nav-tenth" onclick="switchTab('tenth')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-colors flex items-center gap-2">
+          <i class="fa-solid fa-pen-nib"></i>10th Step
+        </button>
+        <button id="nav-topics" onclick="switchTab('topics')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-colors flex items-center gap-2">
+          <i class="fa-regular fa-comments"></i>Topics
+        </button>
+        <button id="nav-saved" onclick="switchTab('saved')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-colors flex items-center gap-2">
+          <i class="fa-regular fa-bookmark"></i>Saved
+          <span id="saved-count" class="ml-1 bg-app-bg text-app-text border border-app-border text-[10px] px-1.5 py-0.5 rounded-md font-bold">0</span>
+        </button>
+      </nav>
+
+      <div class="flex items-center space-x-1.5 shrink-0">
+        <div class="relative flex items-center justify-center w-9 h-9 rounded-lg bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm cursor-pointer" title="Change Color Theme">
+          <i class="fa-solid fa-palette text-sm pointer-events-none"></i>
+          <select id="header-theme-switcher" onchange="changeTheme(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
+            <option value="default">Serenity Gold</option>
+            <option value="theme-sapphire">Sapphire Deep</option>
+            <option value="theme-emerald">Forest Emerald</option>
+            <option value="theme-amethyst">Royal Amethyst</option>
+            <option value="theme-crimson">Oxblood Crimson</option>
+            <option value="theme-reef">Ocean Reef</option>
+            <option value="theme-sunset">Sunset Bloom</option>
+            <option value="theme-wildflower">Wildflower</option>
+            <option value="theme-carnival">Carnival Flora</option>
+            <option value="theme-monochrome">Monochrome Minimalist</option>
+            <option value="theme-oasis">Desert Oasis</option>
+            <option value="theme-miami-synth">Miami Synthwave</option>
+          </select>
+        </div>
+
+        <button onclick="toggleTheme()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Toggle Dark Mode">
+          <i class="fa-solid fa-moon dark:hidden text-sm"></i>
+          <i class="fa-solid fa-sun hidden dark:block text-app-brand text-sm"></i>
+        </button>
+
+        <button onclick="toggleSerenityPrayerModal()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Prayer & Dailies">
+          <i class="fa-solid fa-dove text-sm"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="md:hidden glass-nav bg-app-card/90 border-b border-app-border px-2 py-2 flex justify-around text-[10px] uppercase font-bold tracking-wider z-30">
+    <button onclick="switchTab('search')" class="mob-nav-btn text-app-brand flex flex-col items-center gap-1 p-2 transition-colors" id="mob-nav-search">
+      <i class="fa-solid fa-magnifying-glass text-lg"></i>Search
+    </button>
+    <button onclick="switchTab('steps')" class="mob-nav-btn text-app-muted flex flex-col items-center gap-1 p-2 transition-colors" id="mob-nav-steps">
+      <i class="fa-solid fa-list-ol text-lg"></i>Steps
+    </button>
+    <button onclick="switchTab('tenth')" class="mob-nav-btn text-app-muted flex flex-col items-center gap-1 p-2 transition-colors" id="mob-nav-tenth">
+      <i class="fa-solid fa-pen-nib text-lg"></i>10th
+    </button>
+    <button onclick="switchTab('topics')" class="mob-nav-btn text-app-muted flex flex-col items-center gap-1 p-2 transition-colors" id="mob-nav-topics">
+      <i class="fa-regular fa-comments text-lg"></i>Topics
+    </button>
+    <button onclick="switchTab('saved')" class="mob-nav-btn text-app-muted flex flex-col items-center gap-1 p-2 transition-colors" id="mob-nav-saved">
+      <i class="fa-regular fa-bookmark text-lg"></i>Saved
+    </button>
+  </div>
+
+  <main class="flex-1 max-w-5xl w-full mx-auto p-4 lg:p-8 space-y-8">
+
+    <section id="tab-search" class="space-y-8">
+      
+      <div class="text-center py-12 md:py-20 space-y-6">
+        <h2 class="text-4xl sm:text-6xl font-bold font-serif text-app-text tracking-tight">
+          Find clarity and peace.
+        </h2>
+        <p class="text-app-muted text-lg max-w-2xl mx-auto">
+          Explore the Big Book, 12 & 12, Daily Reflections, and more to support your daily recovery.
+        </p>
+
+        <form id="search-form" onsubmit="handleSearch(event)" class="max-w-2xl mx-auto pt-6">
+          <div class="relative flex items-center">
+            <i class="fa-solid fa-magnifying-glass absolute left-6 text-app-muted text-lg"></i>
+            <input 
+              type="text" 
+              id="search-input"
+              placeholder="e.g. Step Two, Acceptance, Resentment..." 
+              class="w-full pl-14 pr-32 py-5 rounded-2xl bg-app-card border border-app-border text-app-text placeholder-app-muted focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-sm transition-all text-lg"
+              required
+            />
+            <button 
+              type="submit" 
+              id="search-btn"
+              class="absolute right-2.5 px-6 py-3 bg-app-brand text-app-card font-semibold rounded-xl text-sm transition-all shadow-sm hover:bg-app-brandHover">
+              Search
+            </button>
+          </div>
+        </form>
+
+        <div class="flex items-center justify-center pt-6" id="filter-container">
+          <div class="relative flex items-center">
+            <span class="text-xs font-semibold text-app-muted uppercase tracking-widest mr-3 hidden sm:inline-block">Filter Source:</span>
+            <div class="relative">
+              <select id="source-filter" onchange="setFilter(this.value)" class="appearance-none bg-app-card border border-app-border text-app-text text-sm font-medium rounded-xl pl-4 pr-10 py-2.5 focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand cursor-pointer shadow-sm transition-all">
+                <option value="All">All Literature</option>
+                <option value="Big Book">Big Book (Alcoholics Anonymous)</option>
+                <option value="12 Steps & 12 Traditions">12 Steps & 12 Traditions</option>
+                <option value="Daily Reflections">Daily Reflections</option>
+                <option value="As Bill Sees It">As Bill Sees It</option>
+                <option value="Drop the Rock">Drop the Rock</option>
+                <option value="Living Sober">Living Sober</option>
+                <option value="Came to Believe">Came to Believe</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-app-muted">
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="search-loading" class="hidden py-16 text-center space-y-4">
+        <div class="w-8 h-8 border-2 border-app-border border-t-app-brand rounded-full animate-spin mx-auto"></div>
+        <p class="text-sm font-medium text-app-muted tracking-wide uppercase">Searching Literature...</p>
+      </div>
+
+      <div id="results-container" class="space-y-6">
+        <div id="empty-state" class="hidden"></div>
+        <div id="results-list" class="space-y-6"></div>
+      </div>
+    </section>
+
+    <section id="tab-steps" class="hidden space-y-8">
+      <div class="text-center py-8">
+        <h2 class="text-3xl font-bold font-serif text-app-text">The Twelve Steps</h2>
+        <p class="text-app-muted mt-2">Select a step to explore its literature and principles.</p>
+      </div>
+      <div id="steps-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+    <section id="tab-tenth" class="hidden space-y-6">
+      <div class="text-center py-8 border-b border-app-border">
+        <h2 class="text-3xl font-bold font-serif text-app-text">10th Step Spot Check</h2>
+        <p class="text-app-muted mt-2">"Continued to take personal inventory and when we were wrong promptly admitted it."</p>
+      </div>
+      
+      <div class="max-w-2xl mx-auto space-y-6">
+        <div class="bg-app-card p-6 md:p-8 rounded-2xl border border-app-border shadow-sm">
+          <form onsubmit="processTenthStep(event)" class="space-y-4">
+            <label class="block text-sm font-bold text-app-brand uppercase tracking-widest">What is disturbing your peace right now?</label>
+            <textarea 
+              id="tenth-input" 
+              rows="5" 
+              class="w-full p-4 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner resize-none" 
+              placeholder="e.g., I'm frustrated with my coworker for taking credit for my idea..."
+              required></textarea>
+            <button type="submit" class="w-full py-3 bg-app-brand text-app-card font-bold rounded-xl hover:bg-app-brandHover transition-colors shadow-sm">
+              <i class="fa-solid fa-hands-holding-circle mr-2"></i>Process with AI Sponsor
+            </button>
+          </form>
+        </div>
+
+        <div id="tenth-loading" class="hidden py-12 text-center space-y-4">
+          <div class="w-8 h-8 border-2 border-app-border border-t-app-brand rounded-full animate-spin mx-auto"></div>
+          <p class="text-xs font-medium text-app-muted tracking-wide uppercase">Reflecting on principles...</p>
+        </div>
+
+        <div id="tenth-result" class="hidden space-y-6"></div>
+      </div>
+    </section>
+
+    <section id="tab-topics" class="hidden space-y-6">
+      <div class="flex justify-between items-end border-b border-app-border pb-4">
+        <div>
+          <h2 class="text-2xl font-bold font-serif text-app-text">Meeting Topics</h2>
+          <p class="text-sm text-app-muted mt-1">Generate fresh discussion ideas for your home group.</p>
+        </div>
+        <button onclick="generateTopic()" class="text-app-muted hover:text-app-text transition-colors text-sm font-medium flex items-center gap-2">
+          <i class="fa-solid fa-rotate-right"></i> Generate
+        </button>
+      </div>
+
+      <div id="topics-loading" class="hidden py-16 text-center space-y-4">
+        <div class="w-8 h-8 border-2 border-app-border border-t-app-brand rounded-full animate-spin mx-auto"></div>
+        <p class="text-xs font-medium text-app-muted tracking-wide uppercase">Creating topic...</p>
+      </div>
+
+      <div id="topics-result" class="min-h-[400px]"></div>
+    </section>
+
+    <section id="tab-saved" class="hidden space-y-6">
+      <div class="flex justify-between items-end border-b border-app-border pb-4">
+        <div>
+          <h2 class="text-2xl font-bold font-serif text-app-text">Saved Library</h2>
+        </div>
+        <button onclick="clearSaved()" class="text-red-500 hover:text-red-600 transition-colors text-sm font-medium flex items-center gap-2">
+          <i class="fa-solid fa-trash-can"></i> Clear All
+        </button>
+      </div>
+      <div id="saved-list" class="space-y-4"></div>
+    </section>
+
+  </main>
+
+  <div id="serenity-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative text-center">
+      <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      
+      <i class="fa-solid fa-dove text-app-brand text-3xl mb-4"></i>
+      <h3 class="text-sm font-bold text-app-text mb-4 uppercase tracking-widest">The Serenity Prayer</h3>
+      <p class="font-serif text-xl text-app-text leading-relaxed italic mb-6">
+        "God, grant me the serenity<br/>
+        to accept the things I cannot change,<br/>
+        courage to change the things I can,<br/>
+        and wisdom to know the difference."
+      </p>
+
+      <div class="w-full h-px bg-app-border mb-6"></div>
+      
+      <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-4">External Daily Readings</h4>
+      <div class="space-y-3 mb-8">
+        <a href="https://www.aa.org/daily-reflections" target="_blank" class="block w-full py-3 bg-app-bg border border-app-border text-app-text font-semibold rounded-xl text-sm hover:border-app-brand transition-colors flex items-center justify-between px-4 group">
+          <span class="flex items-center gap-2"><i class="fa-regular fa-sun text-app-muted group-hover:text-app-brand transition-colors"></i> Daily Reflections</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-app-muted text-xs"></i>
+        </a>
+        <a href="https://www.hazeldenbettyford.org/thought-for-the-day" target="_blank" class="block w-full py-3 bg-app-bg border border-app-border text-app-text font-semibold rounded-xl text-sm hover:border-app-brand transition-colors flex items-center justify-between px-4 group">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-book-open text-app-muted group-hover:text-app-brand transition-colors"></i> Thought for the Day</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-app-muted text-xs"></i>
+        </a>
+      </div>
+
+      <button onclick="toggleSerenityPrayerModal()" class="w-full py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <div id="audio-player-bar" class="fixed bottom-6 right-6 z-50 bg-app-card border border-app-border p-4 rounded-xl shadow-xl hidden flex items-center space-x-4">
+    <div id="audio-icon-container" class="w-8 h-8 rounded-full bg-app-brandSoft text-app-brand flex items-center justify-center">
+      <i id="audio-icon" class="fa-solid fa-volume-high text-sm"></i>
+    </div>
+    <div>
+      <div class="font-bold text-app-text text-xs" id="audio-title">Reading Aloud...</div>
+    </div>
+    <button onclick="stopAudio()" class="ml-2 text-app-muted hover:text-red-500 transition-colors">
+      <i class="fa-solid fa-circle-stop text-xl"></i>
+    </button>
+  </div>
+
+  <script>
+    const GEMINI_API_KEY = "AIzaSyAncpY0eaQpsrGtuzH8JFyW4vvVbDCR0Ro"; // Environment provided
+    var currentFilter = 'All';
+    var savedPassages = [];
+    var currentAudioSource = null;
+    var globalMemoryStore = {}; 
+
+    try {
+      var stored = localStorage.getItem('serenity_saved');
+      if (stored) savedPassages = JSON.parse(stored) || [];
+    } catch(e) { console.warn("Storage access restricted."); }
+
+    window.addEventListener('DOMContentLoaded', () => {
+       const savedColorTheme = localStorage.getItem('color-theme') || 'default';
+       const headerSelect = document.getElementById('header-theme-switcher');
+       if (headerSelect) headerSelect.value = savedColorTheme;
+    });
+
+    function toggleTheme() {
+      var html = document.documentElement;
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        try { localStorage.setItem('theme-mode', 'light'); } catch(e) {}
+      } else {
+        html.classList.add('dark');
+        try { localStorage.setItem('theme-mode', 'dark'); } catch(e) {}
+      }
+    }
+
+    function changeTheme(themeClass) {
+      const html = document.documentElement;
+      html.classList.remove('theme-sapphire', 'theme-emerald', 'theme-amethyst', 'theme-crimson', 'theme-reef', 'theme-sunset', 'theme-wildflower', 'theme-carnival', 'theme-monochrome', 'theme-oasis', 'theme-miami-synth');
+      if (themeClass !== 'default') { html.classList.add(themeClass); }
+      
+      const headerSelect = document.getElementById('header-theme-switcher');
+      if (headerSelect) headerSelect.value = themeClass;
+      try { localStorage.setItem('color-theme', themeClass); } catch(e) {}
+    }
+
+    function toggleSerenityPrayerModal() {
+      const modal = document.getElementById('serenity-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    var TWELVE_STEPS = [
+      { step: 1, title: "Honesty", desc: "Admitted powerlessness over alcohol...", topic: "Step 1 Powerlessness Big Book Chapter 3" },
+      { step: 2, title: "Hope", desc: "Came to believe in a Power greater...", topic: "Daily Reflections Second Step Came to Believe As Bill Sees It" },
+      { step: 3, title: "Surrender", desc: "Turned our will and lives over...", topic: "Step 3 Surrender Third Step Prayer Big Book Page 63" },
+      { step: 4, title: "Courage", desc: "Made a searching moral inventory...", topic: "Fourth Step Resentment Fear Sex Inventory Drop the Rock" },
+      { step: 5, title: "Integrity", desc: "Admitted the exact nature of our wrongs...", topic: "Fifth Step Confidentiality Relief Big Book Into Action Page 72" },
+      { step: 6, title: "Willingness", desc: "Ready to have defects removed...", topic: "Sixth Step Willingness Character Defects Drop the Rock" },
+      { step: 7, title: "Humility", desc: "Humbly asked Him to remove shortcomings.", topic: "Seventh Step Seventh Step Prayer Humility Drop the Rock" },
+      { step: 8, title: "Brotherly Love", desc: "Made a list of all persons harmed...", topic: "Eighth Step List Willingness Forgiveness 12 and 12" },
+      { step: 9, title: "Restitution", desc: "Made direct amends wherever possible...", topic: "Ninth Step Amends Promises Big Book Page 83 84" },
+      { step: 10, title: "Perseverance", desc: "Continued to take personal inventory...", topic: "Tenth Step Daily Inventory Spot Check Big Book Page 84" },
+      { step: 11, title: "Spirituality", desc: "Sought through prayer and meditation...", topic: "Eleventh Step Prayer Meditation Big Book Page 86 Morning Prayer" },
+      { step: 12, title: "Service", desc: "Tried to carry this message to alcoholics...", topic: "Twelfth Step Service Spiritual Awakening Working With Others Language of the Heart" }
+    ];
+
+    var isAppInitialized = false;
+    function initApp() {
+      if (window.__serenityInitialized) return; 
+      updateSavedCount();
+      renderStepsGrid();
+      generateTopic(false); 
+      window.__serenityInitialized = true;
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initApp);
+    else setTimeout(initApp, 50);
+
+    function switchTab(tabName) {
+      ['search', 'steps', 'tenth', 'topics', 'saved'].forEach(t => {
+        const tabEl = document.getElementById(`tab-${t}`);
+        if (tabEl) tabEl.classList.add('hidden');
+        
+        const btn = document.getElementById(`nav-${t}`);
+        if (btn) btn.className = "nav-btn px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-all flex items-center gap-2";
+        
+        const mobBtn = document.getElementById(`mob-nav-${t}`);
+        if (mobBtn) mobBtn.className = "mob-nav-btn text-app-muted flex flex-col items-center gap-1 p-2 transition-colors";
+      });
+
+      const activeTabEl = document.getElementById(`tab-${tabName}`);
+      if (activeTabEl) activeTabEl.classList.remove('hidden');
+
+      const activeBtn = document.getElementById(`nav-${tabName}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      const activeMobBtn = document.getElementById(`mob-nav-${tabName}`);
+      if (activeMobBtn) activeMobBtn.className = "mob-nav-btn text-app-brand flex flex-col items-center gap-1 p-2 transition-colors";
+
+      if (tabName === 'saved') renderSavedList();
+    }
+
+    function renderStepsGrid() {
+      const grid = document.getElementById('steps-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      TWELVE_STEPS.forEach(s => {
+        grid.insertAdjacentHTML('beforeend', `
+          <div onclick="setQuickSearch('${s.topic}')" class="sleek-card bg-app-card p-5 rounded-2xl border border-app-border cursor-pointer flex items-center gap-4 group hover:border-app-brand">
+            <div class="w-10 h-10 rounded-full bg-app-bg text-app-muted group-hover:bg-app-brandSoft group-hover:text-app-brand font-bold text-lg flex items-center justify-center shrink-0 transition-colors border border-app-border group-hover:border-transparent">${s.step}</div>
+            <div>
+              <h3 class="font-bold text-app-text text-sm tracking-wide uppercase">${s.title}</h3>
+              <p class="text-xs text-app-muted mt-0.5 truncate max-w-[200px] sm:max-w-[300px]">${s.desc}</p>
+            </div>
+          </div>
+        `);
+      });
+    }
+
+    function setQuickSearch(queryText) {
+      switchTab('search');
+      document.getElementById('search-input').value = queryText;
+      performSearch(queryText);
+    }
+
+    function setFilter(filterName) {
+      currentFilter = filterName;
+      const selectEl = document.getElementById('source-filter');
+      if (selectEl && selectEl.value !== filterName) {
+        selectEl.value = filterName;
+      }
+    }
+
+    function handleSearch(e) {
+      e.preventDefault();
+      const q = document.getElementById('search-input').value.trim();
+      if (q) performSearch(q);
+    }
+
+    function safeJSONParse(str) {
+      if (!str) return null;
+      let clean = str.trim();
+      const startIdx = Math.min(
+        clean.indexOf('[') > -1 ? clean.indexOf('[') : Infinity,
+        clean.indexOf('{') > -1 ? clean.indexOf('{') : Infinity
+      );
+      const endIdx = Math.max(clean.lastIndexOf(']'), clean.lastIndexOf('}'));
+      if (startIdx !== Infinity && endIdx !== -1 && startIdx < endIdx) {
+         try { return JSON.parse(clean.substring(startIdx, endIdx + 1)); } catch (err) {}
+      }
+      try { return JSON.parse(clean); } catch (err) { return null; }
+    }
+
+    async function fetchWithRetry(url, options, retries = 3) {
+      const delays = [1000, 2000, 4000];
+      for (let i = 0; i < retries; i++) {
+        try {
+          const res = await fetch(url, options);
+          if (res.ok) return res;
+          if (res.status === 400 || res.status === 403) throw new Error("Auth/Request Error");
+          throw new Error("HTTP Error: " + res.status);
+        } catch (e) {
+          if (i === retries - 1 || e.message.includes("Auth/Request")) throw e;
+        }
+        await new Promise(r => setTimeout(r, delays[i]));
+      }
+      return fetch(url, options);
+    }
+
+    // ==========================================
+    // LITERATURE SEARCH
+    // ==========================================
+    async function performSearch(query) {
+      const loadingEl = document.getElementById('search-loading');
+      const resultsList = document.getElementById('results-list');
+      resultsList.innerHTML = '';
+      loadingEl.classList.remove('hidden');
+
+      const systemPrompt = `You are SerenitySearch, an expert A.A. literature guide. Filter Preference: ${currentFilter}. Return up to 10 highly relevant passages matching the query. Return STRICTLY valid JSON.`;
+      const schema = {
+        type: "OBJECT",
+        properties: {
+          results: {
+            type: "ARRAY",
+            items: {
+              type: "OBJECT",
+              properties: {
+                title: { type: "STRING" },
+                literatureSource: { type: "STRING" },
+                keyQuote: { type: "STRING" },
+                summaryAndInsight: { type: "STRING" },
+                dailyApplication: { type: "STRING" }
+              },
+              required: ["title", "literatureSource", "keyQuote", "summaryAndInsight", "dailyApplication"]
+            }
+          }
+        },
+        required: ["results"]
+      };
+
+      try {
+        const payload = {
+          contents: [{ parts: [{ text: query }] }],
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          generationConfig: { responseMimeType: "application/json", responseSchema: schema }
+        };
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+        const response = await fetchWithRetry(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const data = await response.json();
+        const rawJsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        loadingEl.classList.add('hidden');
+
+        if (rawJsonText) {
+          const parsed = safeJSONParse(rawJsonText);
+          let items = (parsed && parsed.results) ? parsed.results : [];
+          renderSearchResults(items, query);
+        } else { throw new Error("Empty response"); }
+      } catch (err) {
+        console.error(err);
+        loadingEl.classList.add('hidden');
+        renderSearchResults([{
+          title: "Acceptance is the Answer",
+          literatureSource: "Big Book, Page 417",
+          keyQuote: "And acceptance is the answer to all my problems today.",
+          summaryAndInsight: "True serenity begins the moment we stop demanding the world conform to our expectations.",
+          dailyApplication: "Notice when you feel friction today and try to lean into acceptance."
+        }], query);
+      }
+    }
+
+    function renderSearchResults(items, query) {
+      const resultsList = document.getElementById('results-list');
+      if (!items || items.length === 0) {
+        resultsList.innerHTML = `<div class="p-8 text-center text-app-muted text-sm">No passages found.</div>`;
+        return;
+      }
+      resultsList.innerHTML = `<h3 class="text-sm font-bold text-app-muted uppercase tracking-widest mb-4">Results for "${query}"</h3>`;
+      items.forEach((itemObj, index) => {
+        const itemId = 'search_' + Date.now() + '_' + index;
+        globalMemoryStore[itemId] = itemObj;
+        resultsList.insertAdjacentHTML('beforeend', `
+          <div class="sleek-card bg-app-card p-6 sm:p-8 rounded-2xl border border-app-border flex flex-col md:flex-row gap-6 group hover:border-app-brand">
+            <div class="flex-1 space-y-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="inline-block px-2 py-0.5 bg-app-bg border border-app-border rounded text-[10px] font-bold uppercase tracking-widest text-app-brand mb-2">${itemObj.literatureSource}</span>
+                  <h4 class="text-xl font-bold text-app-text">${itemObj.title}</h4>
+                </div>
+                <div class="flex gap-1 md:hidden">
+                  <button onclick="speakText('${itemId}')" class="w-8 h-8 rounded-full text-app-muted hover:text-app-brand bg-app-bg"><i class="fa-solid fa-volume-high"></i></button>
+                  <button onclick="toggleSaveItemById('${itemId}')" class="w-8 h-8 rounded-full text-app-muted hover:text-app-brand bg-app-bg"><i class="fa-regular fa-bookmark"></i></button>
+                </div>
+              </div>
+              <blockquote class="font-serif text-lg text-app-text italic border-l-4 border-app-brand pl-4 py-1">"${itemObj.keyQuote}"</blockquote>
+              <div class="grid sm:grid-cols-2 gap-4 mt-4 pt-4 border-t border-app-border">
+                <div>
+                  <h5 class="text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Insight</h5>
+                  <p class="text-sm text-app-muted leading-relaxed">${itemObj.summaryAndInsight}</p>
+                </div>
+                <div>
+                  <h5 class="text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Application</h5>
+                  <p class="text-sm text-app-muted leading-relaxed">${itemObj.dailyApplication}</p>
+                </div>
+              </div>
+            </div>
+            <div class="hidden md:flex flex-col gap-2 shrink-0 border-l border-app-border pl-6">
+              <button onclick="speakText('${itemId}')" class="w-10 h-10 rounded-full bg-app-bg hover:bg-app-brandSoft text-app-muted hover:text-app-brand transition-colors flex items-center justify-center border border-transparent hover:border-app-brand"><i class="fa-solid fa-volume-high text-sm"></i></button>
+              <button onclick="toggleSaveItemById('${itemId}')" class="w-10 h-10 rounded-full bg-app-bg hover:bg-app-brandSoft text-app-muted hover:text-app-brand transition-colors flex items-center justify-center border border-transparent hover:border-app-brand"><i class="fa-regular fa-bookmark text-sm"></i></button>
+            </div>
+          </div>
+        `);
+      });
+    }
+
+    async function processTenthStep(e) {
+      e.preventDefault();
+      const text = document.getElementById('tenth-input').value.trim();
+      if(!text) return;
+      const loadingEl = document.getElementById('tenth-loading');
+      const resultEl = document.getElementById('tenth-result');
+      resultEl.classList.add('hidden');
+      loadingEl.classList.remove('hidden');
+
+      const prompt = `You are a wise A.A. sponsor processing a 10th Step Spot Check: "${text}". Respond in valid JSON matching the schema.`;
+      const schema = {
+        type: "OBJECT",
+        properties: {
+          validation: { type: "STRING" },
+          theTurnaround: { type: "STRING" },
+          actionStep: { type: "STRING" }
+        },
+        required: ["validation", "theTurnaround", "actionStep"]
+      };
+
+      try {
+        const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema } };
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+        const response = await fetchWithRetry(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const data = await response.json();
+        const rawJsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        loadingEl.classList.add('hidden');
+        const resObj = safeJSONParse(rawJsonText);
+
+        if(resObj && resObj.validation) {
+          resultEl.innerHTML = `
+            <div class="bg-app-card p-6 md:p-8 rounded-2xl border border-app-brand shadow-md relative overflow-hidden">
+              <div class="space-y-6 relative z-10">
+                <div>
+                  <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">Validation</h4>
+                  <p class="text-app-text font-medium">${resObj.validation}</p>
+                </div>
+                <div class="w-8 h-[1px] bg-app-border"></div>
+                <div>
+                  <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">The Turnaround</h4>
+                  <p class="text-app-text font-serif italic text-lg leading-relaxed">"${resObj.theTurnaround}"</p>
+                </div>
+                <div class="w-8 h-[1px] bg-app-border"></div>
+                <div>
+                  <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">Next Right Thing</h4>
+                  <p class="text-app-muted">${resObj.actionStep}</p>
+                </div>
+              </div>
+            </div>`;
+          resultEl.classList.remove('hidden');
+        } else { throw new Error("Parsing failed"); }
+      } catch(err) {
+        loadingEl.classList.add('hidden');
+        resultEl.innerHTML = `<div class="bg-red-50 dark:bg-red-900/20 p-6 rounded-2xl text-center border border-red-200 text-sm text-red-600">Pause, breathe, and step back. Emotional sobriety begins inside.</div>`;
+        resultEl.classList.remove('hidden');
+      }
+    }
+
+    async function generateTopic(isManual = true) {
+      const container = document.getElementById('topics-result');
+      const loadingEl = document.getElementById('topics-loading');
+      if(isManual) { container.classList.add('hidden'); loadingEl.classList.remove('hidden'); }
+
+      // 1. Manage the 24-hour memory blacklist
+      let recentTopics = [];
+      try {
+        const storedTopics = JSON.parse(localStorage.getItem('serenity_recent_topics')) || [];
+        const twentyFourHoursAgo = Date.now() - (24 * 60 * 60 * 1000);
+        recentTopics = storedTopics.filter(t => t.timestamp > twentyFourHoursAgo);
+      } catch(e) {}
+
+      // 2. Build the dynamic prompt
+      let exclusionPrompt = "";
+      if (recentTopics.length > 0) {
+        const titlesToAvoid = recentTopics.map(t => t.title).join(", ");
+        exclusionPrompt = `CRITICAL RULE: You MUST NOT generate a topic related to any of these recently used themes: [${titlesToAvoid}]. Find a completely different, fresh concept from the 12 Steps or Big Book.`;
+      }
+
+      const prompt = `Generate a highly creative, insightful A.A. meeting discussion topic. ${exclusionPrompt} Respond in valid JSON matching the schema.`;
+      
+      const schema = {
+        type: "OBJECT",
+        properties: {
+          title: { type: "STRING" },
+          quote: { type: "STRING" },
+          reflection: { type: "STRING" },
+          questions: { type: "ARRAY", items: { type: "STRING" } }
+        },
+        required: ["title", "quote", "reflection", "questions"]
+      };
+
+      try {
+        const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema, temperature: 0.95 } };
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+        const response = await fetchWithRetry(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const data = await response.json();
+        const rawJsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        loadingEl.classList.add('hidden');
+        const item = safeJSONParse(rawJsonText);
+
+        if(item && item.title) {
+          // 3. Save this new topic to the memory bank
+          recentTopics.push({ title: item.title, timestamp: Date.now() });
+          try { localStorage.setItem('serenity_recent_topics', JSON.stringify(recentTopics)); } catch(e) {}
+
+          const qHtml = item.questions.map(q => `<li class="flex items-start gap-3"><i class="fa-solid fa-circle-question text-app-brand mt-1 text-sm"></i><span class="text-app-text font-medium">${q}</span></li>`).join('');
+          container.innerHTML = `
+            <div class="bg-app-card p-8 md:p-12 rounded-2xl border border-app-border relative shadow-sm">
+              <div class="relative z-10 max-w-2xl mx-auto space-y-8">
+                <div class="text-center space-y-3">
+                  <span class="inline-block px-3 py-1 bg-app-bg border border-app-border rounded-full text-[10px] font-bold uppercase tracking-widest text-app-brand">Meeting Topic</span>
+                  <h3 class="text-3xl font-bold text-app-text">${item.title}</h3>
+                </div>
+                <blockquote class="text-center font-serif text-xl text-app-text italic border-y border-app-border py-6 my-6">"${item.quote}"</blockquote>
+                <div>
+                  <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-2">Reflection</h4>
+                  <p class="text-app-muted leading-relaxed">${item.reflection}</p>
+                </div>
+                <div class="bg-app-bg p-6 rounded-xl border border-app-border">
+                  <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-4">Discussion Questions</h4>
+                  <ul class="space-y-4">${qHtml}</ul>
+                </div>
+              </div>
+            </div>`;
+          container.classList.remove('hidden');
+        }
+      } catch(err) {
+        loadingEl.classList.add('hidden');
+        container.innerHTML = `<div class="text-center py-12 text-app-muted">Unable to generate topic. Check network or key.</div>`;
+        container.classList.remove('hidden');
+      }
+    }
+
+    function toggleSaveItemById(itemId) {
+      const item = globalMemoryStore[itemId];
+      if (!item) return;
+      const existsIdx = savedPassages.findIndex(s => s.keyQuote === item.keyQuote);
+      if (existsIdx > -1) { savedPassages.splice(existsIdx, 1); } 
+      else { savedPassages.unshift(item); }
+      try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
+      updateSavedCount();
+      if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
+    }
+
+    function updateSavedCount() {
+      const countEl = document.getElementById('saved-count');
+      if (countEl) countEl.innerText = savedPassages.length;
+    }
+
+    function removeSaved(index) {
+      savedPassages.splice(index, 1);
+      try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
+      updateSavedCount();
+      renderSavedList();
+    }
+
+    function clearSaved() {
+      savedPassages = [];
+      try { localStorage.setItem('serenity_saved', JSON.stringify([])); } catch(e) {}
+      updateSavedCount();
+      renderSavedList();
+    }
+
+    function renderSavedList() {
+      const container = document.getElementById('saved-list');
+      if (savedPassages.length === 0) {
+        container.innerHTML = `<div class="text-center py-12 text-app-muted text-sm">Your library is empty.</div>`;
+        return;
+      }
+      container.innerHTML = '';
+      savedPassages.forEach((item, idx) => {
+        let content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">${item.literatureSource}</span><h4 class="font-bold text-app-text">${item.title}</h4><p class="text-sm text-app-muted mt-1 font-serif italic">"${item.keyQuote}"</p>`;
+        container.insertAdjacentHTML('beforeend', `
+          <div class="p-5 bg-app-card rounded-xl border border-app-border flex justify-between items-start gap-4 hover:border-app-brand transition-colors">
+            <div>${content}</div>
+            <button onclick="removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+          </div>
+        `);
+      });
+    }
+
+    async function speakText(itemId) {
+      stopAudio(); 
+      const item = globalMemoryStore[itemId];
+      if (!item) return;
+      let textToSpeak = `From ${item.literatureSource}. ${item.title}. Quote: ${item.keyQuote}. Insight: ${item.summaryAndInsight}`;
+      const playerBar = document.getElementById('audio-player-bar');
+      const audioIconContainer = document.getElementById('audio-icon-container');
+      const audioIcon = document.getElementById('audio-icon');
+      playerBar.classList.remove('hidden');
+      audioIcon.className = "fa-solid fa-spinner fa-spin text-xs";
+      audioIconContainer.classList.add('animate-pulse');
+
+      try {
+        const payload = { contents: [{ parts: [{ text: textToSpeak }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } }, model: "gemini-2.5-flash-preview-tts" };
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${GEMINI_API_KEY}`;
+        const res = await fetchWithRetry(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        const data = await res.json();
+        const base64Audio = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+        const mimeType = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.mimeType || 'audio/L16; rate=24000';
+        
+        if (base64Audio) {
+            const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+            const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+            const audioData = Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0));
+            const wavData = encodeWAV(audioData, sampleRate);
+            const blob = new Blob([wavData], { type: 'audio/wav' });
+            const audioUrl = URL.createObjectURL(blob);
+            currentAudioSource = new Audio(audioUrl);
+            currentAudioSource.onended = stopAudio;
+            currentAudioSource.play();
+            audioIcon.className = "fa-solid fa-music text-xs";
+            audioIconContainer.classList.remove('animate-pulse');
+        } else { throw new Error("No audio data"); }
+      } catch (e) {
+          const utterance = new SpeechSynthesisUtterance(textToSpeak);
+          utterance.onend = stopAudio;
+          window.speechSynthesis.speak(utterance);
+          audioIcon.className = "fa-solid fa-music text-xs";
+          audioIconContainer.classList.remove('animate-pulse');
+      }
+    }
+
+    function stopAudio() {
+      if (currentAudioSource) { currentAudioSource.pause(); currentAudioSource = null; }
+      window.speechSynthesis.cancel();
+      document.getElementById('audio-player-bar').classList.add('hidden');
+    }
+
+    function encodeWAV(samples, sampleRate) {
+        const buffer = new ArrayBuffer(44 + samples.length);
+        const view = new DataView(buffer);
+        const writeString = (v, o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+        writeString(view, 0, 'RIFF');
+        view.setUint32(4, 36 + samples.length, true);
+        writeString(view, 8, 'WAVE');
+        writeString(view, 12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, 1, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * 2, true);
+        view.setUint16(32, 2, true);
+        view.setUint16(34, 16, true);
+        writeString(view, 36, 'data');
+        view.setUint32(40, samples.length, true);
+        const sampleView = new Uint8Array(buffer, 44);
+        sampleView.set(samples);
+        return new Uint8Array(buffer);
+    }
+
+    window.switchTab = switchTab;
+    window.toggleTheme = toggleTheme;
+    window.changeTheme = changeTheme;
+    window.toggleSerenityPrayerModal = toggleSerenityPrayerModal;
+    window.handleSearch = handleSearch;
+    window.setQuickSearch = setQuickSearch;
+    window.setFilter = setFilter;
+    window.clearSaved = clearSaved;
+    window.speakText = speakText;
+    window.toggleSaveItemById = toggleSaveItemById;
+    window.removeSaved = removeSaved;
+    window.stopAudio = stopAudio;
+    window.processTenthStep = processTenthStep;
+    window.generateTopic = generateTopic;
+  </script>
+</body>
+</html>
