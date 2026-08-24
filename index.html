@@ -124,8 +124,8 @@
       --color-bg: #2a1128; 
       --color-card: #381836; 
       --color-border: #52254f; 
-      --color-text: #fef3c7; /* Pale yellow text */
-      --color-muted: #fde68a; /* Soft warm yellow */
+      --color-text: #fef3c7; 
+      --color-muted: #fde68a; 
       --color-brand: #10b981; 
       --color-brand-hover: #34d399;
       --color-brand-soft: rgba(16, 185, 129, 0.2); 
@@ -224,6 +224,10 @@
         <button onclick="toggleTheme()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Toggle Dark Mode">
           <i class="fa-solid fa-moon dark:hidden text-sm"></i>
           <i class="fa-solid fa-sun hidden dark:block text-app-brand text-sm"></i>
+        </button>
+
+        <button onclick="toggleSettingsModal()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Settings">
+          <i class="fa-solid fa-gear text-sm"></i>
         </button>
 
         <button onclick="toggleSerenityPrayerModal()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Prayer & Dailies">
@@ -422,6 +426,39 @@
     </div>
   </div>
 
+  <div id="settings-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative">
+      <button onclick="toggleSettingsModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      
+      <div class="flex items-center gap-3 mb-6">
+        <i class="fa-solid fa-key text-app-brand text-2xl"></i>
+        <h3 class="text-xl font-bold text-app-text">API Configuration</h3>
+      </div>
+      
+      <p class="text-sm text-app-muted mb-6 leading-relaxed">
+        To use the AI features of SerenitySearch, please enter your Google Gemini API key below. Your key is securely stored in your browser's local storage and is never sent to our servers.
+      </p>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-app-brand uppercase tracking-widest mb-2">Gemini API Key</label>
+          <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all">
+        </div>
+        
+        <div class="flex gap-3 pt-2">
+          <button onclick="saveApiKey()" class="flex-1 py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover shadow-sm">
+            Save Key
+          </button>
+          <button onclick="clearApiKey()" class="px-6 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-red-500 hover:text-red-500">
+            Clear
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="audio-player-bar" class="fixed bottom-6 right-6 z-50 bg-app-card border border-app-border p-4 rounded-xl shadow-xl hidden flex items-center space-x-4">
     <div id="audio-icon-container" class="w-8 h-8 rounded-full bg-app-brandSoft text-app-brand flex items-center justify-center">
       <i id="audio-icon" class="fa-solid fa-volume-high text-sm"></i>
@@ -435,11 +472,39 @@
   </div>
 
   <script>
-    const GEMINI_API_KEY = "AQ.Ab8RN6LBDrYUVF9085kN0iT4i7IKxB42Cehywei88KOMSPMkMA";
     var currentFilter = 'All';
     var savedPassages = [];
     var currentAudioSource = null;
     var globalMemoryStore = {}; 
+
+    // Secure Local Storage API Key Retrieval
+    function getApiKey() {
+      return localStorage.getItem('serenity_api_key') || "";
+    }
+
+    function saveApiKey() {
+      const key = document.getElementById('api-key-input').value.trim();
+      if (key) {
+        localStorage.setItem('serenity_api_key', key);
+        toggleSettingsModal();
+      }
+    }
+
+    function clearApiKey() {
+      localStorage.removeItem('serenity_api_key');
+      document.getElementById('api-key-input').value = "";
+    }
+
+    function toggleSettingsModal() {
+      const modal = document.getElementById('settings-modal');
+      const input = document.getElementById('api-key-input');
+      if (modal.classList.contains('hidden')) {
+        input.value = getApiKey();
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
 
     try {
       var stored = localStorage.getItem('serenity_saved');
@@ -498,7 +563,7 @@
       if (window.__serenityInitialized) return; 
       updateSavedCount();
       renderStepsGrid();
-      generateTopic(false); 
+      if(getApiKey()) generateTopic(false); 
       window.__serenityInitialized = true;
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initApp);
@@ -526,6 +591,9 @@
       if (activeMobBtn) activeMobBtn.className = "mob-nav-btn text-app-brand flex flex-col items-center gap-1 p-2 transition-colors";
 
       if (tabName === 'saved') renderSavedList();
+      if (tabName === 'topics' && !document.getElementById('topics-result').innerHTML && getApiKey()) {
+        generateTopic(false);
+      }
     }
 
     function renderStepsGrid() {
@@ -599,6 +667,12 @@
     // LITERATURE SEARCH
     // ==========================================
     async function performSearch(query) {
+      const apiKey = getApiKey();
+      if (!apiKey) {
+        toggleSettingsModal();
+        return;
+      }
+
       const loadingEl = document.getElementById('search-loading');
       const resultsList = document.getElementById('results-list');
       resultsList.innerHTML = '';
@@ -632,7 +706,7 @@
           systemInstruction: { parts: [{ text: systemPrompt }] },
           generationConfig: { responseMimeType: "application/json", responseSchema: schema }
         };
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
         const response = await fetchWithRetry(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         const data = await response.json();
         const rawJsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -702,6 +776,12 @@
 
     async function processTenthStep(e) {
       e.preventDefault();
+      const apiKey = getApiKey();
+      if (!apiKey) {
+        toggleSettingsModal();
+        return;
+      }
+
       const text = document.getElementById('tenth-input').value.trim();
       if(!text) return;
       const loadingEl = document.getElementById('tenth-loading');
@@ -722,7 +802,7 @@
 
       try {
         const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema } };
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
         const response = await fetchWithRetry(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         const data = await response.json();
         const rawJsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -759,6 +839,12 @@
     }
 
     async function generateTopic(isManual = true) {
+      const apiKey = getApiKey();
+      if (!apiKey) {
+        if(isManual) toggleSettingsModal();
+        return;
+      }
+
       const container = document.getElementById('topics-result');
       const loadingEl = document.getElementById('topics-loading');
       if(isManual) { container.classList.add('hidden'); loadingEl.classList.remove('hidden'); }
@@ -793,7 +879,7 @@
 
       try {
         const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema, temperature: 0.95 } };
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
         const response = await fetchWithRetry(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         const data = await response.json();
         const rawJsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -882,6 +968,12 @@
     }
 
     async function speakText(itemId) {
+      const apiKey = getApiKey();
+      if (!apiKey) {
+        toggleSettingsModal();
+        return;
+      }
+
       stopAudio(); 
       const item = globalMemoryStore[itemId];
       if (!item) return;
@@ -895,7 +987,7 @@
 
       try {
         const payload = { contents: [{ parts: [{ text: textToSpeak }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } }, model: "gemini-2.5-flash-preview-tts" };
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${GEMINI_API_KEY}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
         const res = await fetchWithRetry(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
         const data = await res.json();
         const base64Audio = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
@@ -955,6 +1047,9 @@
     window.toggleTheme = toggleTheme;
     window.changeTheme = changeTheme;
     window.toggleSerenityPrayerModal = toggleSerenityPrayerModal;
+    window.toggleSettingsModal = toggleSettingsModal;
+    window.saveApiKey = saveApiKey;
+    window.clearApiKey = clearApiKey;
     window.handleSearch = handleSearch;
     window.setQuickSearch = setQuickSearch;
     window.setFilter = setFilter;
