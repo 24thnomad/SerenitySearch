@@ -5,10 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SerenitySearch - AA & Recovery Literature Finder</title>
   
+  <!-- PWA Manifest & App Icons -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#B58C3D">
   <link rel="apple-touch-icon" href="/icon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Serenity">
 
+  <!-- Theme Initialization Script -->
   <script>
     try {
       var storedMode = localStorage.getItem('theme-mode');
@@ -25,12 +30,14 @@
     } catch(e) {}
   </script>
 
+  <!-- Tailwind CSS & Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
   
+  <!-- Semantic Theme Configuration -->
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -59,7 +66,7 @@
   
   <style>
     /* Smooth transitions for theme switching */
-    body, div, p, h1, h2, h3, button, header, input, select, textarea, a {
+    body, div, p, h1, h2, h3, button, header, input, select, textarea, a, span {
       transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
     }
 
@@ -70,7 +77,7 @@
     .dark .nav-btn.active { box-shadow: 0 1px 3px rgba(0,0,0,0.5); }
     
     /* Custom Scrollbar */
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: var(--color-border); border-radius: 10px; }
     
@@ -85,7 +92,7 @@
     :root { --color-bg: #F4EFE6; --color-card: #FCFAF5; --color-border: #DFD5C2; --color-text: #18181b; --color-muted: #52525b; --color-brand: #B58C3D; --color-brand-hover: #9A732E; --color-brand-soft: rgba(181, 140, 61, 0.15); }
     .dark { --color-bg: #09090b; --color-card: #18181b; --color-border: #27272a; --color-text: #f4f4f5; --color-muted: #a1a1aa; --color-brand: #B58C3D; --color-brand-hover: #D5C3A1; --color-brand-soft: rgba(181, 140, 61, 0.2); }
 
-    /* THEME 2: SAPPHIRE DEEP (Jewel Tone) */
+    /* THEME 2: SAPPHIRE DEEP */
     :root.theme-sapphire { --color-bg: #f5f8ff; --color-card: #ffffff; --color-border: #dbeafe; --color-text: #1e3a8a; --color-muted: #60a5fa; --color-brand: #2563eb; --color-brand-hover: #1e40af; --color-brand-soft: rgba(37, 99, 235, 0.12); }
     :root.dark.theme-sapphire { --color-bg: #030712; --color-card: #0a1128; --color-border: #1e3a8a; --color-text: #e0e7ff; --color-muted: #93c5fd; --color-brand: #3b82f6; --color-brand-hover: #60a5fa; --color-brand-soft: rgba(59, 130, 246, 0.2); }
 
@@ -114,26 +121,8 @@
     :root.dark.theme-wildflower { --color-bg: #1e1b4b; --color-card: #2c2869; --color-border: #433e85; --color-text: #e0e7ff; --color-muted: #818cf8; --color-brand: #fb7185; --color-brand-hover: #fda4af; --color-brand-soft: rgba(251, 113, 133, 0.15); }
 
     /* THEME 9: CARNIVAL FLORA */
-    :root.theme-carnival { 
-      --color-bg: #fce7f3; 
-      --color-card: #ffffff;
-      --color-border: #fbcfe8;
-      --color-text: #4a044e;
-      --color-muted: #86198f;
-      --color-brand: #059669;
-      --color-brand-hover: #047857;
-      --color-brand-soft: rgba(5, 150, 105, 0.12);
-    }
-    :root.dark.theme-carnival { 
-      --color-bg: #2a1128; 
-      --color-card: #381836; 
-      --color-border: #52254f; 
-      --color-text: #fef3c7; 
-      --color-muted: #fde68a; 
-      --color-brand: #10b981; 
-      --color-brand-hover: #34d399;
-      --color-brand-soft: rgba(16, 185, 129, 0.2); 
-    }
+    :root.theme-carnival { --color-bg: #fce7f3; --color-card: #ffffff; --color-border: #fbcfe8; --color-text: #4a044e; --color-muted: #86198f; --color-brand: #059669; --color-brand-hover: #047857; --color-brand-soft: rgba(5, 150, 105, 0.12); }
+    :root.dark.theme-carnival { --color-bg: #2a1128; --color-card: #381836; --color-border: #52254f; --color-text: #fef3c7; --color-muted: #fde68a; --color-brand: #10b981; --color-brand-hover: #34d399; --color-brand-soft: rgba(16, 185, 129, 0.2); }
 
     /* THEME 10: MONOCHROME MINIMALIST */
     :root.theme-monochrome { --color-bg: #f4f4f5; --color-card: #ffffff; --color-border: #e4e4e7; --color-text: #09090b; --color-muted: #71717a; --color-brand: #000000; --color-brand-hover: #3f3f46; --color-brand-soft: rgba(0, 0, 0, 0.08); }
@@ -141,16 +130,7 @@
 
     /* THEME 11: DESERT OASIS */
     :root.theme-oasis { --color-bg: #f5ebe6; --color-card: #ffffff; --color-border: #e6d5cb; --color-text: #4a3028; --color-muted: #8a6b60; --color-brand: #52796f; --color-brand-hover: #354f48; --color-brand-soft: rgba(82, 121, 111, 0.15); }
-    :root.dark.theme-oasis { 
-      --color-bg: #2b1e1a;
-      --color-card: #3d2b26;
-      --color-border: #5c433b;
-      --color-text: #d1fae5; 
-      --color-muted: #84a98c; 
-      --color-brand: #38bdf8; 
-      --color-brand-hover: #0ea5e9;
-      --color-brand-soft: rgba(56, 189, 248, 0.2); 
-    }
+    :root.dark.theme-oasis { --color-bg: #2b1e1a; --color-card: #3d2b26; --color-border: #5c433b; --color-text: #d1fae5; --color-muted: #84a98c; --color-brand: #38bdf8; --color-brand-hover: #0ea5e9; --color-brand-soft: rgba(56, 189, 248, 0.2); }
 
     /* THEME 12: MIAMI SYNTHWAVE */
     :root.theme-miami-synth { --color-bg: #f8fafc; --color-card: #ffffff; --color-border: #fde047; --color-text: #082f49; --color-muted: #0284c7; --color-brand: #db2777; --color-brand-hover: #be185d; --color-brand-soft: rgba(219, 39, 119, 0.15); }
@@ -171,14 +151,17 @@
 </head>
 <body class="h-full flex flex-col font-sans bg-app-bg text-app-text overflow-x-hidden custom-scrollbar selection:bg-app-brand/30">
 
-  <div class="bg-app-card text-app-text text-[11px] text-center py-2 px-4 tracking-wide border-b border-app-border">
+  <!-- AI Accuracy Disclaimer -->
+  <div class="bg-app-card text-app-text text-[11px] text-center py-2 px-4 tracking-wide border-b border-app-border shrink-0">
     <i class="fa-solid fa-triangle-exclamation text-app-brand mr-2"></i>
     AI-powered study tool. Quotes and citations may be approximated.
   </div>
 
-  <header class="sticky top-0 z-40 glass-nav bg-app-bg/80 border-b border-app-border px-4 lg:px-8 py-4">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 glass-nav bg-app-bg/80 border-b border-app-border px-4 lg:px-8 py-4 shrink-0">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-4 lg:gap-10">
       
+      <!-- Logo -->
       <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer shrink-0" onclick="switchTab('search')">
         <div class="flex items-center justify-center text-app-brand">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-8 h-8 sm:w-10 sm:h-10 text-app-brand fill-app-card drop-shadow-sm transition-colors duration-400">
@@ -199,6 +182,7 @@
         </h1>
       </div>
 
+      <!-- Segmented Control Navigation (Desktop) -->
       <nav class="hidden md:flex items-center gap-1.5 bg-app-card p-1.5 rounded-xl border border-app-border">
         <button id="nav-search" onclick="switchTab('search')" class="nav-btn active px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-colors flex items-center gap-2">
           <i class="fa-solid fa-magnifying-glass"></i>Search
@@ -218,7 +202,9 @@
         </button>
       </nav>
 
+      <!-- Control cluster -->
       <div class="flex items-center space-x-1.5 shrink-0">
+        <!-- Palette Selector -->
         <div class="relative flex items-center justify-center w-9 h-9 rounded-lg bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm cursor-pointer" title="Change Color Theme">
           <i class="fa-solid fa-palette text-sm pointer-events-none"></i>
           <select id="header-theme-switcher" onchange="changeTheme(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
@@ -239,16 +225,16 @@
             <option value="theme-piston">Piston's Drive</option>
           </select>
         </div>
-
+        <!-- Theme Toggle -->
         <button onclick="toggleTheme()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Toggle Dark Mode">
           <i class="fa-solid fa-moon dark:hidden text-sm"></i>
           <i class="fa-solid fa-sun hidden dark:block text-app-brand text-sm"></i>
         </button>
-
+        <!-- Settings -->
         <button onclick="toggleSettingsModal()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Settings">
           <i class="fa-solid fa-gear text-sm"></i>
         </button>
-
+        <!-- Prayer -->
         <button onclick="toggleSerenityPrayerModal()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Prayer & Dailies">
           <i class="fa-solid fa-dove text-sm"></i>
         </button>
@@ -256,7 +242,8 @@
     </div>
   </header>
 
-  <div class="md:hidden glass-nav bg-app-card/90 border-b border-app-border px-2 py-2 flex justify-around text-[10px] uppercase font-bold tracking-wider z-30">
+  <!-- Mobile Nav Bar -->
+  <div class="md:hidden glass-nav bg-app-card/90 border-b border-app-border px-2 py-2 flex justify-around text-[10px] uppercase font-bold tracking-wider z-30 shrink-0">
     <button onclick="switchTab('search')" class="mob-nav-btn text-app-brand flex flex-col items-center gap-1 p-2 transition-colors" id="mob-nav-search">
       <i class="fa-solid fa-magnifying-glass text-lg"></i>Search
     </button>
@@ -274,37 +261,21 @@
     </button>
   </div>
 
-  <main class="flex-1 max-w-5xl w-full mx-auto p-4 lg:p-8 space-y-8">
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-5xl w-full mx-auto p-4 lg:p-8 space-y-8 pb-32">
 
+    <!-- SEARCH TAB SECTION -->
     <section id="tab-search" class="space-y-8">
-      
       <div class="text-center py-12 md:py-20 space-y-6">
-        <h2 class="text-4xl sm:text-6xl font-bold font-serif text-app-text tracking-tight">
-          Find clarity and peace.
-        </h2>
-        <p class="text-app-muted text-lg max-w-2xl mx-auto">
-          Explore the Big Book, 12 & 12, Daily Reflections, and more to support your daily recovery.
-        </p>
-
+        <h2 class="text-4xl sm:text-6xl font-bold font-serif text-app-text tracking-tight">Find clarity and peace.</h2>
+        <p class="text-app-muted text-lg max-w-2xl mx-auto">Explore the Big Book, 12 & 12, Daily Reflections, and more to support your daily recovery.</p>
         <form id="search-form" onsubmit="handleSearch(event)" class="max-w-2xl mx-auto pt-6">
           <div class="relative flex items-center">
             <i class="fa-solid fa-magnifying-glass absolute left-6 text-app-muted text-lg"></i>
-            <input 
-              type="text" 
-              id="search-input"
-              placeholder="e.g. Step Two, Acceptance, Resentment..." 
-              class="w-full pl-14 pr-32 py-5 rounded-2xl bg-app-card border border-app-border text-app-text placeholder-app-muted focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-sm transition-all text-lg"
-              required
-            />
-            <button 
-              type="submit" 
-              id="search-btn"
-              class="absolute right-2.5 px-6 py-3 bg-app-brand text-app-card font-semibold rounded-xl text-sm transition-all shadow-sm hover:bg-app-brandHover">
-              Search
-            </button>
+            <input type="text" id="search-input" placeholder="e.g. Step Two, Acceptance, Resentment..." class="w-full pl-14 pr-32 py-5 rounded-2xl bg-app-card border border-app-border text-app-text placeholder-app-muted focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-sm transition-all text-lg" required />
+            <button type="submit" id="search-btn" class="absolute right-2.5 px-6 py-3 bg-app-brand text-app-card font-semibold rounded-xl text-sm transition-all shadow-sm hover:bg-app-brandHover">Search</button>
           </div>
         </form>
-
         <div class="flex items-center justify-center pt-6" id="filter-container">
           <div class="relative flex items-center">
             <span class="text-xs font-semibold text-app-muted uppercase tracking-widest mr-3 hidden sm:inline-block">Filter Source:</span>
@@ -322,25 +293,26 @@
                 <option value="AA Comes of Age">AA Comes of Age</option>
                 <option value="Experience, Strength, and Hope">Experience, Strength, and Hope</option>
               </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-app-muted">
-                <i class="fa-solid fa-chevron-down text-xs"></i>
-              </div>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-app-muted"><i class="fa-solid fa-chevron-down text-xs"></i></div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Loading State -->
       <div id="search-loading" class="hidden py-16 text-center space-y-4">
         <div class="w-8 h-8 border-2 border-app-border border-t-app-brand rounded-full animate-spin mx-auto"></div>
         <p class="text-sm font-medium text-app-muted tracking-wide uppercase">Searching Literature...</p>
       </div>
 
+      <!-- Search Results Display -->
       <div id="results-container" class="space-y-6">
         <div id="empty-state" class="hidden"></div>
         <div id="results-list" class="space-y-6"></div>
       </div>
     </section>
 
+    <!-- STEPS GUIDE TAB -->
     <section id="tab-steps" class="hidden space-y-8">
       <div class="text-center py-8">
         <h2 class="text-3xl font-bold font-serif text-app-text">The Twelve Steps</h2>
@@ -349,6 +321,7 @@
       <div id="steps-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </section>
 
+    <!-- 10TH STEP SPOT CHECK TAB -->
     <section id="tab-tenth" class="hidden space-y-6">
       <div class="text-center py-8 border-b border-app-border">
         <h2 class="text-3xl font-bold font-serif text-app-text">10th Step Spot Check</h2>
@@ -359,12 +332,7 @@
         <div class="bg-app-card p-6 md:p-8 rounded-2xl border border-app-border shadow-sm">
           <form onsubmit="processTenthStep(event)" class="space-y-4">
             <label class="block text-sm font-bold text-app-brand uppercase tracking-widest">What is disturbing your peace right now?</label>
-            <textarea 
-              id="tenth-input" 
-              rows="5" 
-              class="w-full p-4 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner resize-none" 
-              placeholder="e.g., I'm frustrated with my coworker for taking credit for my idea..."
-              required></textarea>
+            <textarea id="tenth-input" rows="5" class="w-full p-4 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner resize-none" placeholder="e.g., I'm frustrated with my coworker for taking credit for my idea..." required></textarea>
             <button type="submit" class="w-full py-3 bg-app-brand text-app-card font-bold rounded-xl hover:bg-app-brandHover transition-colors shadow-sm">
               <i class="fa-solid fa-hands-holding-circle mr-2"></i>Process with Serenity Sponsor
             </button>
@@ -376,17 +344,17 @@
           <p class="text-xs font-medium text-app-muted tracking-wide uppercase">Reflecting on principles...</p>
         </div>
 
-        <div id="tenth-result" class="hidden space-y-6"></div>
+        <div id="tenth-result" class="hidden space-y-6 relative"></div>
       </div>
     </section>
 
+    <!-- MEETING TOPICS TAB -->
     <section id="tab-topics" class="hidden space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-app-border pb-4 gap-4">
         <div>
           <h2 class="text-2xl font-bold font-serif text-app-text">Meeting Topics</h2>
           <p class="text-sm text-app-muted mt-1">Generate fresh discussion ideas for your home group.</p>
         </div>
-        
         <div class="flex gap-2 w-full sm:w-auto">
           <button onclick="generateTopic(true, true)" class="flex-1 sm:flex-none px-4 py-2 bg-app-brand text-app-card transition-colors rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-app-brandHover shadow-sm">
             <i class="fa-solid fa-wand-magic-sparkles"></i> Tailored
@@ -405,6 +373,7 @@
       <div id="topics-result" class="min-h-[400px]"></div>
     </section>
 
+    <!-- SAVED LITERATURE TAB -->
     <section id="tab-saved" class="hidden space-y-6">
       <div class="flex justify-between items-end border-b border-app-border pb-4">
         <div>
@@ -414,79 +383,66 @@
           <i class="fa-solid fa-trash-can"></i> Clear All
         </button>
       </div>
-      <div id="saved-list" class="space-y-4"></div>
+      
+      <!-- Sub-Navigation for Saved Tab -->
+      <div class="flex gap-2 mb-2 overflow-x-auto custom-scrollbar pb-2">
+        <button onclick="setSavedTab('literature')" id="saved-tab-literature" class="px-5 py-2 bg-app-brand text-app-card rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">Library</button>
+        <button onclick="setSavedTab('tenth')" id="saved-tab-tenth" class="px-5 py-2 bg-app-bg border border-app-border text-app-text hover:border-app-brand rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">Spot Checks</button>
+        <button onclick="setSavedTab('topic')" id="saved-tab-topic" class="px-5 py-2 bg-app-bg border border-app-border text-app-text hover:border-app-brand rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">Topics</button>
+      </div>
+
+      <div id="saved-list" class="space-y-4 mt-4"></div>
     </section>
 
   </main>
 
+  <!-- SERENITY PRAYER MODAL -->
   <div id="serenity-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative text-center">
-      <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      
+      <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
       <i class="fa-solid fa-dove text-app-brand text-3xl mb-4"></i>
       <h3 class="text-sm font-bold text-app-text mb-4 uppercase tracking-widest">The Serenity Prayer</h3>
       <p class="font-serif text-xl text-app-text leading-relaxed italic mb-6">
-        "God, grant me the serenity<br/>
-        to accept the things I cannot change,<br/>
-        courage to change the things I can,<br/>
-        and wisdom to know the difference."
+        "God, grant me the serenity<br/>to accept the things I cannot change,<br/>courage to change the things I can,<br/>and wisdom to know the difference."
       </p>
-
       <div class="w-full h-px bg-app-border mb-6"></div>
-      
       <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-4">External Daily Readings</h4>
       <div class="space-y-3 mb-8">
         <a href="https://www.aa.org/daily-reflections" target="_blank" class="block w-full py-3 bg-app-bg border border-app-border text-app-text font-semibold rounded-xl text-sm hover:border-app-brand transition-colors flex items-center justify-between px-4 group">
-          <span class="flex items-center gap-2"><i class="fa-regular fa-sun text-app-muted group-hover:text-app-brand transition-colors"></i> Daily Reflections</span>
-          <i class="fa-solid fa-arrow-up-right-from-square text-app-muted text-xs"></i>
+          <span class="flex items-center gap-2"><i class="fa-regular fa-sun text-app-muted group-hover:text-app-brand transition-colors"></i> Daily Reflections</span><i class="fa-solid fa-arrow-up-right-from-square text-app-muted text-xs"></i>
         </a>
         <a href="https://www.hazeldenbettyford.org/thought-for-the-day" target="_blank" class="block w-full py-3 bg-app-bg border border-app-border text-app-text font-semibold rounded-xl text-sm hover:border-app-brand transition-colors flex items-center justify-between px-4 group">
-          <span class="flex items-center gap-2"><i class="fa-solid fa-book-open text-app-muted group-hover:text-app-brand transition-colors"></i> Thought for the Day</span>
-          <i class="fa-solid fa-arrow-up-right-from-square text-app-muted text-xs"></i>
+          <span class="flex items-center gap-2"><i class="fa-solid fa-book-open text-app-muted group-hover:text-app-brand transition-colors"></i> Thought for the Day</span><i class="fa-solid fa-arrow-up-right-from-square text-app-muted text-xs"></i>
         </a>
       </div>
-
-      <button onclick="toggleSerenityPrayerModal()" class="w-full py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover">
-        Close
-      </button>
+      <button onclick="toggleSerenityPrayerModal()" class="w-full py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover">Close</button>
     </div>
   </div>
 
+  <!-- API KEY SETTINGS MODAL -->
   <div id="settings-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative">
-      <button onclick="toggleSettingsModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      
+      <button onclick="toggleSettingsModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
       <div class="flex items-center gap-3 mb-6">
-        <i class="fa-solid fa-key text-app-brand text-2xl"></i>
-        <h3 class="text-xl font-bold text-app-text">API Configuration</h3>
+        <i class="fa-solid fa-key text-app-brand text-2xl"></i><h3 class="text-xl font-bold text-app-text">API Configuration</h3>
       </div>
-      
       <p class="text-sm text-app-muted mb-6 leading-relaxed">
         To use the AI features of SerenitySearch, please enter your Google Gemini API key below. Your key is securely stored in your browser's local storage and is never sent to our servers.
       </p>
-
       <div class="space-y-4">
         <div>
           <label class="block text-xs font-bold text-app-brand uppercase tracking-widest mb-2">Gemini API Key</label>
           <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all">
         </div>
-        
         <div class="flex gap-3 pt-2">
-          <button onclick="saveApiKey()" class="flex-1 py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover shadow-sm">
-            Save Key
-          </button>
-          <button onclick="clearApiKey()" class="px-6 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-red-500 hover:text-red-500">
-            Clear
-          </button>
+          <button onclick="saveApiKey()" class="flex-1 py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover shadow-sm">Save Key</button>
+          <button onclick="clearApiKey()" class="px-6 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-red-500 hover:text-red-500">Clear</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- AUDIO PLAYER BAR -->
   <div id="audio-player-bar" class="fixed bottom-6 right-6 z-50 bg-app-card border border-app-border p-4 rounded-xl shadow-xl hidden flex items-center space-x-4">
     <div id="audio-icon-container" class="w-8 h-8 rounded-full bg-app-brandSoft text-app-brand flex items-center justify-center">
       <i id="audio-icon" class="fa-solid fa-volume-high text-sm"></i>
@@ -499,42 +455,19 @@
     </button>
   </div>
 
+  <!-- JAVASCRIPT LOGIC -->
   <script>
     var currentFilter = 'All';
     var savedPassages = [];
     var currentAudioSource = null;
     var globalMemoryStore = {}; 
+    var currentSavedTab = 'literature';
 
-    // Secure Local Storage API Key Retrieval
-    function getApiKey() {
-      return localStorage.getItem('serenity_api_key') || "";
-    }
+    function getApiKey() { return localStorage.getItem('serenity_api_key') || ""; }
+    function saveApiKey() { const k = document.getElementById('api-key-input').value.trim(); if(k) { localStorage.setItem('serenity_api_key', k); toggleSettingsModal(); } }
+    function clearApiKey() { localStorage.removeItem('serenity_api_key'); document.getElementById('api-key-input').value = ""; }
+    function toggleSettingsModal() { const m = document.getElementById('settings-modal'); const i = document.getElementById('api-key-input'); if(m.classList.contains('hidden')) { i.value = getApiKey(); m.classList.remove('hidden'); } else { m.classList.add('hidden'); } }
 
-    function saveApiKey() {
-      const key = document.getElementById('api-key-input').value.trim();
-      if (key) {
-        localStorage.setItem('serenity_api_key', key);
-        toggleSettingsModal();
-      }
-    }
-
-    function clearApiKey() {
-      localStorage.removeItem('serenity_api_key');
-      document.getElementById('api-key-input').value = "";
-    }
-
-    function toggleSettingsModal() {
-      const modal = document.getElementById('settings-modal');
-      const input = document.getElementById('api-key-input');
-      if (modal.classList.contains('hidden')) {
-        input.value = getApiKey();
-        modal.classList.remove('hidden');
-      } else {
-        modal.classList.add('hidden');
-      }
-    }
-
-    // Daily Memory Engine Logic
     function saveToDailyMemory(type, content) {
       try {
         let memory = JSON.parse(localStorage.getItem('serenity_daily_memory')) || [];
@@ -545,10 +478,7 @@
       } catch(e) {}
     }
 
-    try {
-      var stored = localStorage.getItem('serenity_saved');
-      if (stored) savedPassages = JSON.parse(stored) || [];
-    } catch(e) { console.warn("Storage access restricted."); }
+    try { var stored = localStorage.getItem('serenity_saved'); if (stored) savedPassages = JSON.parse(stored) || []; } catch(e) { }
 
     window.addEventListener('DOMContentLoaded', () => {
        const savedColorTheme = localStorage.getItem('color-theme') || 'default';
@@ -558,29 +488,20 @@
 
     function toggleTheme() {
       var html = document.documentElement;
-      if (html.classList.contains('dark')) {
-        html.classList.remove('dark');
-        try { localStorage.setItem('theme-mode', 'light'); } catch(e) {}
-      } else {
-        html.classList.add('dark');
-        try { localStorage.setItem('theme-mode', 'dark'); } catch(e) {}
-      }
+      if (html.classList.contains('dark')) { html.classList.remove('dark'); try { localStorage.setItem('theme-mode', 'light'); } catch(e) {} } 
+      else { html.classList.add('dark'); try { localStorage.setItem('theme-mode', 'dark'); } catch(e) {} }
     }
 
     function changeTheme(themeClass) {
       const html = document.documentElement;
       html.classList.remove('theme-sapphire', 'theme-emerald', 'theme-amethyst', 'theme-crimson', 'theme-reef', 'theme-sunset', 'theme-wildflower', 'theme-carnival', 'theme-monochrome', 'theme-oasis', 'theme-miami-synth', 'theme-motor', 'theme-lions', 'theme-piston');
       if (themeClass !== 'default') { html.classList.add(themeClass); }
-      
       const headerSelect = document.getElementById('header-theme-switcher');
       if (headerSelect) headerSelect.value = themeClass;
       try { localStorage.setItem('color-theme', themeClass); } catch(e) {}
     }
 
-    function toggleSerenityPrayerModal() {
-      const modal = document.getElementById('serenity-modal');
-      modal.classList.toggle('hidden');
-    }
+    function toggleSerenityPrayerModal() { document.getElementById('serenity-modal').classList.toggle('hidden'); }
 
     var TWELVE_STEPS = [
       { step: 1, title: "Honesty", desc: "Admitted powerlessness over alcohol...", topic: "Step 1 Powerlessness Big Book Chapter 3" },
@@ -610,178 +531,77 @@
 
     function switchTab(tabName) {
       ['search', 'steps', 'tenth', 'topics', 'saved'].forEach(t => {
-        const tabEl = document.getElementById(`tab-${t}`);
-        if (tabEl) tabEl.classList.add('hidden');
-        
-        const btn = document.getElementById(`nav-${t}`);
-        if (btn) btn.className = "nav-btn px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-all flex items-center gap-2";
-        
-        const mobBtn = document.getElementById(`mob-nav-${t}`);
-        if (mobBtn) mobBtn.className = "mob-nav-btn text-app-muted flex flex-col items-center gap-1 p-2 transition-colors";
+        const tabEl = document.getElementById(`tab-${t}`); if (tabEl) tabEl.classList.add('hidden');
+        const btn = document.getElementById(`nav-${t}`); if (btn) btn.className = "nav-btn px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-all flex items-center gap-2";
+        const mobBtn = document.getElementById(`mob-nav-${t}`); if (mobBtn) mobBtn.className = "mob-nav-btn text-app-muted flex flex-col items-center gap-1 p-2 transition-colors";
       });
-
-      const activeTabEl = document.getElementById(`tab-${tabName}`);
-      if (activeTabEl) activeTabEl.classList.remove('hidden');
-
-      const activeBtn = document.getElementById(`nav-${tabName}`);
-      if (activeBtn) activeBtn.classList.add('active');
-      
-      const activeMobBtn = document.getElementById(`mob-nav-${tabName}`);
-      if (activeMobBtn) activeMobBtn.className = "mob-nav-btn text-app-brand flex flex-col items-center gap-1 p-2 transition-colors";
-
+      const activeTabEl = document.getElementById(`tab-${tabName}`); if (activeTabEl) activeTabEl.classList.remove('hidden');
+      const activeBtn = document.getElementById(`nav-${tabName}`); if (activeBtn) activeBtn.classList.add('active');
+      const activeMobBtn = document.getElementById(`mob-nav-${tabName}`); if (activeMobBtn) activeMobBtn.className = "mob-nav-btn text-app-brand flex flex-col items-center gap-1 p-2 transition-colors";
       if (tabName === 'saved') renderSavedList();
-      if (tabName === 'topics' && !document.getElementById('topics-result').innerHTML && getApiKey()) {
-        generateTopic(false, false);
-      }
+      if (tabName === 'topics' && !document.getElementById('topics-result').innerHTML && getApiKey()) generateTopic(false, false);
     }
 
     function renderStepsGrid() {
-      const grid = document.getElementById('steps-grid');
-      if (!grid) return;
-      grid.innerHTML = '';
+      const grid = document.getElementById('steps-grid'); if (!grid) return; grid.innerHTML = '';
       TWELVE_STEPS.forEach(s => {
         grid.insertAdjacentHTML('beforeend', `
           <div onclick="setQuickSearch('${s.topic}')" class="sleek-card bg-app-card p-5 rounded-2xl border border-app-border cursor-pointer flex items-center gap-4 group hover:border-app-brand">
             <div class="w-10 h-10 rounded-full bg-app-bg text-app-muted group-hover:bg-app-brandSoft group-hover:text-app-brand font-bold text-lg flex items-center justify-center shrink-0 transition-colors border border-app-border group-hover:border-transparent">${s.step}</div>
-            <div>
-              <h3 class="font-bold text-app-text text-sm tracking-wide uppercase">${s.title}</h3>
-              <p class="text-xs text-app-muted mt-0.5 truncate max-w-[200px] sm:max-w-[300px]">${s.desc}</p>
-            </div>
+            <div><h3 class="font-bold text-app-text text-sm tracking-wide uppercase">${s.title}</h3><p class="text-xs text-app-muted mt-0.5 truncate max-w-[200px] sm:max-w-[300px]">${s.desc}</p></div>
           </div>
         `);
       });
     }
 
-    function setQuickSearch(queryText) {
-      switchTab('search');
-      document.getElementById('search-input').value = queryText;
-      performSearch(queryText);
-    }
-
-    function setFilter(filterName) {
-      currentFilter = filterName;
-      const selectEl = document.getElementById('source-filter');
-      if (selectEl && selectEl.value !== filterName) {
-        selectEl.value = filterName;
-      }
-    }
-
-    function handleSearch(e) {
-      e.preventDefault();
-      const q = document.getElementById('search-input').value.trim();
-      if (q) performSearch(q);
-    }
+    function setQuickSearch(queryText) { switchTab('search'); document.getElementById('search-input').value = queryText; performSearch(queryText); }
+    function setFilter(filterName) { currentFilter = filterName; const s = document.getElementById('source-filter'); if (s && s.value !== filterName) s.value = filterName; }
+    function handleSearch(e) { e.preventDefault(); const q = document.getElementById('search-input').value.trim(); if (q) performSearch(q); }
 
     function safeJSONParse(str) {
-      if (!str) return null;
-      let clean = str.trim();
-      const startIdx = Math.min(
-        clean.indexOf('[') > -1 ? clean.indexOf('[') : Infinity,
-        clean.indexOf('{') > -1 ? clean.indexOf('{') : Infinity
-      );
-      const endIdx = Math.max(clean.lastIndexOf(']'), clean.lastIndexOf('}'));
-      if (startIdx !== Infinity && endIdx !== -1 && startIdx < endIdx) {
-         try { return JSON.parse(clean.substring(startIdx, endIdx + 1)); } catch (err) {}
-      }
+      if (!str) return null; let clean = str.trim();
+      const s = Math.min(clean.indexOf('[') > -1 ? clean.indexOf('[') : Infinity, clean.indexOf('{') > -1 ? clean.indexOf('{') : Infinity);
+      const e = Math.max(clean.lastIndexOf(']'), clean.lastIndexOf('}'));
+      if (s !== Infinity && e !== -1 && s < e) { try { return JSON.parse(clean.substring(s, e + 1)); } catch (err) {} }
       try { return JSON.parse(clean); } catch (err) { return null; }
     }
 
-    async function fetchWithRetry(url, options, retries = 1) {
-      try {
-        const res = await fetch(url, options);
-        if (res.ok) return res;
-        const errorData = await res.json();
-        throw new Error(`${errorData.error?.message || res.statusText} (Error Code: ${res.status})`);
-      } catch (e) {
-        throw e;
-      }
+    async function fetchWithRetry(url, options) {
+      try { const res = await fetch(url, options); if (res.ok) return res; const err = await res.json(); throw new Error(`${err.error?.message || res.statusText}`); } catch (e) { throw e; }
     }
 
-    // ==========================================
-    // LITERATURE SEARCH
-    // ==========================================
     async function performSearch(query) {
-      const apiKey = getApiKey();
-      if (!apiKey) {
-        toggleSettingsModal();
-        return;
-      }
-
+      const apiKey = getApiKey(); if (!apiKey) { toggleSettingsModal(); return; }
       saveToDailyMemory('search', query);
-
-      const loadingEl = document.getElementById('search-loading');
-      const resultsList = document.getElementById('results-list');
-      resultsList.innerHTML = '';
-      loadingEl.classList.remove('hidden');
-
-      const systemPrompt = `You are SerenitySearch, an expert A.A. literature guide. Filter Preference: ${currentFilter}. Return up to 10 highly relevant passages matching the query. Return STRICTLY valid JSON.`;
-      const schema = {
-        type: "OBJECT",
-        properties: {
-          results: {
-            type: "ARRAY",
-            items: {
-              type: "OBJECT",
-              properties: {
-                title: { type: "STRING" },
-                literatureSource: { type: "STRING" },
-                keyQuote: { type: "STRING" },
-                summaryAndInsight: { type: "STRING" },
-                dailyApplication: { type: "STRING" }
-              },
-              required: ["title", "literatureSource", "keyQuote", "summaryAndInsight", "dailyApplication"]
-            }
-          }
-        },
-        required: ["results"]
-      };
-
+      const l = document.getElementById('search-loading'); const r = document.getElementById('results-list'); r.innerHTML = ''; l.classList.remove('hidden');
+      const sys = `You are SerenitySearch, an expert A.A. literature guide. Filter Preference: ${currentFilter}. Return up to 10 highly relevant passages matching the query. Return STRICTLY valid JSON.`;
+      const sch = { type: "OBJECT", properties: { results: { type: "ARRAY", items: { type: "OBJECT", properties: { title: { type: "STRING" }, literatureSource: { type: "STRING" }, keyQuote: { type: "STRING" }, summaryAndInsight: { type: "STRING" }, dailyApplication: { type: "STRING" } }, required: ["title", "literatureSource", "keyQuote", "summaryAndInsight", "dailyApplication"] } } }, required: ["results"] };
       try {
-        const payload = {
-          contents: [{ parts: [{ text: query }] }],
-          systemInstruction: { parts: [{ text: systemPrompt }] },
-          generationConfig: { responseMimeType: "application/json", responseSchema: schema }
-        };
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
-        const response = await fetchWithRetry(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        const data = await response.json();
-        const rawJsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        loadingEl.classList.add('hidden');
-
-        if (rawJsonText) {
-          const parsed = safeJSONParse(rawJsonText);
-          let items = (parsed && parsed.results) ? parsed.results : [];
-          renderSearchResults(items, query);
-        } else { throw new Error("Empty API Response"); }
+        const payload = { contents: [{ parts: [{ text: query }] }], systemInstruction: { parts: [{ text: sys }] }, generationConfig: { responseMimeType: "application/json", responseSchema: sch } };
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+        const response = await fetchWithRetry(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const data = await response.json(); l.classList.add('hidden');
+        const parsed = safeJSONParse(data.candidates?.[0]?.content?.parts?.[0]?.text);
+        let items = (parsed && parsed.results) ? parsed.results : [];
+        renderSearchResults(items, query);
       } catch (err) {
-        console.error(err);
-        loadingEl.classList.add('hidden');
-        resultsList.innerHTML = `
-          <div class="bg-red-50 dark:bg-red-900/20 p-6 rounded-2xl border border-red-200 dark:border-red-800 text-center">
-            <p class="text-red-600 dark:text-red-400 font-bold text-sm mb-2">Google API Error</p>
-            <p class="text-red-600 dark:text-red-400 text-xs">${err.message}</p>
-          </div>`;
+        l.classList.add('hidden'); r.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl border border-red-200 text-center"><p class="text-red-600 font-bold text-sm mb-2">Error</p><p class="text-red-600 text-xs">${err.message}</p></div>`;
       }
     }
 
     function renderSearchResults(items, query) {
-      const resultsList = document.getElementById('results-list');
-      if (!items || items.length === 0) {
-        resultsList.innerHTML = `<div class="p-8 text-center text-app-muted text-sm">No passages found.</div>`;
-        return;
-      }
-      resultsList.innerHTML = `<h3 class="text-sm font-bold text-app-muted uppercase tracking-widest mb-4">Results for "${query}"</h3>`;
+      const r = document.getElementById('results-list');
+      if (!items || items.length === 0) { r.innerHTML = `<div class="p-8 text-center text-app-muted text-sm">No passages found.</div>`; return; }
+      r.innerHTML = `<h3 class="text-sm font-bold text-app-muted uppercase tracking-widest mb-4">Results for "${query}"</h3>`;
       items.forEach((itemObj, index) => {
+        itemObj.type = 'literature'; // Added type property
         const itemId = 'search_' + Date.now() + '_' + index;
         globalMemoryStore[itemId] = itemObj;
-        resultsList.insertAdjacentHTML('beforeend', `
+        r.insertAdjacentHTML('beforeend', `
           <div class="sleek-card bg-app-card p-6 sm:p-8 rounded-2xl border border-app-border flex flex-col md:flex-row gap-6 group hover:border-app-brand">
             <div class="flex-1 space-y-4">
               <div class="flex justify-between items-start">
-                <div>
-                  <span class="inline-block px-2 py-0.5 bg-app-bg border border-app-border rounded text-[10px] font-bold uppercase tracking-widest text-app-brand mb-2">${itemObj.literatureSource}</span>
-                  <h4 class="text-xl font-bold text-app-text">${itemObj.title}</h4>
-                </div>
+                <div><span class="inline-block px-2 py-0.5 bg-app-bg border border-app-border rounded text-[10px] font-bold uppercase tracking-widest text-app-brand mb-2">${itemObj.literatureSource}</span><h4 class="text-xl font-bold text-app-text">${itemObj.title}</h4></div>
                 <div class="flex gap-1 md:hidden">
                   <button onclick="speakText('${itemId}')" class="w-8 h-8 rounded-full text-app-muted hover:text-app-brand bg-app-bg"><i class="fa-solid fa-volume-high"></i></button>
                   <button onclick="toggleSaveItemById('${itemId}')" class="w-8 h-8 rounded-full text-app-muted hover:text-app-brand bg-app-bg"><i class="fa-regular fa-bookmark"></i></button>
@@ -789,14 +609,8 @@
               </div>
               <blockquote class="font-serif text-lg text-app-text italic border-l-4 border-app-brand pl-4 py-1">"${itemObj.keyQuote}"</blockquote>
               <div class="grid sm:grid-cols-2 gap-4 mt-4 pt-4 border-t border-app-border">
-                <div>
-                  <h5 class="text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Insight</h5>
-                  <p class="text-sm text-app-muted leading-relaxed">${itemObj.summaryAndInsight}</p>
-                </div>
-                <div>
-                  <h5 class="text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Application</h5>
-                  <p class="text-sm text-app-muted leading-relaxed">${itemObj.dailyApplication}</p>
-                </div>
+                <div><h5 class="text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Insight</h5><p class="text-sm text-app-muted leading-relaxed">${itemObj.summaryAndInsight}</p></div>
+                <div><h5 class="text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Application</h5><p class="text-sm text-app-muted leading-relaxed">${itemObj.dailyApplication}</p></div>
               </div>
             </div>
             <div class="hidden md:flex flex-col gap-2 shrink-0 border-l border-app-border pl-6">
@@ -809,252 +623,224 @@
     }
 
     async function processTenthStep(e) {
-      e.preventDefault();
-      const apiKey = getApiKey();
-      if (!apiKey) {
-        toggleSettingsModal();
-        return;
-      }
-
-      const text = document.getElementById('tenth-input').value.trim();
-      if(!text) return;
-      
+      e.preventDefault(); const apiKey = getApiKey(); if (!apiKey) { toggleSettingsModal(); return; }
+      const text = document.getElementById('tenth-input').value.trim(); if(!text) return;
       saveToDailyMemory('tenth_step', text);
-      
-      const loadingEl = document.getElementById('tenth-loading');
-      const resultEl = document.getElementById('tenth-result');
-      resultEl.classList.add('hidden');
-      loadingEl.classList.remove('hidden');
-
+      const l = document.getElementById('tenth-loading'); const r = document.getElementById('tenth-result'); r.classList.add('hidden'); l.classList.remove('hidden');
       const prompt = `You are a wise A.A. Serenity Sponsor processing a 10th Step Spot Check: "${text}". Respond in valid JSON matching the schema.`;
-      const schema = {
-        type: "OBJECT",
-        properties: {
-          validation: { type: "STRING" },
-          theTurnaround: { type: "STRING" },
-          actionStep: { type: "STRING" }
-        },
-        required: ["validation", "theTurnaround", "actionStep"]
-      };
-
+      const sch = { type: "OBJECT", properties: { validation: { type: "STRING" }, theTurnaround: { type: "STRING" }, actionStep: { type: "STRING" } }, required: ["validation", "theTurnaround", "actionStep"] };
       try {
-        const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema } };
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
-        const response = await fetchWithRetry(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        const data = await response.json();
-        const rawJsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        loadingEl.classList.add('hidden');
-        const resObj = safeJSONParse(rawJsonText);
-
+        const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: sch } };
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+        const res = await fetchWithRetry(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const data = await res.json(); l.classList.add('hidden');
+        const resObj = safeJSONParse(data.candidates?.[0]?.content?.parts?.[0]?.text);
         if(resObj && resObj.validation) {
-          resultEl.innerHTML = `
-            <div class="bg-app-card p-6 md:p-8 rounded-2xl border border-app-brand shadow-md relative overflow-hidden">
-              <div class="space-y-6 relative z-10">
-                <div>
-                  <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">Validation</h4>
-                  <p class="text-app-text font-medium">${resObj.validation}</p>
-                </div>
+          resObj.type = 'tenth';
+          const itemId = 'tenth_' + Date.now();
+          globalMemoryStore[itemId] = resObj;
+          
+          r.innerHTML = `
+            <div class="bg-app-card p-6 md:p-8 rounded-2xl border border-app-brand shadow-md relative overflow-hidden group">
+              <!-- Injected Save and Audio UI for 10th Step -->
+              <div class="absolute top-4 right-4 flex gap-2 z-20">
+                <button onclick="speakText('${itemId}')" class="w-8 h-8 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-solid fa-volume-high text-xs"></i></button>
+                <button onclick="toggleSaveItemById('${itemId}')" class="w-8 h-8 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-regular fa-bookmark text-xs"></i></button>
+              </div>
+              <div class="space-y-6 relative z-10 pt-4">
+                <div><h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">Validation</h4><p class="text-app-text font-medium pr-16">${resObj.validation}</p></div>
                 <div class="w-8 h-[1px] bg-app-border"></div>
-                <div>
-                  <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">The Turnaround</h4>
-                  <p class="text-app-text font-serif italic text-lg leading-relaxed">"${resObj.theTurnaround}"</p>
-                </div>
+                <div><h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">The Turnaround</h4><p class="text-app-text font-serif italic text-lg leading-relaxed">"${resObj.theTurnaround}"</p></div>
                 <div class="w-8 h-[1px] bg-app-border"></div>
-                <div>
-                  <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">Next Right Thing</h4>
-                  <p class="text-app-muted">${resObj.actionStep}</p>
-                </div>
+                <div><h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">Next Right Thing</h4><p class="text-app-muted">${resObj.actionStep}</p></div>
               </div>
             </div>`;
-          resultEl.classList.remove('hidden');
+          r.classList.remove('hidden');
         } else { throw new Error("Parsing failed"); }
       } catch(err) {
-        loadingEl.classList.add('hidden');
-        resultEl.innerHTML = `
-          <div class="bg-red-50 dark:bg-red-900/20 p-6 rounded-2xl border border-red-200 dark:border-red-800 text-center">
-            <p class="text-red-600 dark:text-red-400 font-bold text-sm mb-2">Google API Error</p>
-            <p class="text-red-600 dark:text-red-400 text-xs">${err.message}</p>
-          </div>`;
-        resultEl.classList.remove('hidden');
+        l.classList.add('hidden'); r.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl border border-red-200 text-center"><p class="text-red-600 font-bold text-sm mb-2">Error</p><p class="text-red-600 text-xs">${err.message}</p></div>`; r.classList.remove('hidden');
       }
     }
 
     async function generateTopic(isManual = true, isTailored = false) {
-      const apiKey = getApiKey();
-      if (!apiKey) {
-        if(isManual) toggleSettingsModal();
-        return;
-      }
-
-      const container = document.getElementById('topics-result');
-      const loadingEl = document.getElementById('topics-loading');
-      const loadingText = document.getElementById('topics-loading-text');
+      const apiKey = getApiKey(); if (!apiKey) { if(isManual) toggleSettingsModal(); return; }
+      const c = document.getElementById('topics-result'); const l = document.getElementById('topics-loading'); document.getElementById('topics-loading-text').innerText = isTailored ? "Tailoring topic to your activity..." : "Creating random topic...";
+      if(isManual) { c.classList.add('hidden'); l.classList.remove('hidden'); }
       
-      if(isManual) { container.classList.add('hidden'); loadingEl.classList.remove('hidden'); }
-      
-      loadingText.innerText = isTailored ? "Tailoring topic to your activity..." : "Creating random topic...";
-
-      let recentTopics = [];
-      let memory = [];
-      
+      let recentTopics = [], memory = [];
       try {
-        const storedTopics = JSON.parse(localStorage.getItem('serenity_recent_topics')) || [];
-        const twentyFourHoursAgo = Date.now() - (24 * 60 * 60 * 1000);
-        recentTopics = storedTopics.filter(t => t.timestamp > twentyFourHoursAgo);
-        
-        const storedMemory = JSON.parse(localStorage.getItem('serenity_daily_memory')) || [];
-        memory = storedMemory.filter(m => m.timestamp > twentyFourHoursAgo);
+        const t = JSON.parse(localStorage.getItem('serenity_recent_topics')) || []; const m = JSON.parse(localStorage.getItem('serenity_daily_memory')) || [];
+        const d = Date.now() - (24 * 60 * 60 * 1000);
+        recentTopics = t.filter(x => x.timestamp > d); memory = m.filter(x => x.timestamp > d);
       } catch(e) {}
 
-      let exclusionPrompt = "";
-      if (recentTopics.length > 0) {
-        const titlesToAvoid = recentTopics.map(t => t.title).join(", ");
-        exclusionPrompt = `CRITICAL RULE: You MUST NOT generate a topic related to any of these recently used themes: [${titlesToAvoid}]. Find a completely different, fresh concept from the 12 Steps or Big Book.`;
-      }
-      
-      let tailoredPrompt = "";
+      let exc = recentTopics.length > 0 ? `CRITICAL RULE: You MUST NOT generate a topic related to any of these recently used themes: [${recentTopics.map(t => t.title).join(", ")}]. Find a completely different, fresh concept.` : "";
+      let tail = "Generate a completely random, fresh topic. ";
       if (isTailored) {
-        if (memory.length > 0) {
-          const recentSearches = memory.filter(m => m.type === 'search').map(m => m.content).join(', ');
-          const recentTenth = memory.filter(m => m.type === 'tenth_step').map(m => m.content).join(' | ');
-          tailoredPrompt = `The user has recently been exploring these concepts: [${recentSearches}]. They are also working through these 10th step thoughts: [${recentTenth}]. Tailor the meeting topic and reflection to address these specific themes while keeping it grounded in AA principles. `;
-        } else {
-          tailoredPrompt = "No specific recent user input found, generate a highly insightful random topic. ";
-        }
-      } else {
-         tailoredPrompt = "Generate a completely random, fresh topic. ";
+        if (memory.length > 0) tail = `The user has recently been exploring these concepts: [${memory.filter(m => m.type === 'search').map(m => m.content).join(', ')}]. They are also working through these 10th step thoughts: [${memory.filter(m => m.type === 'tenth_step').map(m => m.content).join(' | ')}]. Tailor the meeting topic and reflection to address these specific themes while keeping it grounded in AA principles. `;
+        else tail = "No specific recent user input found, generate a highly insightful random topic. ";
       }
 
-      const prompt = `Generate a highly creative, insightful A.A. meeting discussion topic. ${tailoredPrompt} ${exclusionPrompt} Respond in valid JSON matching the schema.`;
-      
-      const schema = {
-        type: "OBJECT",
-        properties: {
-          title: { type: "STRING" },
-          quote: { type: "STRING" },
-          reflection: { type: "STRING" },
-          questions: { type: "ARRAY", items: { type: "STRING" } }
-        },
-        required: ["title", "quote", "reflection", "questions"]
-      };
+      const prompt = `Generate a highly creative, insightful A.A. meeting discussion topic. ${tail} ${exc} Respond in valid JSON matching the schema.`;
+      const sch = { type: "OBJECT", properties: { title: { type: "STRING" }, quote: { type: "STRING" }, reflection: { type: "STRING" }, questions: { type: "ARRAY", items: { type: "STRING" } } }, required: ["title", "quote", "reflection", "questions"] };
 
       try {
-        const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: schema, temperature: 0.95 } };
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
-        const response = await fetchWithRetry(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        const data = await response.json();
-        const rawJsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        loadingEl.classList.add('hidden');
-        const item = safeJSONParse(rawJsonText);
+        const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: sch, temperature: 0.95 } };
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+        const res = await fetchWithRetry(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const data = await res.json(); l.classList.add('hidden');
+        const item = safeJSONParse(data.candidates?.[0]?.content?.parts?.[0]?.text);
 
         if(item && item.title) {
           recentTopics.push({ title: item.title, timestamp: Date.now() });
           try { localStorage.setItem('serenity_recent_topics', JSON.stringify(recentTopics)); } catch(e) {}
 
-          const tailoredBadge = isTailored && memory.length > 0 
-            ? `<span class="inline-block px-3 py-1 bg-app-brandSoft border border-app-brand/20 rounded-full text-[10px] font-bold uppercase tracking-widest text-app-brand"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Tailored Topic</span>`
-            : `<span class="inline-block px-3 py-1 bg-app-bg border border-app-border rounded-full text-[10px] font-bold uppercase tracking-widest text-app-brand">Meeting Topic</span>`;
+          item.type = 'topic'; // Added type property
+          const itemId = 'topic_' + Date.now();
+          globalMemoryStore[itemId] = item;
 
+          const badge = isTailored && memory.length > 0 ? `<span class="inline-block px-3 py-1 bg-app-brandSoft border border-app-brand/20 rounded-full text-[10px] font-bold uppercase tracking-widest text-app-brand"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Tailored Topic</span>` : `<span class="inline-block px-3 py-1 bg-app-bg border border-app-border rounded-full text-[10px] font-bold uppercase tracking-widest text-app-brand">Meeting Topic</span>`;
           const qHtml = item.questions.map(q => `<li class="flex items-start gap-3"><i class="fa-solid fa-circle-question text-app-brand mt-1 text-sm"></i><span class="text-app-text font-medium">${q}</span></li>`).join('');
-          container.innerHTML = `
-            <div class="bg-app-card p-8 md:p-12 rounded-2xl border border-app-border relative shadow-sm">
-              <div class="relative z-10 max-w-2xl mx-auto space-y-8">
-                <div class="text-center space-y-3">
-                  ${tailoredBadge}
-                  <h3 class="text-3xl font-bold text-app-text">${item.title}</h3>
-                </div>
+          
+          c.innerHTML = `
+            <div class="bg-app-card p-8 md:p-12 rounded-2xl border border-app-border relative shadow-sm group">
+              <!-- Injected Save and Audio UI for Topics -->
+              <div class="absolute top-4 right-4 md:top-6 md:right-6 flex gap-2 z-20">
+                <button onclick="speakText('${itemId}')" class="w-10 h-10 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-solid fa-volume-high text-sm"></i></button>
+                <button onclick="toggleSaveItemById('${itemId}')" class="w-10 h-10 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-regular fa-bookmark text-sm"></i></button>
+              </div>
+              <div class="relative z-10 max-w-2xl mx-auto space-y-8 pt-6">
+                <div class="text-center space-y-3">${badge}<h3 class="text-3xl font-bold text-app-text pr-8">${item.title}</h3></div>
                 <blockquote class="text-center font-serif text-xl text-app-text italic border-y border-app-border py-6 my-6">"${item.quote}"</blockquote>
-                <div>
-                  <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-2">Reflection</h4>
-                  <p class="text-app-muted leading-relaxed">${item.reflection}</p>
-                </div>
-                <div class="bg-app-bg p-6 rounded-xl border border-app-border">
-                  <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-4">Discussion Questions</h4>
-                  <ul class="space-y-4">${qHtml}</ul>
-                </div>
+                <div><h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-2">Reflection</h4><p class="text-app-muted leading-relaxed">${item.reflection}</p></div>
+                <div class="bg-app-bg p-6 rounded-xl border border-app-border"><h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-4">Discussion Questions</h4><ul class="space-y-4">${qHtml}</ul></div>
               </div>
             </div>`;
-          container.classList.remove('hidden');
+          c.classList.remove('hidden');
         }
       } catch(err) {
-        loadingEl.classList.add('hidden');
-        container.innerHTML = `
-          <div class="bg-red-50 dark:bg-red-900/20 p-6 rounded-2xl border border-red-200 dark:border-red-800 text-center">
-            <p class="text-red-600 dark:text-red-400 font-bold text-sm mb-2">Google API Error</p>
-            <p class="text-red-600 dark:text-red-400 text-xs">${err.message}</p>
-          </div>`;
-        container.classList.remove('hidden');
+        l.classList.add('hidden'); c.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl border border-red-200 text-center"><p class="text-red-600 font-bold text-sm mb-2">Error</p><p class="text-red-600 text-xs">${err.message}</p></div>`; c.classList.remove('hidden');
       }
     }
 
     function toggleSaveItemById(itemId) {
       const item = globalMemoryStore[itemId];
       if (!item) return;
-      const existsIdx = savedPassages.findIndex(s => s.keyQuote === item.keyQuote);
+      
+      // Determine if item already exists based on its type
+      let existsIdx = -1;
+      if (item.type === 'tenth') {
+        existsIdx = savedPassages.findIndex(s => s.validation === item.validation);
+      } else if (item.type === 'topic') {
+        existsIdx = savedPassages.findIndex(s => s.title === item.title);
+      } else { // 'literature' or legacy items
+        existsIdx = savedPassages.findIndex(s => s.keyQuote === item.keyQuote);
+      }
+
       if (existsIdx > -1) { savedPassages.splice(existsIdx, 1); } 
       else { savedPassages.unshift(item); }
+      
       try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
       updateSavedCount();
       if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
     }
 
-    function updateSavedCount() {
-      const countEl = document.getElementById('saved-count');
-      if (countEl) countEl.innerText = savedPassages.length;
-    }
+    function updateSavedCount() { const c = document.getElementById('saved-count'); if (c) c.innerText = savedPassages.length; }
 
     function removeSaved(index) {
-      savedPassages.splice(index, 1);
+      // Find the true index in the full array by comparing objects
+      const trueIndex = savedPassages.indexOf(filteredSavedItems()[index]);
+      if(trueIndex > -1) {
+        savedPassages.splice(trueIndex, 1);
+        try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
+        updateSavedCount();
+        renderSavedList();
+      }
+    }
+
+    function clearSaved() {
+      // Only clear the currently filtered type
+      const itemsToKeep = savedPassages.filter(item => {
+        const itemType = item.type || 'literature';
+        return itemType !== currentSavedTab;
+      });
+      savedPassages = itemsToKeep;
       try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
       updateSavedCount();
       renderSavedList();
     }
 
-    function clearSaved() {
-      savedPassages = [];
-      try { localStorage.setItem('serenity_saved', JSON.stringify([])); } catch(e) {}
-      updateSavedCount();
+    function setSavedTab(tabName) {
+      currentSavedTab = tabName;
+      ['literature', 'tenth', 'topic'].forEach(t => {
+        const btn = document.getElementById(`saved-tab-${t}`);
+        if(btn) {
+          if (t === tabName) btn.className = "px-5 py-2 bg-app-brand text-app-card rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors";
+          else btn.className = "px-5 py-2 bg-app-bg border border-app-border text-app-text hover:border-app-brand rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors";
+        }
+      });
       renderSavedList();
     }
 
+    function filteredSavedItems() {
+      return savedPassages.filter(item => {
+        const itemType = item.type || 'literature'; // Fallback for old items
+        return itemType === currentSavedTab;
+      });
+    }
+
     function renderSavedList() {
-      const container = document.getElementById('saved-list');
-      if (savedPassages.length === 0) {
-        container.innerHTML = `<div class="text-center py-12 text-app-muted text-sm">Your library is empty.</div>`;
+      const c = document.getElementById('saved-list');
+      const filteredItems = filteredSavedItems();
+
+      if (filteredItems.length === 0) {
+        let msg = currentSavedTab === 'tenth' ? "No saved Spot Checks." : currentSavedTab === 'topic' ? "No saved Topics." : "Your library is empty.";
+        c.innerHTML = `<div class="text-center py-12 text-app-muted text-sm">${msg}</div>`;
         return;
       }
-      container.innerHTML = '';
-      savedPassages.forEach((item, idx) => {
-        let content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">${item.literatureSource}</span><h4 class="font-bold text-app-text">${item.title}</h4><p class="text-sm text-app-muted mt-1 font-serif italic">"${item.keyQuote}"</p>`;
-        container.insertAdjacentHTML('beforeend', `
+      
+      c.innerHTML = '';
+      filteredItems.forEach((item, idx) => {
+        let content = '';
+        if (currentSavedTab === 'tenth') {
+          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">Spot Check</span>
+                     <p class="font-bold text-app-text text-sm mb-1">${item.validation}</p>
+                     <p class="text-sm text-app-muted font-serif italic">"${item.theTurnaround}"</p>`;
+        } else if (currentSavedTab === 'topic') {
+          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">Meeting Topic</span>
+                     <h4 class="font-bold text-app-text">${item.title}</h4>
+                     <p class="text-sm text-app-muted mt-1 truncate">"${item.quote}"</p>`;
+        } else { // literature
+          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">${item.literatureSource}</span>
+                     <h4 class="font-bold text-app-text">${item.title}</h4>
+                     <p class="text-sm text-app-muted mt-1 font-serif italic">"${item.keyQuote}"</p>`;
+        }
+
+        c.insertAdjacentHTML('beforeend', `
           <div class="p-5 bg-app-card rounded-xl border border-app-border flex justify-between items-start gap-4 hover:border-app-brand transition-colors">
-            <div>${content}</div>
-            <button onclick="removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+            <div class="overflow-hidden">${content}</div>
+            <button onclick="removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors shrink-0"><i class="fa-solid fa-trash-can"></i></button>
           </div>
         `);
       });
     }
 
     async function speakText(itemId) {
-      const apiKey = getApiKey();
-      if (!apiKey) {
-        toggleSettingsModal();
-        return;
+      const apiKey = getApiKey(); if (!apiKey) { toggleSettingsModal(); return; }
+      stopAudio(); const item = globalMemoryStore[itemId]; if (!item) return;
+      
+      // Intelligent Audio Router based on type
+      let textToSpeak = "";
+      if (item.type === 'tenth') {
+        textToSpeak = `Spot Check Validation: ${item.validation}. The Turnaround: ${item.theTurnaround}. Next Right Thing: ${item.actionStep}.`;
+      } else if (item.type === 'topic') {
+        textToSpeak = `Meeting Topic: ${item.title}. Quote: ${item.quote}. Reflection: ${item.reflection}. Questions for discussion: ${item.questions.join(', ')}.`;
+      } else { // literature
+        textToSpeak = `From ${item.literatureSource}. ${item.title}. Quote: ${item.keyQuote}. Insight: ${item.summaryAndInsight}. Application: ${item.dailyApplication || ''}`;
       }
-
-      stopAudio(); 
-      const item = globalMemoryStore[itemId];
-      if (!item) return;
       
-      // FIXED: Added the dailyApplication string to the audio payload
-      let textToSpeak = `From ${item.literatureSource}. ${item.title}. Quote: ${item.keyQuote}. Insight: ${item.summaryAndInsight}. Application: ${item.dailyApplication}`;
-      
-      const playerBar = document.getElementById('audio-player-bar');
-      const audioIconContainer = document.getElementById('audio-icon-container');
-      const audioIcon = document.getElementById('audio-icon');
-      playerBar.classList.remove('hidden');
-      audioIcon.className = "fa-solid fa-spinner fa-spin text-xs";
-      audioIconContainer.classList.add('animate-pulse');
+      const p = document.getElementById('audio-player-bar'); const ac = document.getElementById('audio-icon-container'); const ai = document.getElementById('audio-icon');
+      p.classList.remove('hidden'); ai.className = "fa-solid fa-spinner fa-spin text-xs"; ac.classList.add('animate-pulse');
 
       try {
         const payload = { contents: [{ parts: [{ text: textToSpeak }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } }, model: "gemini-3.6-flash" };
@@ -1065,81 +851,27 @@
         const mimeType = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.mimeType || 'audio/L16; rate=24000';
         
         if (base64Audio) {
-            const sampleRateMatch = mimeType.match(/rate=(\d+)/);
-            const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+            const srMatch = mimeType.match(/rate=(\d+)/); const sr = srMatch ? parseInt(srMatch[1], 10) : 24000;
             const audioData = Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0));
-            const wavData = encodeWAV(audioData, sampleRate);
+            const wavData = encodeWAV(audioData, sr);
             const blob = new Blob([wavData], { type: 'audio/wav' });
-            const audioUrl = URL.createObjectURL(blob);
-            currentAudioSource = new Audio(audioUrl);
+            currentAudioSource = new Audio(URL.createObjectURL(blob));
             currentAudioSource.onended = stopAudio;
             currentAudioSource.play();
-            audioIcon.className = "fa-solid fa-music text-xs";
-            audioIconContainer.classList.remove('animate-pulse');
+            ai.className = "fa-solid fa-music text-xs"; ac.classList.remove('animate-pulse');
         } else { throw new Error("No audio data"); }
       } catch (e) {
-          const utterance = new SpeechSynthesisUtterance(textToSpeak);
-          utterance.onend = stopAudio;
-          window.speechSynthesis.speak(utterance);
-          audioIcon.className = "fa-solid fa-music text-xs";
-          audioIconContainer.classList.remove('animate-pulse');
+          const u = new SpeechSynthesisUtterance(textToSpeak); u.onend = stopAudio; window.speechSynthesis.speak(u);
+          ai.className = "fa-solid fa-music text-xs"; ac.classList.remove('animate-pulse');
       }
     }
 
-    function stopAudio() {
-      if (currentAudioSource) { currentAudioSource.pause(); currentAudioSource = null; }
-      window.speechSynthesis.cancel();
-      document.getElementById('audio-player-bar').classList.add('hidden');
-    }
+    function stopAudio() { if (currentAudioSource) { currentAudioSource.pause(); currentAudioSource = null; } window.speechSynthesis.cancel(); document.getElementById('audio-player-bar').classList.add('hidden'); }
+    function encodeWAV(s, sr) { const b = new ArrayBuffer(44 + s.length); const v = new DataView(b); const w = (v, o, str) => { for (let i = 0; i < str.length; i++) v.setUint8(o + i, str.charCodeAt(i)); }; w(v, 0, 'RIFF'); v.setUint32(4, 36 + s.length, true); w(v, 8, 'WAVE'); w(v, 12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(v, 36, 'data'); v.setUint32(40, s.length, true); const sv = new Uint8Array(b, 44); sv.set(s); return new Uint8Array(b); }
 
-    function encodeWAV(samples, sampleRate) {
-        const buffer = new ArrayBuffer(44 + samples.length);
-        const view = new DataView(buffer);
-        const writeString = (v, o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
-        writeString(view, 0, 'RIFF');
-        view.setUint32(4, 36 + samples.length, true);
-        writeString(view, 8, 'WAVE');
-        writeString(view, 12, 'fmt ');
-        view.setUint32(16, 16, true);
-        view.setUint16(20, 1, true);
-        view.setUint16(22, 1, true);
-        view.setUint32(24, sampleRate, true);
-        view.setUint32(28, sampleRate * 2, true);
-        view.setUint16(32, 2, true);
-        view.setUint16(34, 16, true);
-        writeString(view, 36, 'data');
-        view.setUint32(40, samples.length, true);
-        const sampleView = new Uint8Array(buffer, 44);
-        sampleView.set(samples);
-        return new Uint8Array(buffer);
-    }
+    if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(err => { console.log('SW failed:', err); }); }); }
 
-    // Register Service Worker for PWA
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(err => {
-          console.log('Service Worker registration failed:', err);
-        });
-      });
-    }
-
-    window.switchTab = switchTab;
-    window.toggleTheme = toggleTheme;
-    window.changeTheme = changeTheme;
-    window.toggleSerenityPrayerModal = toggleSerenityPrayerModal;
-    window.toggleSettingsModal = toggleSettingsModal;
-    window.saveApiKey = saveApiKey;
-    window.clearApiKey = clearApiKey;
-    window.handleSearch = handleSearch;
-    window.setQuickSearch = setQuickSearch;
-    window.setFilter = setFilter;
-    window.clearSaved = clearSaved;
-    window.speakText = speakText;
-    window.toggleSaveItemById = toggleSaveItemById;
-    window.removeSaved = removeSaved;
-    window.stopAudio = stopAudio;
-    window.processTenthStep = processTenthStep;
-    window.generateTopic = generateTopic;
+    window.switchTab = switchTab; window.toggleTheme = toggleTheme; window.changeTheme = changeTheme; window.toggleSerenityPrayerModal = toggleSerenityPrayerModal; window.toggleSettingsModal = toggleSettingsModal; window.saveApiKey = saveApiKey; window.clearApiKey = clearApiKey; window.handleSearch = handleSearch; window.setQuickSearch = setQuickSearch; window.setFilter = setFilter; window.clearSaved = clearSaved; window.speakText = speakText; window.toggleSaveItemById = toggleSaveItemById; window.removeSaved = removeSaved; window.stopAudio = stopAudio; window.processTenthStep = processTenthStep; window.generateTopic = generateTopic; window.setSavedTab = setSavedTab;
   </script>
 </body>
 </html>
