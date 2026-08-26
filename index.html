@@ -146,7 +146,6 @@
 
     /* THEME 15: PISTON'S DRIVE (Dual-Era) */
     :root.theme-piston { --color-bg: #f8fafc; --color-card: #ffffff; --color-border: #1d428a; --color-text: #0f172a; --color-muted: #1d428a; --color-brand: #c8102e; --color-brand-hover: #1d428a; --color-brand-soft: rgba(200, 16, 46, 0.12); }
-    
     /* Tweaked Dark Mode: Crimson Red borders instead of Teal */
     :root.dark.theme-piston { --color-bg: #01333c; --color-card: #000000; --color-border: #9d2235; --color-text: #ffffff; --color-muted: #8a8d8f; --color-brand: #ffa300; --color-brand-hover: #9d2235; --color-brand-soft: rgba(157, 34, 53, 0.35); }
   </style>
@@ -805,28 +804,29 @@
       filteredItems.forEach((item, idx) => {
         let content = '';
         if (currentSavedTab === 'tenth') {
-          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">Spot Check</span>
-                     <p class="font-bold text-app-text text-sm mb-1">${item.validation}</p>
-                     <p class="text-sm text-app-muted font-serif italic">"${item.theTurnaround}"</p>`;
+          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-2">Spot Check</span>
+                     <p class="font-bold text-app-text text-sm mb-2">${item.validation}</p>
+                     <p class="text-sm text-app-muted font-serif italic mb-3 border-l-2 border-app-brand pl-3">"${item.theTurnaround}"</p>
+                     <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">Next Right Thing</span>
+                     <p class="text-sm text-app-text">${item.actionStep}</p>`;
         } else if (currentSavedTab === 'topic') {
-          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">Meeting Topic</span>
-                     <h4 class="font-bold text-app-text">${item.title}</h4>
-                     <p class="text-sm text-app-muted mt-1 truncate">"${item.quote}"</p>`;
-        } else { // literature
+          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-2">Meeting Topic</span>
+                     <h4 class="font-bold text-app-text text-lg">${item.title}</h4>
+                     <p class="text-sm text-app-muted mt-2 font-serif italic border-l-2 border-app-brand pl-3">"${item.quote}"</p>`;
+        } else { 
           content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">${item.literatureSource}</span>
                      <h4 class="font-bold text-app-text">${item.title}</h4>
-                     <p class="text-sm text-app-muted mt-1 font-serif italic">"${item.keyQuote}"</p>`;
+                     <p class="text-sm text-app-muted mt-2 font-serif italic">"${item.keyQuote}"</p>`;
         }
 
         c.insertAdjacentHTML('beforeend', `
           <div class="p-5 bg-app-card rounded-xl border border-app-border flex justify-between items-start gap-4 hover:border-app-brand transition-colors">
-            <div class="overflow-hidden">${content}</div>
-            <button onclick="removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors shrink-0"><i class="fa-solid fa-trash-can"></i></button>
+            <div class="overflow-hidden w-full">${content}</div>
+            <button onclick="removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors shrink-0 mt-1"><i class="fa-solid fa-trash-can"></i></button>
           </div>
         `);
       });
     }
-
     async function speakText(itemId) {
       const apiKey = getApiKey(); if (!apiKey) { toggleSettingsModal(); return; }
       stopAudio(); const item = globalMemoryStore[itemId]; if (!item) return;
