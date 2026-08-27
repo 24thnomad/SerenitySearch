@@ -575,7 +575,8 @@
       const apiKey = getApiKey(); if (!apiKey) { toggleSettingsModal(); return; }
       saveToDailyMemory('search', query);
       const l = document.getElementById('search-loading'); const r = document.getElementById('results-list'); r.innerHTML = ''; l.classList.remove('hidden');
-      const sys = `You are SerenitySearch, an expert A.A. literature guide. Filter Preference: ${currentFilter}. Return up to 10 highly relevant passages matching the query. Return STRICTLY valid JSON.`;
+      const libraryList = "Big Book, 12 Steps & 12 Traditions, Daily Reflections, As Bill Sees It, Drop the Rock, Living Sober, Came to Believe, The Language of the Heart, AA Comes of Age, Experience, Strength, and Hope";
+const sys = `You are SerenitySearch, an expert A.A. literature guide. Available Library: ${libraryList}. Filter Preference: ${currentFilter}. If Filter is "All", you MUST diversify your results across the Available Library, explicitly prioritizing the less common books. Return up to 10 highly relevant passages. Return STRICTLY valid JSON.`;
       const sch = { type: "OBJECT", properties: { results: { type: "ARRAY", items: { type: "OBJECT", properties: { title: { type: "STRING" }, literatureSource: { type: "STRING" }, keyQuote: { type: "STRING" }, summaryAndInsight: { type: "STRING" }, dailyApplication: { type: "STRING" } }, required: ["title", "literatureSource", "keyQuote", "summaryAndInsight", "dailyApplication"] } } }, required: ["results"] };
       try {
         const payload = { contents: [{ parts: [{ text: query }] }], systemInstruction: { parts: [{ text: sys }] }, generationConfig: { responseMimeType: "application/json", responseSchema: sch } };
