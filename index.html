@@ -278,23 +278,21 @@
           </div>
         </form>
         <div class="flex items-center justify-center pt-6" id="filter-container">
-          <div class="relative flex items-center">
+          <div class="relative flex items-center" id="multi-select-wrapper">
             <span class="text-xs font-semibold text-app-muted uppercase tracking-widest mr-3 hidden sm:inline-block">Filter Source:</span>
             <div class="relative">
-              <select id="source-filter" onchange="setFilter(this.value)" class="appearance-none bg-app-card border border-app-border text-app-text text-sm font-medium rounded-xl pl-4 pr-10 py-2.5 focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand cursor-pointer shadow-sm transition-all">
-                <option value="All">All Literature</option>
-                <option value="Big Book">Big Book (Alcoholics Anonymous)</option>
-                <option value="12 Steps & 12 Traditions">12 Steps & 12 Traditions</option>
-                <option value="Daily Reflections">Daily Reflections</option>
-                <option value="As Bill Sees It">As Bill Sees It</option>
-                <option value="Drop the Rock">Drop the Rock</option>
-                <option value="Living Sober">Living Sober</option>
-                <option value="Came to Believe">Came to Believe</option>
-                <option value="The Language of the Heart">The Language of the Heart</option>
-                <option value="AA Comes of Age">AA Comes of Age</option>
-                <option value="Experience, Strength, and Hope">Experience, Strength, and Hope</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-app-muted"><i class="fa-solid fa-chevron-down text-xs"></i></div>
+              <button type="button" onclick="toggleFilterMenu()" class="flex items-center gap-2 bg-app-card border border-app-border text-app-text text-sm font-medium rounded-xl px-4 py-2.5 focus:outline-none focus:border-app-brand shadow-sm transition-all hover:border-app-brand">
+                <span id="filter-btn-text">All Literature</span>
+                <i class="fa-solid fa-chevron-down text-xs text-app-muted"></i>
+              </button>
+              
+              <div id="filter-menu" class="hidden absolute left-0 sm:right-0 sm:left-auto top-full mt-2 w-64 bg-app-card border border-app-border rounded-xl shadow-xl z-50 p-2 max-h-64 overflow-y-auto custom-scrollbar flex flex-col">
+                <label class="flex items-center gap-3 p-2 hover:bg-app-bg rounded-lg cursor-pointer transition-colors border-b border-app-border mb-1">
+                  <input type="checkbox" id="check-all-sources" onchange="toggleAllSources(this.checked)" checked class="w-4 h-4 accent-app-brand cursor-pointer">
+                  <span class="text-sm font-bold text-app-text">Select All / Any</span>
+                </label>
+                <div id="filter-checkbox-list" class="flex flex-col"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -333,7 +331,12 @@
         <div class="bg-app-card p-6 md:p-8 rounded-2xl border border-app-border shadow-sm">
           <form onsubmit="processTenthStep(event)" class="space-y-4">
             <label class="block text-sm font-bold text-app-brand uppercase tracking-widest">What is disturbing your peace right now?</label>
-            <textarea id="tenth-input" rows="5" class="w-full p-4 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner resize-none" placeholder="e.g., I'm frustrated with my coworker for taking credit for my idea..." required></textarea>
+              <div class="relative">
+              <textarea id="tenth-input" rows="5" class="w-full p-4 pb-12 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner resize-none" placeholder="e.g., I'm frustrated with my coworker for taking credit for my idea..." required></textarea>
+              <button type="button" onclick="toggleDictation()" class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-app-card border border-app-border flex items-center justify-center shadow-sm hover:border-app-brand transition-colors">
+                <i id="dictation-icon" class="fa-solid fa-microphone text-app-muted"></i>
+              </button>
+            </div>
             <button type="submit" class="w-full py-3 bg-app-brand text-app-card font-bold rounded-xl hover:bg-app-brandHover transition-colors shadow-sm">
               <i class="fa-solid fa-hands-holding-circle mr-2"></i>Process with Serenity Sponsor
             </button>
@@ -458,7 +461,7 @@
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    var currentFilter = 'All';
+   
     var savedPassages = [];
     var currentAudioSource = null;
     var globalMemoryStore = {}; 
@@ -556,7 +559,7 @@
     }
 
     function setQuickSearch(queryText) { switchTab('search'); document.getElementById('search-input').value = queryText; performSearch(queryText); }
-    function setFilter(filterName) { currentFilter = filterName; const s = document.getElementById('source-filter'); if (s && s.value !== filterName) s.value = filterName; }
+    
     function handleSearch(e) { e.preventDefault(); const q = document.getElementById('search-input').value.trim(); if (q) performSearch(q); }
 
     function safeJSONParse(str) {
@@ -575,8 +578,8 @@
       const apiKey = getApiKey(); if (!apiKey) { toggleSettingsModal(); return; }
       saveToDailyMemory('search', query);
       const l = document.getElementById('search-loading'); const r = document.getElementById('results-list'); r.innerHTML = ''; l.classList.remove('hidden');
-      const libraryList = "Big Book, 12 Steps & 12 Traditions, Daily Reflections, As Bill Sees It, Drop the Rock, Living Sober, Came to Believe, The Language of the Heart, AA Comes of Age, Experience, Strength, and Hope";
-const sys = `You are SerenitySearch, an expert A.A. literature guide. Available Library: ${libraryList}. Filter Preference: ${currentFilter}. If Filter is "All", you MUST diversify your results across the Available Library, explicitly prioritizing the less common books. Return up to 10 highly relevant passages. Return STRICTLY valid JSON.`;
+      const activeLibs = selectedSources.length === 0 ? LIBRARY_SOURCES.join(", ") : selectedSources.join(", ");
+      const sys = `You are SerenitySearch, an expert A.A. literature guide. Available Library: ${LIBRARY_SOURCES.join(", ")}. The user explicitly selected to search ONLY within these books: [${activeLibs}]. You MUST pull quotes explicitly prioritizing variety among the selected books. Return up to 10 highly relevant passages. Return STRICTLY valid JSON.`;
       const sch = { type: "OBJECT", properties: { results: { type: "ARRAY", items: { type: "OBJECT", properties: { title: { type: "STRING" }, literatureSource: { type: "STRING" }, keyQuote: { type: "STRING" }, summaryAndInsight: { type: "STRING" }, dailyApplication: { type: "STRING" } }, required: ["title", "literatureSource", "keyQuote", "summaryAndInsight", "dailyApplication"] } } }, required: ["results"] };
       try {
         const payload = { contents: [{ parts: [{ text: query }] }], systemInstruction: { parts: [{ text: sys }] }, generationConfig: { responseMimeType: "application/json", responseSchema: sch } };
@@ -872,9 +875,82 @@ const sys = `You are SerenitySearch, an expert A.A. literature guide. Available 
     function stopAudio() { if (currentAudioSource) { currentAudioSource.pause(); currentAudioSource = null; } window.speechSynthesis.cancel(); document.getElementById('audio-player-bar').classList.add('hidden'); }
     function encodeWAV(s, sr) { const b = new ArrayBuffer(44 + s.length); const v = new DataView(b); const w = (v, o, str) => { for (let i = 0; i < str.length; i++) v.setUint8(o + i, str.charCodeAt(i)); }; w(v, 0, 'RIFF'); v.setUint32(4, 36 + s.length, true); w(v, 8, 'WAVE'); w(v, 12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(v, 36, 'data'); v.setUint32(40, s.length, true); const sv = new Uint8Array(b, 44); sv.set(s); return new Uint8Array(b); }
 
+      // --- MULTI-SELECT FILTER LOGIC ---
+    const LIBRARY_SOURCES = ["Big Book", "12 Steps & 12 Traditions", "Daily Reflections", "As Bill Sees It", "Drop the Rock", "Living Sober", "Came to Believe", "The Language of the Heart", "AA Comes of Age", "Experience, Strength, and Hope"];
+    let selectedSources = [...LIBRARY_SOURCES];
+
+    function initFilterMenu() {
+      const list = document.getElementById('filter-checkbox-list');
+      if (!list) return;
+      list.innerHTML = LIBRARY_SOURCES.map(source => `
+        <label class="flex items-center gap-3 p-2 hover:bg-app-bg rounded-lg cursor-pointer transition-colors">
+          <input type="checkbox" value="${source}" onchange="updateSelectedSources()" checked class="source-checkbox w-4 h-4 accent-app-brand cursor-pointer">
+          <span class="text-sm font-medium text-app-text">${source}</span>
+        </label>
+      `).join('');
+      
+      document.addEventListener('click', (e) => {
+        const wrapper = document.getElementById('multi-select-wrapper');
+        const menu = document.getElementById('filter-menu');
+        if (wrapper && !wrapper.contains(e.target) && !menu.classList.contains('hidden')) menu.classList.add('hidden');
+      });
+    }
+
+    function toggleFilterMenu() { document.getElementById('filter-menu').classList.toggle('hidden'); }
+
+    function toggleAllSources(isChecked) {
+      document.querySelectorAll('.source-checkbox').forEach(cb => cb.checked = isChecked);
+      updateSelectedSources();
+    }
+
+    function updateSelectedSources() {
+      const checkboxes = document.querySelectorAll('.source-checkbox');
+      selectedSources = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+      
+      const allCheck = document.getElementById('check-all-sources');
+      const btnText = document.getElementById('filter-btn-text');
+      
+      if (selectedSources.length === LIBRARY_SOURCES.length) {
+        allCheck.checked = true; btnText.innerText = "All Literature";
+      } else if (selectedSources.length === 0) {
+        allCheck.checked = false; btnText.innerText = "None Selected";
+      } else if (selectedSources.length === 1) {
+        allCheck.checked = false; btnText.innerText = "1 Book Selected";
+      } else {
+        allCheck.checked = false; btnText.innerText = `${selectedSources.length} Books Selected`;
+      }
+    }
+    
+    window.addEventListener('DOMContentLoaded', initFilterMenu);
+
+    // --- 10TH STEP VOICE DICTATION ---
+    let speechRecognition;
+    function toggleDictation() {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRec) return alert("Your browser does not support voice dictation.");
+      
+      const micIcon = document.getElementById('dictation-icon');
+      const input = document.getElementById('tenth-input');
+      
+      if (speechRecognition) { speechRecognition.stop(); return; }
+      
+      speechRecognition = new SpeechRec();
+      speechRecognition.continuous = true;
+      speechRecognition.interimResults = false;
+      
+      speechRecognition.onstart = () => { micIcon.className = "fa-solid fa-microphone text-red-500 fa-beat-fade"; };
+      speechRecognition.onresult = (e) => {
+        for (let i = e.resultIndex; i < e.results.length; ++i) {
+          if (e.results[i].isFinal) input.value += (input.value ? " " : "") + e.results[i][0].transcript;
+        }
+      };
+      speechRecognition.onend = () => { speechRecognition = null; micIcon.className = "fa-solid fa-microphone text-app-muted"; };
+      speechRecognition.start();
+    }
+      
     if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(err => { console.log('SW failed:', err); }); }); }
 
-    window.switchTab = switchTab; window.toggleTheme = toggleTheme; window.changeTheme = changeTheme; window.toggleSerenityPrayerModal = toggleSerenityPrayerModal; window.toggleSettingsModal = toggleSettingsModal; window.saveApiKey = saveApiKey; window.clearApiKey = clearApiKey; window.handleSearch = handleSearch; window.setQuickSearch = setQuickSearch; window.setFilter = setFilter; window.clearSaved = clearSaved; window.speakText = speakText; window.toggleSaveItemById = toggleSaveItemById; window.removeSaved = removeSaved; window.stopAudio = stopAudio; window.processTenthStep = processTenthStep; window.generateTopic = generateTopic; window.setSavedTab = setSavedTab;
+    window.switchTab = switchTab; window.toggleTheme = toggleTheme; window.changeTheme = changeTheme; window.toggleSerenityPrayerModal = toggleSerenityPrayerModal; window.toggleSettingsModal = toggleSettingsModal; window.saveApiKey = saveApiKey; window.clearApiKey = clearApiKey; window.handleSearch = handleSearch; window.setQuickSearch = setQuickSearch; window.toggleFilterMenu = toggleFilterMenu; window.toggleAllSources = toggleAllSources; window.updateSelectedSources = updateSelectedSources; window.toggleDictation = toggleDictation; window.clearSaved = clearSaved; window.speakText = speakText; window.toggleSaveItemById = toggleSaveItemById; window.removeSaved = removeSaved; window.stopAudio = stopAudio; window.processTenthStep = processTenthStep; window.generateTopic = generateTopic; window.setSavedTab = setSavedTab;
   </script>
 </body>
 </html>
