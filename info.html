@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SerenitySearch - Infographic</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['"Playfair Display"', 'serif'] },
+          colors: { brand: '#B58C3D', brandSoft: 'rgba(181, 140, 61, 0.15)', bg: '#F4EFE6', card: '#FCFAF5', border: '#DFD5C2', text: '#18181b', muted: '#52525b' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-bg text-text font-sans p-8 md:p-12 min-h-screen flex items-center justify-center selection:bg-brand/30">
+
+  <div class="max-w-5xl w-full bg-card border-2 border-brand/20 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+    
+    <!-- HEADER -->
+    <header class="bg-gradient-to-b from-brandSoft to-transparent p-10 md:p-16 text-center space-y-6 relative border-b border-border">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-brand/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+      <div class="flex items-center justify-center space-x-4">
+        <div class="w-16 h-16 text-brand">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-full h-full fill-card drop-shadow-md">
+            <g stroke="currentColor" stroke-width="5" stroke-linejoin="miter">
+              <path d="M48,82 C20,92 5,82 8,72 C18,78 30,78 40,75 Z"/><path d="M52,82 C80,92 95,82 92,72 C82,78 70,78 60,75 Z"/><path d="M40,78 C12,72 5,48 8,42 C16,52 26,55 32,55 Z"/><path d="M60,78 C88,72 95,48 92,42 C84,52 74,55 68,55 Z"/><path d="M48,75 C20,62 18,30 26,22 C32,36 42,46 48,50 Z"/><path d="M52,75 C80,62 82,30 74,22 C68,36 58,46 52,50 Z"/><path d="M50,78 C42,84 45,98 50,98 C55,98 58,84 50,78 Z"/><path d="M50,78 C35,60 40,20 50,12 C60,20 65,60 50,78 Z"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <h1 class="text-5xl md:text-6xl font-bold font-serif tracking-tight text-text">SerenitySearch</h1>
+        <p class="text-xl md:text-2xl text-brand font-medium mt-4">A Modern Tool for Timeless Principles.</p>
+      </div>
+      <p class="max-w-2xl mx-auto text-muted text-lg leading-relaxed">
+        An AI-powered, privacy-first companion app designed to bring the wisdom of A.A. literature into the modern era. Instantly search texts, process inventory, and generate discussion topics.
+      </p>
+    </header>
+
+    <!-- CORE FEATURES GRID -->
+    <div class="grid md:grid-cols-2 gap-8 p-10 md:p-16">
+      
+      <!-- Feature 1 -->
+      <div class="flex gap-6">
+        <div class="shrink-0 w-14 h-14 rounded-2xl bg-brandSoft border border-brand/30 flex items-center justify-center text-brand text-2xl">
+          <i class="fa-solid fa-book-open"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-2">Deep Literature Search</h3>
+          <p class="text-muted leading-relaxed text-sm">Targeted searches across 10 approved texts (Big Book, 12&12, Daily Reflections, etc.). Custom multi-select filtering guarantees you find the exact insight and daily application you need.</p>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="flex gap-6">
+        <div class="shrink-0 w-14 h-14 rounded-2xl bg-brandSoft border border-brand/30 flex items-center justify-center text-brand text-2xl">
+          <i class="fa-solid fa-list-ol"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-2">Interactive 12 Steps</h3>
+          <p class="text-muted leading-relaxed text-sm">Read the unabridged text of all 12 Steps natively. Tapping a step automatically triggers an intelligent, cross-literature search focused entirely on that step's core principle.</p>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="flex gap-6">
+        <div class="shrink-0 w-14 h-14 rounded-2xl bg-brandSoft border border-brand/30 flex items-center justify-center text-brand text-2xl">
+          <i class="fa-solid fa-microphone"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-2">10th Step Spot Check</h3>
+          <p class="text-muted leading-relaxed text-sm">Use native voice dictation to speak what's disturbing your peace. The AI "Sponsor" processes your input to provide compassionate validation, a perspective turnaround, and the next right thing.</p>
+        </div>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="flex gap-6">
+        <div class="shrink-0 w-14 h-14 rounded-2xl bg-brandSoft border border-brand/30 flex items-center justify-center text-brand text-2xl">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-2">Meeting Topic Generator</h3>
+          <p class="text-muted leading-relaxed text-sm">Instantly generate fresh, context-aware meeting topics complete with a core quote, a deep reflection, and open-ended discussion questions. Seamlessly share directly from your device.</p>
+        </div>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="flex gap-6">
+        <div class="shrink-0 w-14 h-14 rounded-2xl bg-brandSoft border border-brand/30 flex items-center justify-center text-brand text-2xl">
+          <i class="fa-solid fa-bookmark"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-2">Personal Saved Library</h3>
+          <p class="text-muted leading-relaxed text-sm">Bookmark your favorite passages, specific 10th step turnarounds, and engaging meeting topics. Build a tailored archive of recovery insights that you can quickly reference anytime.</p>
+        </div>
+      </div>
+
+      <!-- Feature 6 -->
+      <div class="flex gap-6">
+        <div class="shrink-0 w-14 h-14 rounded-2xl bg-brandSoft border border-brand/30 flex items-center justify-center text-brand text-2xl">
+          <i class="fa-solid fa-palette"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold mb-2">Deep Theme Selection</h3>
+          <p class="text-muted leading-relaxed text-sm">Personalize the visual experience. Toggle Dark Mode or choose from 15 meticulously crafted color palettes—ensuring maximum readability and visual comfort for any user, in any lighting.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- UNDER THE HOOD -->
+    <div class="bg-text text-card p-10">
+      <h3 class="text-center text-xs font-bold text-brand uppercase tracking-widest mb-8">Technical Architecture</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        
+        <div class="space-y-3">
+          <i class="fa-solid fa-shield-halved text-2xl text-brand"></i>
+          <h4 class="font-bold text-sm">100% Private</h4>
+          <p class="text-xs text-gray-400">Zero backend tracking. Data stays entirely on your local device.</p>
+        </div>
+
+        <div class="space-y-3">
+          <i class="fa-solid fa-mobile-screen-button text-2xl text-brand"></i>
+          <h4 class="font-bold text-sm">PWA Ready</h4>
+          <p class="text-xs text-gray-400">Installs natively as a standalone app on iOS, Android, and tablets.</p>
+        </div>
+
+        <div class="space-y-3">
+          <i class="fa-solid fa-volume-high text-2xl text-brand"></i>
+          <h4 class="font-bold text-sm">Accessible</h4>
+          <p class="text-xs text-gray-400">Built-in Text-to-Speech reads passages aloud for auditory learners.</p>
+        </div>
+
+        <div class="space-y-3">
+          <i class="fa-solid fa-cloud-arrow-down text-2xl text-brand"></i>
+          <h4 class="font-bold text-sm">Cross-Device Sync</h4>
+          <p class="text-xs text-gray-400">Secure JSON data export allows seamless transitions across devices.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-card p-8 text-center border-t border-border flex flex-col items-center">
+      <div class="w-12 h-1 bg-brand rounded-full mb-6"></div>
+      <p class="font-serif italic text-muted">"Our very lives, as ex-problem drinkers, depend upon our constant thought of others and how we may help meet their needs."</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>
+
