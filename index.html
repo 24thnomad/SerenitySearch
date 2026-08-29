@@ -159,9 +159,12 @@
   <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- AI Accuracy Disclaimer -->
- <div class="bg-app-card text-app-text text-[11px] text-center py-2 px-4 tracking-wide border-b border-app-border shrink-0">
-    <i class="fa-solid fa-triangle-exclamation text-app-brand mr-2"></i>
-    An AI guide for your daily reprieve. Quotes and chapter locations are gathered for reflection and may vary slightly.
+ <div id="ai-disclaimer" onclick="dismissDisclaimer()" class="bg-app-card text-app-text text-[11px] text-center py-2 px-8 tracking-wide border-b border-app-border shrink-0 relative cursor-pointer hover:bg-app-bg transition-colors group flex items-center justify-center">
+    <div>
+      <i class="fa-solid fa-triangle-exclamation text-app-brand mr-2"></i>
+      An AI guide for your daily reprieve. Quotes and chapter locations are gathered for reflection and may vary slightly.
+    </div>
+    <i class="fa-solid fa-xmark absolute right-4 text-app-muted opacity-50 group-hover:opacity-100 transition-opacity"></i>
   </div>
 
   <!-- Header -->
@@ -770,8 +773,19 @@
     }
 
     var isAppInitialized = false;
+    function dismissDisclaimer() {
+      const d = document.getElementById('ai-disclaimer');
+      if (d) {
+        d.classList.add('hidden');
+        try { localStorage.setItem('serenity_disclaimer_dismissed', 'true'); } catch(e) {}
+      }
+    }
     function initApp() {
       if (window.__serenityInitialized) return; 
+      if (localStorage.getItem('serenity_disclaimer_dismissed') === 'true') {
+        const d = document.getElementById('ai-disclaimer');
+        if (d) d.classList.add('hidden');
+      }
       updateSavedCount();
       renderStepsGrid();
       initFilterMenu();
