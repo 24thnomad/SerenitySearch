@@ -468,7 +468,6 @@
           <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all">
         </div>
         
-        <!-- Sobriety Counter Settings -->
         <div class="w-full h-px bg-app-border my-4"></div>
         <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest mb-3">Sobriety Counter</h4>
         <div class="space-y-4">
@@ -482,12 +481,24 @@
           </label>
         </div>
 
+        <div class="w-full h-px bg-app-border my-4"></div>
+        <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest mb-3">Audio Settings</h4>
+        <div class="mb-4 relative">
+          <label class="block text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Reader Voice</label>
+          <select id="tts-voice-input" class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all text-sm appearance-none">
+            <option value="Kore">Female (Kore)</option>
+            <option value="Aoede">Female (Aoede)</option>
+            <option value="Charon">Male (Charon)</option>
+            <option value="Fenrir">Male (Fenrir)</option>
+          </select>
+          <i class="fa-solid fa-chevron-down absolute right-4 top-9 text-app-muted pointer-events-none text-xs"></i>
+        </div>
+
         <div class="flex gap-3 pt-6">
           <button onclick="saveSettings()" class="flex-1 py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover shadow-sm">Save Settings</button>
           <button onclick="clearApiKey()" class="px-6 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-red-500 hover:text-red-500">Clear Key</button>
         </div>
         
-        <!-- Data Backup Section -->
         <div class="w-full h-px bg-app-border my-4"></div>
         <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest mb-2">Data Backup</h4>
         <div class="flex gap-3">
@@ -558,6 +569,11 @@
       const sh = document.getElementById('show-home-counter-input').checked;
       localStorage.setItem('serenity_show_home_counter', sh);
 
+      const voiceInput = document.getElementById('tts-voice-input');
+      if (voiceInput) {
+        localStorage.setItem('serenity_tts_voice', voiceInput.value);
+      }
+
       updateCounters();
       toggleSettingsModal(); 
     }
@@ -570,6 +586,12 @@
         document.getElementById('api-key-input').value = getApiKey(); 
         document.getElementById('sobriety-date-input').value = localStorage.getItem('serenity_sobriety_date') || "";
         document.getElementById('show-home-counter-input').checked = localStorage.getItem('serenity_show_home_counter') === 'true';
+        
+        const voiceInput = document.getElementById('tts-voice-input');
+        if (voiceInput) {
+          voiceInput.value = localStorage.getItem('serenity_tts_voice') || 'Kore';
+        }
+        
         m.classList.remove('hidden'); 
       } else { 
         m.classList.add('hidden'); 
@@ -1291,8 +1313,9 @@
             return;
         }
 
-        try {
-            const payload = { contents: [{ parts: [{ text: chunkText }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } }, model: "gemini-2.5-flash-preview-tts" };
+       try {
+            const selectedVoice = localStorage.getItem('serenity_tts_voice') || 'Kore';
+            const payload = { contents: [{ parts: [{ text: chunkText }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: selectedVoice } } } }, model: "gemini-2.5-flash-preview-tts" };
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
             const res = await fetchWithRetry(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
             const data = await res.json();
