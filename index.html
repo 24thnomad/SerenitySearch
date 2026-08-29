@@ -1141,9 +1141,14 @@
                      <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">Next Right Thing</span>
                      <p class="text-sm text-app-text">${item.actionStep}</p>`;
         } else if (currentSavedTab === 'topic') {
+          const qHtml = item.questions ? item.questions.map(q => `<li class="flex items-start gap-2"><i class="fa-solid fa-circle-question text-app-brand mt-1 text-xs"></i><span class="text-sm text-app-text">${q}</span></li>`).join('') : '';
           content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-2">Meeting Topic</span>
                      <h4 class="font-bold text-app-text text-lg">${item.title}</h4>
-                     <p class="text-sm text-app-muted mt-2 font-serif italic border-l-2 border-app-brand pl-3">"${item.quote}"</p>`;
+                     <p class="text-sm text-app-muted mt-2 font-serif italic border-l-2 border-app-brand pl-3 mb-4">"${item.quote}"</p>
+                     <div class="bg-app-bg p-4 rounded-xl border border-app-border mt-3">
+                       <h5 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-3">Discussion Questions</h5>
+                       <ul class="space-y-2">${qHtml}</ul>
+                     </div>`;
         } else { 
           content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">${item.literatureSource}</span>
                      <h4 class="font-bold text-app-text">${item.title}</h4>
