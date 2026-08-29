@@ -159,9 +159,9 @@
   <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- AI Accuracy Disclaimer -->
-  <div class="bg-app-card text-app-text text-[11px] text-center py-2 px-4 tracking-wide border-b border-app-border shrink-0">
+ <div class="bg-app-card text-app-text text-[11px] text-center py-2 px-4 tracking-wide border-b border-app-border shrink-0">
     <i class="fa-solid fa-triangle-exclamation text-app-brand mr-2"></i>
-    AI-powered study tool. Quotes and citations may be approximated.
+    An AI guide for your daily reprieve. Quotes and chapter locations are gathered for reflection and may vary slightly.
   </div>
 
   <!-- Header -->
@@ -171,7 +171,7 @@
       <!-- Logo -->
       <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer shrink-0" onclick="switchTab('search')">
         <div class="flex items-center justify-center text-app-brand">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-8 h-8 sm:w-10 sm:h-10 text-app-brand fill-app-card drop-shadow-sm transition-colors duration-400">
+          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100" class="w-8 h-8 sm:w-10 sm:h-10 text-app-brand fill-app-card drop-shadow-sm transition-colors duration-400">
             <g stroke="currentColor" stroke-width="5" stroke-linejoin="miter">
               <path d="M48,82 C20,92 5,82 8,72 C18,78 30,78 40,75 Z" />
               <path d="M52,82 C80,92 95,82 92,72 C82,78 70,78 60,75 Z" />
@@ -883,8 +883,7 @@
       const r = document.getElementById('results-list'); 
 
       const activeLibs = selectedSources.length === 0 ? LIBRARY_SOURCES.join(", ") : selectedSources.join(", ");
-      let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Library: ${LIBRARY_SOURCES.join(", ")}. The user explicitly selected to search ONLY within these books: [${activeLibs}]. You MUST pull quotes explicitly prioritizing variety among the selected books. Return EXACTLY ${count} highly relevant passages.`;
-      if (excludeTitles.length > 0) sys += ` CRITICAL: Do NOT return these titles as you already provided them: [${excludeTitles.join(", ")}].`;
+let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Library: ${LIBRARY_SOURCES.join(", ")}. The user explicitly selected to search ONLY within these books: [${activeLibs}]. You MUST pull quotes explicitly prioritizing variety among the selected books. For the 'literatureSource' field, provide the book name AND the structural location (e.g., "Big Book • Chapter 5" or "12 & 12 • Step Four"). For compilation books like As Bill Sees It and Daily Reflections, identify the core Index Theme instead (e.g., "As Bill Sees It • Theme: Acceptance" or "Daily Reflections • Theme: Humility"). STRICT RULE: NEVER output page numbers, topic numbers, or dates under any circumstances. Return EXACTLY ${count} highly relevant passages.`;      if (excludeTitles.length > 0) sys += ` CRITICAL: Do NOT return these titles as you already provided them: [${excludeTitles.join(", ")}].`;
       sys += ` Return STRICTLY valid JSON.`;
       
       const sch = { 
