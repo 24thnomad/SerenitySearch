@@ -1,6 +1,6 @@
 {
-    "name": "SerenitySearch",
-    "short_name": "Serenity",
+    "name": "Serenity Search",
+    "short_name": "Serenity Search",
     "description": "An AI-powered A.A. literature guide and 10th Step companion.",
     "start_url": "/",
     "display": "standalone",
