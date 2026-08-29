@@ -210,9 +210,9 @@
       </nav>
 
       <!-- Control cluster -->
-      <div class="flex items-center space-x-1.5 shrink-0">
-        <div class="relative flex items-center justify-center w-9 h-9 rounded-lg bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm cursor-pointer" title="Change Color Theme">
-          <i class="fa-solid fa-palette text-sm pointer-events-none"></i>
+      <div class="flex items-center space-x-3 shrink-0">
+        <div class="relative flex items-center justify-center w-12 h-12 rounded-xl bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm cursor-pointer" title="Change Color Theme">
+          <i class="fa-solid fa-palette text-lg pointer-events-none"></i>
           <select id="header-theme-switcher" onchange="changeTheme(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
             <option value="default">Serenity Gold</option>
             <option value="theme-sapphire">Sapphire Deep</option>
@@ -231,15 +231,15 @@
             <option value="theme-piston">Piston's Drive</option>
           </select>
         </div>
-        <button onclick="toggleTheme()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Toggle Dark Mode">
-          <i class="fa-solid fa-moon dark:hidden text-sm"></i>
-          <i class="fa-solid fa-sun hidden dark:block text-app-brand text-sm"></i>
+        <button onclick="toggleTheme()" class="w-12 h-12 rounded-xl flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Toggle Dark Mode">
+          <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+          <i class="fa-solid fa-sun hidden dark:block text-app-brand text-lg"></i>
         </button>
-        <button onclick="toggleSettingsModal()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Settings">
-          <i class="fa-solid fa-gear text-sm"></i>
+        <button onclick="toggleSettingsModal()" class="w-12 h-12 rounded-xl flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Settings">
+          <i class="fa-solid fa-gear text-lg"></i>
         </button>
-        <button onclick="toggleSerenityPrayerModal()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Prayer & Dailies">
-          <i class="fa-solid fa-dove text-sm"></i>
+        <button onclick="toggleSerenityPrayerModal()" class="w-12 h-12 rounded-xl flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Prayer & Dailies">
+          <i class="fa-solid fa-dove text-lg"></i>
         </button>
       </div>
     </div>
