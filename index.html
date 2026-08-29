@@ -207,7 +207,6 @@
 
       <!-- Control cluster -->
       <div class="flex items-center space-x-1.5 shrink-0">
-        <!-- Palette Selector -->
         <div class="relative flex items-center justify-center w-9 h-9 rounded-lg bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm cursor-pointer" title="Change Color Theme">
           <i class="fa-solid fa-palette text-sm pointer-events-none"></i>
           <select id="header-theme-switcher" onchange="changeTheme(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
@@ -228,16 +227,13 @@
             <option value="theme-piston">Piston's Drive</option>
           </select>
         </div>
-        <!-- Theme Toggle -->
         <button onclick="toggleTheme()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Toggle Dark Mode">
           <i class="fa-solid fa-moon dark:hidden text-sm"></i>
           <i class="fa-solid fa-sun hidden dark:block text-app-brand text-sm"></i>
         </button>
-        <!-- Settings -->
         <button onclick="toggleSettingsModal()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Settings">
           <i class="fa-solid fa-gear text-sm"></i>
         </button>
-        <!-- Prayer -->
         <button onclick="toggleSerenityPrayerModal()" class="w-9 h-9 rounded-lg flex items-center justify-center bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm" title="Prayer & Dailies">
           <i class="fa-solid fa-dove text-sm"></i>
         </button>
@@ -270,8 +266,24 @@
     <!-- SEARCH TAB SECTION -->
     <section id="tab-search" class="space-y-8">
       <div class="text-center py-12 md:py-20 space-y-6">
+        
+        <!-- Home Counter -->
+        <div id="home-counter-container" class="hidden justify-center mb-4">
+          <div class="inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-4 px-6 py-3 bg-app-card border border-app-border rounded-2xl shadow-sm cursor-default hover:border-app-brand transition-colors">
+             <div class="flex items-center gap-2 text-app-brand font-bold">
+               <i class="fa-solid fa-seedling"></i>
+               <span id="home-counter-formatted" class="text-sm sm:text-base"></span>
+             </div>
+             <div class="hidden sm:block w-px h-4 bg-app-border"></div>
+             <div class="text-xs sm:text-sm font-semibold text-app-muted uppercase tracking-widest">
+               <span id="home-counter-total"></span> Days Total
+             </div>
+          </div>
+        </div>
+
         <h2 class="text-4xl sm:text-6xl font-bold font-serif text-app-text tracking-tight">Find clarity and peace.</h2>
         <p class="text-app-muted text-lg max-w-2xl mx-auto">Explore the Big Book, 12 & 12, Daily Reflections, and more to support your daily recovery.</p>
+        
         <form id="search-form" onsubmit="handleSearch(event)" class="max-w-2xl mx-auto pt-6">
           <div class="relative flex items-center">
             <i class="fa-solid fa-magnifying-glass absolute left-6 text-app-muted text-lg"></i>
@@ -282,7 +294,7 @@
             <button type="submit" id="search-btn" class="absolute right-2.5 px-6 py-3 bg-app-brand text-app-card font-semibold rounded-xl text-sm transition-all shadow-sm hover:bg-app-brandHover">Search</button>
           </div>
         </form>
-        
+
         <!-- Multi-Select Filter Container -->
         <div class="flex items-center justify-center pt-6" id="filter-container">
           <div class="relative flex items-center" id="multi-select-wrapper">
@@ -293,7 +305,7 @@
                 <i class="fa-solid fa-chevron-down text-xs text-app-muted"></i>
               </button>
               
-              <div id="filter-menu" class="hidden absolute left-0 sm:right-0 sm:left-auto top-full mt-2 w-64 bg-app-card border border-app-border rounded-xl shadow-xl z-50 p-2 max-h-64 overflow-y-auto custom-scrollbar flex flex-col">
+              <div id="filter-menu" class="hidden absolute left-0 sm:right-0 sm:left-auto top-full mt-2 w-64 bg-app-card border border-app-border rounded-xl shadow-xl z-50 p-2 max-h-64 overflow-y-auto custom-scrollbar flex flex-col text-left">
                 <label class="flex items-center gap-3 p-2 hover:bg-app-bg rounded-lg cursor-pointer transition-colors border-b border-app-border mb-1">
                   <input type="checkbox" id="check-all-sources" onchange="toggleAllSources(this.checked)" checked class="w-4 h-4 accent-app-brand cursor-pointer">
                   <span class="text-sm font-bold text-app-text">Select All / Any</span>
@@ -303,7 +315,6 @@
             </div>
           </div>
         </div>
-        
       </div>
 
       <!-- Loading State -->
@@ -314,7 +325,6 @@
 
       <!-- Search Results Display -->
       <div id="results-container" class="space-y-6">
-        <div id="empty-state" class="hidden"></div>
         <div id="results-list" class="space-y-6"></div>
       </div>
     </section>
@@ -323,7 +333,7 @@
     <section id="tab-steps" class="hidden space-y-8">
       <div class="text-center py-8">
         <h2 class="text-3xl font-bold font-serif text-app-text">The Twelve Steps</h2>
-        <p class="text-app-muted mt-2">Select a step to explore its literature and principles.</p>
+        <p class="text-app-muted mt-2">Select a step to read its principle and explore related literature.</p>
       </div>
       <div id="steps-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </section>
@@ -341,7 +351,7 @@
             <label class="block text-sm font-bold text-app-brand uppercase tracking-widest">What is disturbing your peace right now?</label>
             <div class="relative">
               <textarea id="tenth-input" rows="5" class="w-full p-4 pb-12 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner resize-none" placeholder="e.g., I'm frustrated with my coworker for taking credit for my idea..." required></textarea>
-              <button type="button" onclick="toggleDictation('tenth-input', 'dictation-icon')" class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-app-card border border-app-border flex items-center justify-center shadow-sm hover:border-app-brand transition-colors">
+              <button type="button" onclick="toggleDictation('tenth-input', 'dictation-icon')" class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-app-card border border-app-border flex items-center justify-center shadow-sm hover:border-app-brand transition-colors" title="Use Voice Dictation">
                 <i id="dictation-icon" class="fa-solid fa-microphone text-app-muted"></i>
               </button>
             </div>
@@ -412,6 +422,12 @@
   <div id="serenity-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative text-center">
       <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
+      
+      <!-- Dove Modal Counter -->
+      <div id="dove-counter-container" class="hidden mb-6">
+        <span id="dove-counter-text" class="inline-flex items-center gap-2 px-4 py-1.5 bg-app-brandSoft border border-app-brand/20 rounded-full text-xs font-bold uppercase tracking-widest text-app-brand"></span>
+      </div>
+
       <i class="fa-solid fa-dove text-app-brand text-3xl mb-4"></i>
       <h3 class="text-sm font-bold text-app-text mb-4 uppercase tracking-widest">The Serenity Prayer</h3>
       <p class="font-serif text-xl text-app-text leading-relaxed italic mb-6">
@@ -434,50 +450,71 @@
   <!-- API KEY & BACKUP SETTINGS MODAL -->
   <div id="settings-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative">
-      <button onclick="toggleSettingsModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+      <button onclick="toggleSettingsModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
       <div class="flex items-center gap-3 mb-6">
-        <i class="fa-solid fa-key text-app-brand text-2xl"></i>
-        <h3 class="text-xl font-bold text-app-text">Configuration & Backup</h3>
+        <i class="fa-solid fa-key text-app-brand text-2xl"></i><h3 class="text-xl font-bold text-app-text">API Configuration</h3>
       </div>
+      <p class="text-sm text-app-muted mb-6 leading-relaxed">
+        To use the AI features of SerenitySearch, please enter your Google Gemini API key below. Your key is securely stored in your browser's local storage and is never sent to our servers.
+      </p>
       
-      <div class="space-y-6">
-        <!-- API Section -->
+      <div class="space-y-4">
         <div>
-          <p class="text-sm text-app-muted mb-4 leading-relaxed">
-            Enter your Google Gemini API key below. It is securely stored in your browser's local storage.
-          </p>
           <label class="block text-xs font-bold text-app-brand uppercase tracking-widest mb-2">Gemini API Key</label>
-          <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all mb-3">
-          <div class="flex gap-3">
-            <button onclick="saveApiKey()" class="flex-1 py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover shadow-sm">Save Key</button>
-            <button onclick="clearApiKey()" class="px-6 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-red-500 hover:text-red-500">Clear</button>
+          <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all">
+        </div>
+        
+        <!-- Sobriety Counter Settings -->
+        <div class="w-full h-px bg-app-border my-4"></div>
+        <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest mb-3">Sobriety Counter</h4>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Sobriety Date</label>
+            <input type="date" id="sobriety-date-input" class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all text-sm">
           </div>
+          <label class="flex items-center gap-3 p-3 bg-app-bg rounded-xl cursor-pointer transition-colors border border-app-border hover:border-app-brand shadow-sm">
+            <input type="checkbox" id="show-home-counter-input" class="w-5 h-5 accent-app-brand cursor-pointer">
+            <span class="text-sm font-bold text-app-text">Show on Home Screen</span>
+          </label>
         </div>
 
-        <div class="w-full h-px bg-app-border"></div>
-
-        <!-- Backup Section -->
-        <div>
-          <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest mb-3">Data Sync & Backup</h4>
-          <div class="flex gap-3">
-            <button onclick="exportData()" class="flex-1 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-app-brand shadow-sm flex items-center justify-center">
-              <i class="fa-solid fa-download mr-2"></i>Export
-            </button>
-            <label class="flex-1 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-app-brand shadow-sm cursor-pointer flex items-center justify-center m-0">
-               <i class="fa-solid fa-upload mr-2"></i>Import
-               <input type="file" accept=".json" onchange="importData(event)" class="hidden">
-            </label>
-          </div>
-          <p class="text-xs text-app-muted mt-3 text-center">Export your saved items and topics to sync across devices.</p>
+        <div class="flex gap-3 pt-6">
+          <button onclick="saveSettings()" class="flex-1 py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover shadow-sm">Save Settings</button>
+          <button onclick="clearApiKey()" class="px-6 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-red-500 hover:text-red-500">Clear Key</button>
+        </div>
+        
+        <!-- Data Backup Section -->
+        <div class="w-full h-px bg-app-border my-4"></div>
+        <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest mb-2">Data Backup</h4>
+        <div class="flex gap-3">
+          <button onclick="exportData()" class="flex-1 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-app-brand shadow-sm">
+            <i class="fa-solid fa-download mr-2"></i>Export
+          </button>
+          <label class="flex-1 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-app-brand shadow-sm cursor-pointer text-center flex items-center justify-center m-0">
+             <i class="fa-solid fa-upload mr-2"></i>Import
+             <input type="file" accept=".json" onchange="importData(event)" class="hidden">
+          </label>
         </div>
       </div>
-      
     </div>
   </div>
 
-  <!-- AUDIO PLAYER BAR -->
+  <!-- 12 Steps Focus Modal -->
+  <div id="step-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-app-card max-w-2xl w-full p-8 rounded-2xl border border-app-border shadow-2xl relative flex flex-col max-h-[90vh]">
+      <button onclick="closeStepModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div id="step-modal-content" class="overflow-y-auto custom-scrollbar pr-2 mb-6 flex-1 space-y-4 pt-2">
+        <!-- Content injected via JS -->
+      </div>
+      
+      <div id="step-modal-action" class="shrink-0 pt-4 border-t border-app-border">
+        <!-- Button injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Player UI -->
   <div id="audio-player-bar" class="fixed bottom-6 right-6 z-50 bg-app-card border border-app-border p-4 rounded-xl shadow-xl hidden flex items-center space-x-4">
     <div id="audio-icon-container" class="w-8 h-8 rounded-full bg-app-brandSoft text-app-brand flex items-center justify-center">
       <i id="audio-icon" class="fa-solid fa-volume-high text-sm"></i>
@@ -490,7 +527,6 @@
     </button>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
   <script>
     var savedPassages = [];
     var currentAudioSource = null;
@@ -505,23 +541,107 @@
     let activeMicIcon = null;
 
     function getApiKey() { return localStorage.getItem('serenity_api_key') || ""; }
-    function saveApiKey() { 
+    
+    function saveSettings() { 
       const k = document.getElementById('api-key-input').value.trim(); 
-      if(k) { localStorage.setItem('serenity_api_key', k); toggleSettingsModal(); } 
+      if(k) localStorage.setItem('serenity_api_key', k); 
+      else localStorage.removeItem('serenity_api_key');
+
+      const sd = document.getElementById('sobriety-date-input').value;
+      if(sd) localStorage.setItem('serenity_sobriety_date', sd);
+      else localStorage.removeItem('serenity_sobriety_date');
+
+      const sh = document.getElementById('show-home-counter-input').checked;
+      localStorage.setItem('serenity_show_home_counter', sh);
+
+      updateCounters();
+      toggleSettingsModal(); 
     }
-    function clearApiKey() { 
-      localStorage.removeItem('serenity_api_key'); 
-      document.getElementById('api-key-input').value = ""; 
-    }
+
+    function clearApiKey() { localStorage.removeItem('serenity_api_key'); document.getElementById('api-key-input').value = ""; }
+    
     function toggleSettingsModal() { 
       const m = document.getElementById('settings-modal'); 
-      const i = document.getElementById('api-key-input'); 
       if(m.classList.contains('hidden')) { 
-        i.value = getApiKey(); 
+        document.getElementById('api-key-input').value = getApiKey(); 
+        document.getElementById('sobriety-date-input').value = localStorage.getItem('serenity_sobriety_date') || "";
+        document.getElementById('show-home-counter-input').checked = localStorage.getItem('serenity_show_home_counter') === 'true';
         m.classList.remove('hidden'); 
       } else { 
         m.classList.add('hidden'); 
       } 
+    }
+
+    function calculateSobrietyTime(dateString) {
+      if (!dateString) return null;
+      const start = new Date(dateString + 'T00:00:00');
+      const now = new Date();
+      now.setHours(0,0,0,0); 
+      
+      if (start > now) return { formatted: "Day 1", totalDays: 1 };
+      
+      const diffTime = now - start;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      if (diffDays === 0) return { formatted: "Day 1", totalDays: 1 };
+      
+      let years = now.getFullYear() - start.getFullYear();
+      let months = now.getMonth() - start.getMonth();
+      let days = now.getDate() - start.getDate();
+      
+      if (days < 0) {
+          months--;
+          const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+          days += prevMonth.getDate();
+      }
+      if (months < 0) {
+          years--;
+          months += 12;
+      }
+      
+      if (years === 0 && months === 0) return { formatted: `Day ${diffDays}`, totalDays: diffDays };
+      
+      let parts = [];
+      if (years > 0) parts.push(`${years} Year${years > 1 ? 's' : ''}`);
+      if (months > 0) parts.push(`${months} Month${months > 1 ? 's' : ''}`);
+      if (days > 0) parts.push(`${days} Day${days > 1 ? 's' : ''}`);
+      
+      return { formatted: parts.join(', '), totalDays: diffDays };
+    }
+
+    function updateCounters() {
+      const dateStr = localStorage.getItem('serenity_sobriety_date');
+      const showHome = localStorage.getItem('serenity_show_home_counter') === 'true';
+      
+      const doveContainer = document.getElementById('dove-counter-container');
+      const doveText = document.getElementById('dove-counter-text');
+      const homeContainer = document.getElementById('home-counter-container');
+      const homeFormatted = document.getElementById('home-counter-formatted');
+      const homeTotal = document.getElementById('home-counter-total');
+
+      if (dateStr) {
+        const timeObj = calculateSobrietyTime(dateStr);
+        if (doveContainer && doveText) {
+            doveText.innerHTML = `<i class="fa-solid fa-seedling mr-1"></i> ${timeObj.formatted} &bull; ${timeObj.totalDays.toLocaleString()} Days`;
+            doveContainer.classList.remove('hidden');
+        }
+        if (homeContainer && homeFormatted && homeTotal) {
+            if (showHome) {
+                homeFormatted.innerText = timeObj.formatted;
+                homeTotal.innerText = timeObj.totalDays.toLocaleString();
+                homeContainer.classList.remove('hidden');
+                homeContainer.classList.add('flex');
+            } else {
+                homeContainer.classList.add('hidden');
+                homeContainer.classList.remove('flex');
+            }
+        }
+      } else {
+        if (doveContainer) doveContainer.classList.add('hidden');
+        if (homeContainer) {
+           homeContainer.classList.add('hidden');
+           homeContainer.classList.remove('flex');
+        }
+      }
     }
 
     function saveToDailyMemory(type, content) {
@@ -534,10 +654,7 @@
       } catch(e) {}
     }
 
-    try { 
-      var stored = localStorage.getItem('serenity_saved'); 
-      if (stored) savedPassages = JSON.parse(stored) || []; 
-    } catch(e) { }
+    try { var stored = localStorage.getItem('serenity_saved'); if (stored) savedPassages = JSON.parse(stored) || []; } catch(e) { }
 
     window.addEventListener('DOMContentLoaded', () => {
        const savedColorTheme = localStorage.getItem('color-theme') || 'default';
@@ -547,13 +664,8 @@
 
     function toggleTheme() {
       var html = document.documentElement;
-      if (html.classList.contains('dark')) { 
-        html.classList.remove('dark'); 
-        try { localStorage.setItem('theme-mode', 'light'); } catch(e) {} 
-      } else { 
-        html.classList.add('dark'); 
-        try { localStorage.setItem('theme-mode', 'dark'); } catch(e) {} 
-      }
+      if (html.classList.contains('dark')) { html.classList.remove('dark'); try { localStorage.setItem('theme-mode', 'light'); } catch(e) {} } 
+      else { html.classList.add('dark'); try { localStorage.setItem('theme-mode', 'dark'); } catch(e) {} }
     }
 
     function changeTheme(themeClass) {
@@ -565,113 +677,162 @@
       try { localStorage.setItem('color-theme', themeClass); } catch(e) {}
     }
 
-    function toggleSerenityPrayerModal() { 
-      document.getElementById('serenity-modal').classList.toggle('hidden'); 
-    }
+    function toggleSerenityPrayerModal() { document.getElementById('serenity-modal').classList.toggle('hidden'); }
 
     var TWELVE_STEPS = [
-      { step: 1, title: "Honesty", desc: "Admitted powerlessness over alcohol...", topic: "Step 1 Powerlessness Big Book Chapter 3" },
-      { step: 2, title: "Hope", desc: "Came to believe in a Power greater...", topic: "Daily Reflections Second Step Came to Believe As Bill Sees It" },
-      { step: 3, title: "Surrender", desc: "Turned our will and lives over...", topic: "Step 3 Surrender Third Step Prayer Big Book Page 63" },
-      { step: 4, title: "Courage", desc: "Made a searching moral inventory...", topic: "Fourth Step Resentment Fear Sex Inventory Drop the Rock" },
-      { step: 5, title: "Integrity", desc: "Admitted the exact nature of our wrongs...", topic: "Fifth Step Confidentiality Relief Big Book Into Action Page 72" },
-      { step: 6, title: "Willingness", desc: "Ready to have defects removed...", topic: "Sixth Step Willingness Character Defects Drop the Rock" },
-      { step: 7, title: "Humility", desc: "Humbly asked Him to remove shortcomings.", topic: "Seventh Step Seventh Step Prayer Humility Drop the Rock" },
-      { step: 8, title: "Brotherly Love", desc: "Made a list of all persons harmed...", topic: "Eighth Step List Willingness Forgiveness 12 and 12" },
-      { step: 9, title: "Restitution", desc: "Made direct amends wherever possible...", topic: "Ninth Step Amends Promises Big Book Page 83 84" },
-      { step: 10, title: "Perseverance", desc: "Continued to take personal inventory...", topic: "Tenth Step Daily Inventory Spot Check Big Book Page 84" },
-      { step: 11, title: "Spirituality", desc: "Sought through prayer and meditation...", topic: "Eleventh Step Prayer Meditation Big Book Page 86 Morning Prayer" },
-      { step: 12, title: "Service", desc: "Tried to carry this message to alcoholics...", topic: "Twelfth Step Service Spiritual Awakening Working With Others Language of the Heart" }
+      { step: 1, title: "Honesty", text: "We admitted we were powerless over alcohol—that our lives had become unmanageable.", query: "Step 1 Powerlessness" },
+      { step: 2, title: "Hope", text: "Came to believe that a Power greater than ourselves could restore us to sanity.", query: "Step 2 Came to Believe Sanity" },
+      { step: 3, title: "Surrender", text: "Made a decision to turn our will and our lives over to the care of God as we understood Him.", query: "Step 3 Surrender Third Step Prayer" },
+      { step: 4, title: "Courage", text: "Made a searching and fearless moral inventory of ourselves.", query: "Step 4 Moral Inventory Resentment Fear" },
+      { step: 5, title: "Integrity", text: "Admitted to God, to ourselves, and to another human being the exact nature of our wrongs.", query: "Step 5 Admission of Wrongs Integrity" },
+      { step: 6, title: "Willingness", text: "Were entirely ready to have God remove all these defects of character.", query: "Step 6 Character Defects Willingness" },
+      { step: 7, title: "Humility", text: "Humbly asked Him to remove our shortcomings.", query: "Step 7 Shortcomings Humility Seventh Step Prayer" },
+      { step: 8, title: "Brotherly Love", text: "Made a list of all persons we had harmed, and became willing to make amends to them all.", query: "Step 8 List of Harms Willingness to Amends" },
+      { step: 9, title: "Restitution", text: "Made direct amends to such people wherever possible, except when to do so would injure them or others.", query: "Step 9 Direct Amends Restitution" },
+      { step: 10, title: "Perseverance", text: "Continued to take personal inventory and when we were wrong promptly admitted it.", query: "Step 10 Daily Inventory Spot Check" },
+      { step: 11, title: "Spirituality", text: "Sought through prayer and meditation to improve our conscious contact with God, as we understood Him, praying only for knowledge of His will for us and the power to carry that out.", query: "Step 11 Prayer Meditation Conscious Contact" },
+      { step: 12, title: "Service", text: "Having had a spiritual awakening as the result of these Steps, we tried to carry this message to alcoholics, and to practice these principles in all our affairs.", query: "Step 12 Spiritual Awakening Service" }
     ];
-
-    var isAppInitialized = false;
-    function initApp() {
-      if (window.__serenityInitialized) return; 
-      updateSavedCount();
-      renderStepsGrid();
-      if(getApiKey()) generateTopic(false, false); 
-      window.__serenityInitialized = true;
-    }
-    
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initApp);
-    } else {
-      setTimeout(initApp, 50);
-    }
-
-    function switchTab(tabName) {
-      ['search', 'steps', 'tenth', 'topics', 'saved'].forEach(t => {
-        const tabEl = document.getElementById(`tab-${t}`); 
-        if (tabEl) tabEl.classList.add('hidden');
-        
-        const btn = document.getElementById(`nav-${t}`); 
-        if (btn) btn.className = "nav-btn px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-all flex items-center gap-2";
-        
-        const mobBtn = document.getElementById(`mob-nav-${t}`); 
-        if (mobBtn) mobBtn.className = "mob-nav-btn text-app-muted flex flex-col items-center gap-1 p-2 transition-colors";
-      });
-      
-      const activeTabEl = document.getElementById(`tab-${tabName}`); 
-      if (activeTabEl) activeTabEl.classList.remove('hidden');
-      
-      const activeBtn = document.getElementById(`nav-${tabName}`); 
-      if (activeBtn) activeBtn.classList.add('active');
-      
-      const activeMobBtn = document.getElementById(`mob-nav-${tabName}`); 
-      if (activeMobBtn) activeMobBtn.className = "mob-nav-btn text-app-brand flex flex-col items-center gap-1 p-2 transition-colors";
-      
-      if (tabName === 'saved') renderSavedList();
-      if (tabName === 'topics' && !document.getElementById('topics-result').innerHTML && getApiKey()) generateTopic(false, false);
-    }
 
     function renderStepsGrid() {
       const grid = document.getElementById('steps-grid'); 
       if (!grid) return; 
       grid.innerHTML = '';
       
-      TWELVE_STEPS.forEach(s => {
+      TWELVE_STEPS.forEach((s, idx) => {
         grid.insertAdjacentHTML('beforeend', `
-          <div onclick="setQuickSearch('${s.topic}')" class="sleek-card bg-app-card p-5 rounded-2xl border border-app-border cursor-pointer flex items-center gap-4 group hover:border-app-brand">
+          <div onclick="openStepModal(${idx})" class="sleek-card bg-app-card p-5 rounded-2xl border border-app-border cursor-pointer flex items-center gap-4 group hover:border-app-brand">
             <div class="w-10 h-10 rounded-full bg-app-bg text-app-muted group-hover:bg-app-brandSoft group-hover:text-app-brand font-bold text-lg flex items-center justify-center shrink-0 transition-colors border border-app-border group-hover:border-transparent">${s.step}</div>
-            <div>
+            <div class="overflow-hidden">
               <h3 class="font-bold text-app-text text-sm tracking-wide uppercase">${s.title}</h3>
-              <p class="text-xs text-app-muted mt-0.5 truncate max-w-[200px] sm:max-w-[300px]">${s.desc}</p>
+              <p class="text-xs text-app-muted mt-0.5">${s.text.substring(0, 50)}...</p>
             </div>
           </div>
         `);
       });
     }
 
-    function setQuickSearch(queryText) { 
-      switchTab('search'); 
-      document.getElementById('search-input').value = queryText; 
-      performSearch(queryText); 
-    }
-    
-    function handleSearch(e) { 
-      e.preventDefault(); 
-      const q = document.getElementById('search-input').value.trim(); 
-      if (q) performSearch(q); 
+    function openStepModal(idx) {
+      const step = TWELVE_STEPS[idx];
+      const content = document.getElementById('step-modal-content');
+      const action = document.getElementById('step-modal-action');
+      
+      content.innerHTML = `
+        <span class="inline-block px-3 py-1 bg-app-brandSoft text-app-brand text-[10px] font-bold uppercase tracking-widest rounded-full mb-2">Step ${step.step} • ${step.title}</span>
+        <h3 class="text-2xl font-bold text-app-text mb-4">The Principle of ${step.title}</h3>
+        <p class="font-serif text-xl text-app-text leading-relaxed italic border-l-4 border-app-brand pl-4 py-2">
+          "${step.text}"
+        </p>
+      `;
+      
+      action.innerHTML = `
+        <button onclick="searchStep('${step.query}')" class="w-full py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover shadow-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-magnifying-glass"></i> Search Literature for Step ${step.step}
+        </button>
+      `;
+      
+      document.getElementById('step-modal').classList.remove('hidden');
     }
 
+    function closeStepModal() {
+      document.getElementById('step-modal').classList.add('hidden');
+    }
+
+    function searchStep(queryText) {
+      closeStepModal();
+      setQuickSearch(queryText);
+    }
+
+    var isAppInitialized = false;
+    function initApp() {
+      if (window.__serenityInitialized) return; 
+      updateSavedCount();
+      renderStepsGrid();
+      initFilterMenu();
+      updateCounters();
+      if(getApiKey()) generateTopic(false, false); 
+      window.__serenityInitialized = true;
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initApp);
+    else setTimeout(initApp, 50);
+
+    function switchTab(tabName) {
+      ['search', 'steps', 'tenth', 'topics', 'saved'].forEach(t => {
+        const tabEl = document.getElementById(`tab-${t}`); if (tabEl) tabEl.classList.add('hidden');
+        const btn = document.getElementById(`nav-${t}`); if (btn) btn.className = "nav-btn px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-all flex items-center gap-2";
+        const mobBtn = document.getElementById(`mob-nav-${t}`); if (mobBtn) mobBtn.className = "mob-nav-btn text-app-muted flex flex-col items-center gap-1 p-2 transition-colors";
+      });
+      const activeTabEl = document.getElementById(`tab-${tabName}`); if (activeTabEl) activeTabEl.classList.remove('hidden');
+      const activeBtn = document.getElementById(`nav-${tabName}`); if (activeBtn) activeBtn.classList.add('active');
+      const activeMobBtn = document.getElementById(`mob-nav-${tabName}`); if (activeMobBtn) activeMobBtn.className = "mob-nav-btn text-app-brand flex flex-col items-center gap-1 p-2 transition-colors";
+      if (tabName === 'saved') renderSavedList();
+      if (tabName === 'topics' && !document.getElementById('topics-result').innerHTML && getApiKey()) generateTopic(false, false);
+    }
+
+    function setQuickSearch(queryText) { switchTab('search'); document.getElementById('search-input').value = queryText; performSearch(queryText); }
+    function handleSearch(e) { e.preventDefault(); const q = document.getElementById('search-input').value.trim(); if (q) performSearch(q); }
+
     function safeJSONParse(str) {
-      if (!str) return null; 
-      let clean = str.trim();
+      if (!str) return null; let clean = str.trim();
       const s = Math.min(clean.indexOf('[') > -1 ? clean.indexOf('[') : Infinity, clean.indexOf('{') > -1 ? clean.indexOf('{') : Infinity);
       const e = Math.max(clean.lastIndexOf(']'), clean.lastIndexOf('}'));
-      if (s !== Infinity && e !== -1 && s < e) { 
-        try { return JSON.parse(clean.substring(s, e + 1)); } catch (err) {} 
-      }
+      if (s !== Infinity && e !== -1 && s < e) { try { return JSON.parse(clean.substring(s, e + 1)); } catch (err) {} }
       try { return JSON.parse(clean); } catch (err) { return null; }
     }
 
     async function fetchWithRetry(url, options) {
-      try { 
-        const res = await fetch(url, options); 
-        if (res.ok) return res; 
-        const err = await res.json(); 
-        throw new Error(`${err.error?.message || res.statusText}`); 
-      } catch (e) { throw e; }
+      try { const res = await fetch(url, options); if (res.ok) return res; const err = await res.json(); throw new Error(`${err.error?.message || res.statusText}`); } catch (e) { throw e; }
+    }
+
+    const LIBRARY_SOURCES = ["Big Book", "12 Steps & 12 Traditions", "Daily Reflections", "As Bill Sees It", "Drop the Rock", "Living Sober", "Came to Believe", "The Language of the Heart", "AA Comes of Age", "Experience, Strength, and Hope"];
+    let selectedSources = [...LIBRARY_SOURCES];
+
+    function initFilterMenu() {
+      const list = document.getElementById('filter-checkbox-list');
+      if (!list) return;
+      list.innerHTML = LIBRARY_SOURCES.map(source => `
+        <label class="flex items-center gap-3 p-2 hover:bg-app-bg rounded-lg cursor-pointer transition-colors border-b border-app-border mb-1">
+          <input type="checkbox" value="${source}" onchange="updateSelectedSources()" checked class="source-checkbox w-4 h-4 accent-app-brand cursor-pointer">
+          <span class="text-sm font-medium text-app-text">${source}</span>
+        </label>
+      `).join('');
+      
+      document.addEventListener('click', (e) => {
+        const wrapper = document.getElementById('multi-select-wrapper');
+        const menu = document.getElementById('filter-menu');
+        if (wrapper && !wrapper.contains(e.target) && !menu.classList.contains('hidden')) {
+          menu.classList.add('hidden');
+        }
+      });
+    }
+
+    function toggleFilterMenu() { document.getElementById('filter-menu').classList.toggle('hidden'); }
+
+    function toggleAllSources(isChecked) {
+      document.querySelectorAll('.source-checkbox').forEach(cb => cb.checked = isChecked);
+      updateSelectedSources();
+    }
+
+    function updateSelectedSources() {
+      const checkboxes = document.querySelectorAll('.source-checkbox');
+      selectedSources = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+      
+      const allCheck = document.getElementById('check-all-sources');
+      const btnText = document.getElementById('filter-btn-text');
+      
+      if (selectedSources.length === LIBRARY_SOURCES.length) {
+        if(allCheck) allCheck.checked = true; 
+        if(btnText) btnText.innerText = "All Literature";
+      } else if (selectedSources.length === 0) {
+        if(allCheck) allCheck.checked = false; 
+        if(btnText) btnText.innerText = "None Selected";
+      } else if (selectedSources.length === 1) {
+        if(allCheck) allCheck.checked = false; 
+        if(btnText) btnText.innerText = "1 Book Selected";
+      } else {
+        if(allCheck) allCheck.checked = false; 
+        if(btnText) btnText.innerText = `${selectedSources.length} Books Selected`;
+      }
     }
 
     async function performSearch(query) {
@@ -684,7 +845,7 @@
       r.innerHTML = ''; 
       l.classList.remove('hidden');
       
-      // Start the chunked search process for much faster perceived loading
+      // Fast chunked search
       fetchSearchBatch(query, 3, [], true);
     }
 
@@ -736,7 +897,6 @@
             renderSearchResults(items, query, isFirstBatch);
             const newTitles = excludeTitles.concat(items.map(i => i.title));
             
-            // If this was the fast initial batch, immediately fetch the rest quietly
             if (isFirstBatch) {
                 r.insertAdjacentHTML('beforeend', `<div id="subtle-loading" class="py-4 text-center text-app-muted text-xs animate-pulse"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Finding deeper insights...</div>`);
                 fetchSearchBatch(query, 7, newTitles, false);
@@ -766,9 +926,6 @@
       
       if (isFirstBatch) {
           r.innerHTML = `<h3 class="text-sm font-bold text-app-muted uppercase tracking-widest mb-4">Results for "${query}"</h3>`;
-      } else {
-          const sl = document.getElementById('subtle-loading');
-          if (sl) sl.remove();
       }
       
       items.forEach((itemObj, index) => {
@@ -780,10 +937,7 @@
           <div class="sleek-card bg-app-card p-6 sm:p-8 rounded-2xl border border-app-border flex flex-col md:flex-row gap-6 group hover:border-app-brand">
             <div class="flex-1 space-y-4">
               <div class="flex justify-between items-start">
-                <div>
-                  <span class="inline-block px-2 py-0.5 bg-app-bg border border-app-border rounded text-[10px] font-bold uppercase tracking-widest text-app-brand mb-2">${itemObj.literatureSource}</span>
-                  <h4 class="text-xl font-bold text-app-text">${itemObj.title}</h4>
-                </div>
+                <div><span class="inline-block px-2 py-0.5 bg-app-bg border border-app-border rounded text-[10px] font-bold uppercase tracking-widest text-app-brand mb-2">${itemObj.literatureSource}</span><h4 class="text-xl font-bold text-app-text">${itemObj.title}</h4></div>
                 <div class="flex gap-1 md:hidden">
                   <button onclick="speakText('${itemId}')" class="w-8 h-8 rounded-full text-app-muted hover:text-app-brand bg-app-bg"><i class="fa-solid fa-volume-high"></i></button>
                   <button onclick="toggleSaveItemById('${itemId}')" class="w-8 h-8 rounded-full text-app-muted hover:text-app-brand bg-app-bg"><i class="fa-regular fa-bookmark"></i></button>
@@ -791,14 +945,8 @@
               </div>
               <blockquote class="font-serif text-lg text-app-text italic border-l-4 border-app-brand pl-4 py-1">"${itemObj.keyQuote}"</blockquote>
               <div class="grid sm:grid-cols-2 gap-4 mt-4 pt-4 border-t border-app-border">
-                <div>
-                  <h5 class="text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Insight</h5>
-                  <p class="text-sm text-app-muted leading-relaxed">${itemObj.summaryAndInsight}</p>
-                </div>
-                <div>
-                  <h5 class="text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Application</h5>
-                  <p class="text-sm text-app-muted leading-relaxed">${itemObj.dailyApplication}</p>
-                </div>
+                <div><h5 class="text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Insight</h5><p class="text-sm text-app-muted leading-relaxed">${itemObj.summaryAndInsight}</p></div>
+                <div><h5 class="text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Application</h5><p class="text-sm text-app-muted leading-relaxed">${itemObj.dailyApplication}</p></div>
               </div>
             </div>
             <div class="hidden md:flex flex-col gap-2 shrink-0 border-l border-app-border pl-6">
@@ -811,31 +959,18 @@
     }
 
     async function processTenthStep(e) {
-      e.preventDefault(); 
-      const apiKey = getApiKey(); 
-      if (!apiKey) { toggleSettingsModal(); return; }
-      
-      const text = document.getElementById('tenth-input').value.trim(); 
-      if(!text) return;
-      
+      e.preventDefault(); const apiKey = getApiKey(); if (!apiKey) { toggleSettingsModal(); return; }
+      const text = document.getElementById('tenth-input').value.trim(); if(!text) return;
       saveToDailyMemory('tenth_step', text);
-      const l = document.getElementById('tenth-loading'); 
-      const r = document.getElementById('tenth-result'); 
-      r.classList.add('hidden'); 
-      l.classList.remove('hidden');
-      
+      const l = document.getElementById('tenth-loading'); const r = document.getElementById('tenth-result'); r.classList.add('hidden'); l.classList.remove('hidden');
       const prompt = `You are a wise A.A. Serenity Sponsor processing a 10th Step Spot Check: "${text}". Respond in valid JSON matching the schema.`;
       const sch = { type: "OBJECT", properties: { validation: { type: "STRING" }, theTurnaround: { type: "STRING" }, actionStep: { type: "STRING" } }, required: ["validation", "theTurnaround", "actionStep"] };
-      
       try {
         const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: sch } };
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
         const res = await fetchWithRetry(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        const data = await res.json(); 
-        
-        l.classList.add('hidden');
+        const data = await res.json(); l.classList.add('hidden');
         const resObj = safeJSONParse(data.candidates?.[0]?.content?.parts?.[0]?.text);
-        
         if(resObj && resObj.validation) {
           resObj.type = 'tenth';
           const itemId = 'tenth_' + Date.now();
@@ -858,34 +993,24 @@
           r.classList.remove('hidden');
         } else { throw new Error("Parsing failed"); }
       } catch(err) {
-        l.classList.add('hidden'); 
-        r.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl border border-red-200 text-center"><p class="text-red-600 font-bold text-sm mb-2">Error</p><p class="text-red-600 text-xs">${err.message}</p></div>`; 
-        r.classList.remove('hidden');
+        l.classList.add('hidden'); r.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl border border-red-200 text-center"><p class="text-red-600 font-bold text-sm mb-2">Error</p><p class="text-red-600 text-xs">${err.message}</p></div>`; r.classList.remove('hidden');
       }
     }
 
     async function generateTopic(isManual = true, isTailored = false) {
-      const apiKey = getApiKey(); 
-      if (!apiKey) { if(isManual) toggleSettingsModal(); return; }
-      
-      const c = document.getElementById('topics-result'); 
-      const l = document.getElementById('topics-loading'); 
-      document.getElementById('topics-loading-text').innerText = isTailored ? "Tailoring topic to your activity..." : "Creating random topic...";
-      
+      const apiKey = getApiKey(); if (!apiKey) { if(isManual) toggleSettingsModal(); return; }
+      const c = document.getElementById('topics-result'); const l = document.getElementById('topics-loading'); document.getElementById('topics-loading-text').innerText = isTailored ? "Tailoring topic to your activity..." : "Creating random topic...";
       if(isManual) { c.classList.add('hidden'); l.classList.remove('hidden'); }
       
       let recentTopics = [], memory = [];
       try {
-        const t = JSON.parse(localStorage.getItem('serenity_recent_topics')) || []; 
-        const m = JSON.parse(localStorage.getItem('serenity_daily_memory')) || [];
+        const t = JSON.parse(localStorage.getItem('serenity_recent_topics')) || []; const m = JSON.parse(localStorage.getItem('serenity_daily_memory')) || [];
         const d = Date.now() - (24 * 60 * 60 * 1000);
-        recentTopics = t.filter(x => x.timestamp > d); 
-        memory = m.filter(x => x.timestamp > d);
+        recentTopics = t.filter(x => x.timestamp > d); memory = m.filter(x => x.timestamp > d);
       } catch(e) {}
 
       let exc = recentTopics.length > 0 ? `CRITICAL RULE: You MUST NOT generate a topic related to any of these recently used themes: [${recentTopics.map(t => t.title).join(", ")}]. Find a completely different, fresh concept.` : "";
       let tail = "Generate a completely random, fresh topic. ";
-      
       if (isTailored) {
         if (memory.length > 0) tail = `The user has recently been exploring these concepts: [${memory.filter(m => m.type === 'search').map(m => m.content).join(', ')}]. They are also working through these 10th step thoughts: [${memory.filter(m => m.type === 'tenth_step').map(m => m.content).join(' | ')}]. Tailor the meeting topic and reflection to address these specific themes while keeping it grounded in AA principles. `;
         else tail = "No specific recent user input found, generate a highly insightful random topic. ";
@@ -898,16 +1023,14 @@
         const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: sch, temperature: 0.95 } };
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
         const res = await fetchWithRetry(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        const data = await res.json(); 
-        
-        l.classList.add('hidden');
+        const data = await res.json(); l.classList.add('hidden');
         const item = safeJSONParse(data.candidates?.[0]?.content?.parts?.[0]?.text);
 
         if(item && item.title) {
           recentTopics.push({ title: item.title, timestamp: Date.now() });
           try { localStorage.setItem('serenity_recent_topics', JSON.stringify(recentTopics)); } catch(e) {}
 
-          item.type = 'topic'; 
+          item.type = 'topic';
           const itemId = 'topic_' + Date.now();
           globalMemoryStore[itemId] = item;
 
@@ -916,7 +1039,6 @@
           
           c.innerHTML = `
             <div class="bg-app-card p-8 md:p-12 rounded-2xl border border-app-border relative shadow-sm group">
-              <!-- Injected Save, Share, and Audio UI for Topics -->
               <div class="absolute top-4 right-4 md:top-6 md:right-6 flex gap-2 z-20">
                 <button onclick="shareItem('${itemId}')" class="w-10 h-10 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-solid fa-arrow-up-from-bracket text-sm"></i></button>
                 <button onclick="speakText('${itemId}')" class="w-10 h-10 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-solid fa-volume-high text-sm"></i></button>
@@ -932,9 +1054,7 @@
           c.classList.remove('hidden');
         }
       } catch(err) {
-        l.classList.add('hidden'); 
-        c.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl border border-red-200 text-center"><p class="text-red-600 font-bold text-sm mb-2">Error</p><p class="text-red-600 text-xs">${err.message}</p></div>`; 
-        c.classList.remove('hidden');
+        l.classList.add('hidden'); c.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl border border-red-200 text-center"><p class="text-red-600 font-bold text-sm mb-2">Error</p><p class="text-red-600 text-xs">${err.message}</p></div>`; c.classList.remove('hidden');
       }
     }
 
@@ -959,10 +1079,7 @@
       if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
     }
 
-    function updateSavedCount() { 
-      const c = document.getElementById('saved-count'); 
-      if (c) c.innerText = savedPassages.length; 
-    }
+    function updateSavedCount() { const c = document.getElementById('saved-count'); if (c) c.innerText = savedPassages.length; }
 
     function removeSaved(index) {
       const trueIndex = savedPassages.indexOf(filteredSavedItems()[index]);
@@ -1041,7 +1158,8 @@
         `);
       });
     }
-    
+
+    // --- AUDIO WATERFALL LOGIC ---
     async function speakText(itemId) {
       const apiKey = getApiKey(); 
       if (!apiKey) { toggleSettingsModal(); return; }
@@ -1060,7 +1178,6 @@
         textToSpeak = `From ${item.literatureSource}. ${item.title}. Quote: ${item.keyQuote}. Insight: ${item.summaryAndInsight}. Application: ${item.dailyApplication || ''}`;
       }
       
-      // Split text into chunkable sentences
       const chunks = textToSpeak.match(/[^.!?]+[.!?]+/g) || [textToSpeak];
       audioQueue = [];
       isFetchingChunks = true;
@@ -1108,15 +1225,12 @@
                 
                 audioQueue.push(URL.createObjectURL(blob));
                 
-                // Immediately trigger play if this is the first chunk in the queue
                 if (!currentAudioSource) playNextInQueue();
             }
             
-            // Waterfall: Start generating the next sentence while this one plays
             if (!abortAudio) processAudioWaterfall(chunks, index + 1, apiKey);
             
         } catch (e) {
-            // Fallback to robotic browser voice if AI generation fails
             if (index === 0) {
                 const u = new SpeechSynthesisUtterance(chunks.join(" ")); 
                 u.onend = stopAudio; 
@@ -1145,7 +1259,7 @@
         currentAudioSource.onended = () => {
             URL.revokeObjectURL(nextAudioUrl);
             currentAudioSource = null;
-            playNextInQueue(); // Seamlessly play the next chunk
+            playNextInQueue();
         };
         currentAudioSource.play();
     }
@@ -1161,48 +1275,12 @@
     }
     
     function encodeWAV(s, sr) { 
-      const b = new ArrayBuffer(44 + s.length); 
-      const v = new DataView(b); 
+      const b = new ArrayBuffer(44 + s.length); const v = new DataView(b); 
       const w = (v, o, str) => { for (let i = 0; i < str.length; i++) v.setUint8(o + i, str.charCodeAt(i)); }; 
       w(v, 0, 'RIFF'); v.setUint32(4, 36 + s.length, true); w(v, 8, 'WAVE'); w(v, 12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(v, 36, 'data'); v.setUint32(40, s.length, true); const sv = new Uint8Array(b, 44); sv.set(s); return new Uint8Array(b); 
     }
 
-    // --- MULTI-SELECT FILTER LOGIC ---
-    const LIBRARY_SOURCES = ["Big Book", "12 Steps & 12 Traditions", "Daily Reflections", "As Bill Sees It", "Drop the Rock", "Living Sober", "Came to Believe", "The Language of the Heart", "AA Comes of Age", "Experience, Strength, and Hope"];
-    let selectedSources = [...LIBRARY_SOURCES];
-
-    function initFilterMenu() {
-      const list = document.getElementById('filter-checkbox-list');
-      if (!list) return;
-      list.innerHTML = LIBRARY_SOURCES.map(source => `
-        <label class="flex items-center gap-3 p-2 hover:bg-app-bg rounded-lg cursor-pointer transition-colors">
-          <input type="checkbox" value="${source}" onchange="updateSelectedSources()" checked class="source-checkbox w-4 h-4 accent-app-brand cursor-pointer">
-          <span class="text-sm font-medium text-app-text">${source}</span>
-        </label>
-      `).join('');
-      
-      document.addEventListener('click', (e) => {
-        const wrapper = document.getElementById('multi-select-wrapper');
-        const menu = document.getElementById('filter-menu');
-        if (wrapper && !wrapper.contains(e.target) && !menu.classList.contains('hidden')) {
-          menu.classList.add('hidden');
-        }
-      });
-    }
-
-    function toggleFilterMenu() { document.getElementById('filter-menu').classList.toggle('hidden'); }
-
-    function toggleAllSources(isChecked) {
-      document.querySelectorAll('.source-checkbox').forEach(cb => cb.checked = isChecked);
-      updateSelectedSources();
-    }
-
-    function updateSelectedSources() {
-      const checkboxes = document.querySelectorAll('.source-checkbox');
-      selectedSources = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-    }
-      
-    // --- DICTATION (VOICE TO TEXT) ---
+    // --- GLOBAL DICTATION LOGIC ---
     function showToast(message, isError = false) {
       const container = document.getElementById('toast-container');
       if (!container) return;
@@ -1211,10 +1289,7 @@
       toast.innerHTML = isError ? `<i class="fa-solid fa-triangle-exclamation mr-2"></i>${message}` : message;
       container.appendChild(toast);
       
-      // Animate in
       setTimeout(() => toast.classList.remove('-translate-y-full', 'opacity-0'), 10);
-      
-      // Animate out and remove after 4 seconds
       setTimeout(() => {
         toast.classList.add('-translate-y-full', 'opacity-0');
         setTimeout(() => toast.remove(), 300);
@@ -1231,13 +1306,11 @@
       const micIcon = document.getElementById(iconId);
       const input = document.getElementById(inputId);
       
-      // If clicking the same active mic, just stop it normally
       if (speechRecognition && activeDictationInput === inputId) { 
         speechRecognition.stop(); 
         return; 
       }
       
-      // If a different mic was running, or it's stuck, force kill it
       if (speechRecognition) {
         try { speechRecognition.abort(); } catch(e) {}
       }
@@ -1294,7 +1367,7 @@
       }
     }
 
-    // --- BACKUP & RESTORE LOGIC ---
+    // --- EXPORT / IMPORT / SHARE ---
     function exportData() {
       const data = {
         savedPassages: savedPassages,
@@ -1331,7 +1404,6 @@
       reader.readAsText(file);
     }
 
-    // --- NATIVE SHARE LOGIC ---
     async function shareItem(itemId) {
       const item = globalMemoryStore[itemId];
       if (!item) return;
@@ -1343,10 +1415,19 @@
         });
       } catch (e) { console.log('Share canceled or failed', e); }
     }
-      
+
     if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(err => { console.log('SW failed:', err); }); }); }
 
-    window.switchTab = switchTab; window.toggleTheme = toggleTheme; window.changeTheme = changeTheme; window.toggleSerenityPrayerModal = toggleSerenityPrayerModal; window.toggleSettingsModal = toggleSettingsModal; window.saveApiKey = saveApiKey; window.clearApiKey = clearApiKey; window.handleSearch = handleSearch; window.setQuickSearch = setQuickSearch; window.toggleFilterMenu = toggleFilterMenu; window.toggleAllSources = toggleAllSources; window.updateSelectedSources = updateSelectedSources; window.toggleDictation = toggleDictation; window.clearSaved = clearSaved; window.speakText = speakText; window.toggleSaveItemById = toggleSaveItemById; window.removeSaved = removeSaved; window.stopAudio = stopAudio; window.processTenthStep = processTenthStep; window.generateTopic = generateTopic; window.setSavedTab = setSavedTab; window.exportData = exportData; window.importData = importData; window.shareItem = shareItem;
+    window.switchTab = switchTab; window.toggleTheme = toggleTheme; window.changeTheme = changeTheme; 
+    window.toggleSerenityPrayerModal = toggleSerenityPrayerModal; window.toggleSettingsModal = toggleSettingsModal; 
+    window.saveSettings = saveSettings; window.clearApiKey = clearApiKey; window.handleSearch = handleSearch; 
+    window.setQuickSearch = setQuickSearch; window.toggleFilterMenu = toggleFilterMenu; 
+    window.toggleAllSources = toggleAllSources; window.updateSelectedSources = updateSelectedSources; 
+    window.toggleDictation = toggleDictation; window.clearSaved = clearSaved; window.speakText = speakText; 
+    window.toggleSaveItemById = toggleSaveItemById; window.removeSaved = removeSaved; window.stopAudio = stopAudio; 
+    window.processTenthStep = processTenthStep; window.generateTopic = generateTopic; window.setSavedTab = setSavedTab;
+    window.openStepModal = openStepModal; window.closeStepModal = closeStepModal; window.searchStep = searchStep;
+    window.exportData = exportData; window.importData = importData; window.shareItem = shareItem;
   </script>
 </body>
 </html>
