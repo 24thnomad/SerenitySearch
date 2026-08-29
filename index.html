@@ -944,7 +944,7 @@
                 <div><span class="inline-block px-2 py-0.5 bg-app-bg border border-app-border rounded text-[10px] font-bold uppercase tracking-widest text-app-brand mb-2">${itemObj.literatureSource}</span><h4 class="text-xl font-bold text-app-text">${itemObj.title}</h4></div>
                 <div class="flex gap-1 md:hidden">
                   <button onclick="speakText('${itemId}')" class="w-8 h-8 rounded-full text-app-muted hover:text-app-brand bg-app-bg"><i class="fa-solid fa-volume-high"></i></button>
-                  <button onclick="toggleSaveItemById('${itemId}')" class="w-8 h-8 rounded-full text-app-muted hover:text-app-brand bg-app-bg"><i class="fa-regular fa-bookmark"></i></button>
+                  <button onclick="toggleSaveItemById('${itemId}', this)" class="w-8 h-8 rounded-full text-app-muted hover:text-app-brand bg-app-bg"><i class="fa-regular fa-bookmark"></i></button>
                 </div>
               </div>
               <blockquote class="font-serif text-lg text-app-text italic border-l-4 border-app-brand pl-4 py-1">"${itemObj.keyQuote}"</blockquote>
@@ -955,7 +955,7 @@
             </div>
             <div class="hidden md:flex flex-col gap-2 shrink-0 border-l border-app-border pl-6">
               <button onclick="speakText('${itemId}')" class="w-10 h-10 rounded-full bg-app-bg hover:bg-app-brandSoft text-app-muted hover:text-app-brand transition-colors flex items-center justify-center border border-transparent hover:border-app-brand"><i class="fa-solid fa-volume-high text-sm"></i></button>
-              <button onclick="toggleSaveItemById('${itemId}')" class="w-10 h-10 rounded-full bg-app-bg hover:bg-app-brandSoft text-app-muted hover:text-app-brand transition-colors flex items-center justify-center border border-transparent hover:border-app-brand"><i class="fa-regular fa-bookmark text-sm"></i></button>
+              <button onclick="toggleSaveItemById('${itemId}', this)" class="w-10 h-10 rounded-full bg-app-bg hover:bg-app-brandSoft text-app-muted hover:text-app-brand transition-colors flex items-center justify-center border border-transparent hover:border-app-brand"><i class="fa-regular fa-bookmark text-sm"></i></button>
             </div>
           </div>
         `);
@@ -984,7 +984,7 @@
             <div class="bg-app-card p-6 md:p-8 rounded-2xl border border-app-brand shadow-md relative overflow-hidden group">
               <div class="absolute top-4 right-4 flex gap-2 z-20">
                 <button onclick="speakText('${itemId}')" class="w-8 h-8 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-solid fa-volume-high text-xs"></i></button>
-                <button onclick="toggleSaveItemById('${itemId}')" class="w-8 h-8 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-regular fa-bookmark text-xs"></i></button>
+                <button onclick="toggleSaveItemById('${itemId}', this)" class="w-8 h-8 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-regular fa-bookmark text-xs"></i></button>
               </div>
               <div class="space-y-6 relative z-10 pt-4">
                 <div><h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">Validation</h4><p class="text-app-text font-medium pr-16">${resObj.validation}</p></div>
@@ -1046,7 +1046,7 @@
               <div class="absolute top-4 right-4 md:top-6 md:right-6 flex gap-2 z-20">
                 <button onclick="shareItem('${itemId}')" class="w-10 h-10 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-solid fa-arrow-up-from-bracket text-sm"></i></button>
                 <button onclick="speakText('${itemId}')" class="w-10 h-10 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-solid fa-volume-high text-sm"></i></button>
-                <button onclick="toggleSaveItemById('${itemId}')" class="w-10 h-10 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-regular fa-bookmark text-sm"></i></button>
+                <button onclick="toggleSaveItemById('${itemId}', this)" class="w-10 h-10 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-regular fa-bookmark text-sm"></i></button>
               </div>
               <div class="relative z-10 max-w-2xl mx-auto space-y-8 pt-6">
                 <div class="text-center space-y-3">${badge}<h3 class="text-3xl font-bold text-app-text pr-8">${item.title}</h3></div>
@@ -1062,26 +1062,56 @@
       }
     }
 
-    function toggleSaveItemById(itemId) {
-      const item = globalMemoryStore[itemId];
-      if (!item) return;
-      
-      let existsIdx = -1;
-      if (item.type === 'tenth') {
-        existsIdx = savedPassages.findIndex(s => s.validation === item.validation);
-      } else if (item.type === 'topic') {
-        existsIdx = savedPassages.findIndex(s => s.title === item.title);
-      } else { 
-        existsIdx = savedPassages.findIndex(s => s.keyQuote === item.keyQuote);
-      }
+   function toggleSaveItemById(itemId, btnElement) {
+  const item = globalMemoryStore[itemId];
+  if (!item) return;
+  
+  let existsIdx = -1;
+  if (item.type === 'tenth') {
+    existsIdx = savedPassages.findIndex(s => s.validation === item.validation);
+  } else if (item.type === 'topic') {
+    existsIdx = savedPassages.findIndex(s => s.title === item.title);
+  } else { 
+    existsIdx = savedPassages.findIndex(s => s.keyQuote === item.keyQuote);
+  }
 
-      if (existsIdx > -1) { savedPassages.splice(existsIdx, 1); } 
-      else { savedPassages.unshift(item); }
+  let isNowSaved = false;
+  if (existsIdx > -1) { 
+    savedPassages.splice(existsIdx, 1); 
+    isNowSaved = false;
+    showToast('Removed from library.');
+  } else { 
+    savedPassages.unshift(item); 
+    isNowSaved = true;
+    showToast('Saved to library!');
+  }
+  
+  try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
+  updateSavedCount();
+  if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
+
+  // --- VISUAL UI UPDATE LOGIC ---
+  if (btnElement) {
+    const icon = btnElement.querySelector('i');
+    if (icon) {
+      // Ensure the icon has the transition class for the "pop" animation
+      icon.classList.add('transition-all', 'duration-200');
       
-      try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
-      updateSavedCount();
-      if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
+      if (isNowSaved) {
+        // Change to solid gold and scale up slightly
+        icon.classList.remove('fa-regular', 'text-app-muted');
+        icon.classList.add('fa-solid', 'text-app-brand', 'scale-125');
+        
+        // Return to normal size after a fraction of a second (creates the pop)
+        setTimeout(() => icon.classList.remove('scale-125'), 200);
+      } else {
+        // Revert to hollow gray outline
+        icon.classList.remove('fa-solid', 'text-app-brand', 'scale-125');
+        icon.classList.add('fa-regular', 'text-app-muted');
+      }
     }
+  }
+}
 
     function updateSavedCount() { const c = document.getElementById('saved-count'); if (c) c.innerText = savedPassages.length; }
 
