@@ -692,12 +692,14 @@
     });
 
     function toggleTheme() {
+      triggerHaptic();
       var html = document.documentElement;
       if (html.classList.contains('dark')) { html.classList.remove('dark'); try { localStorage.setItem('theme-mode', 'light'); } catch(e) {} } 
       else { html.classList.add('dark'); try { localStorage.setItem('theme-mode', 'dark'); } catch(e) {} }
     }
 
     function changeTheme(themeClass) {
+      triggerHaptic();
       const html = document.documentElement;
       html.classList.remove('theme-sapphire', 'theme-emerald', 'theme-amethyst', 'theme-crimson', 'theme-reef', 'theme-sunset', 'theme-wildflower', 'theme-carnival', 'theme-monochrome', 'theme-oasis', 'theme-miami-synth', 'theme-motor', 'theme-lions', 'theme-piston');
       if (themeClass !== 'default') { html.classList.add(themeClass); }
@@ -773,7 +775,19 @@
     }
 
     var isAppInitialized = false;
-    function dismissDisclaimer() {
+    // Haptic Feedback Utility
+    function triggerHaptic() {
+      // Checks if the browser/device supports the vibration API
+      if (navigator.vibrate) {
+        navigator.vibrate(50); // 50 milliseconds is the sweet spot for a "click" feel
+      }
+    }
+    
+    // Expose it to the window so inline HTML buttons can use it
+    window.triggerHaptic = triggerHaptic;
+    
+   function dismissDisclaimer() {
+      triggerHaptic(); // Added haptic bump!
       const d = document.getElementById('ai-disclaimer');
       if (d) {
         d.classList.add('hidden');
@@ -797,6 +811,7 @@
     else setTimeout(initApp, 50);
 
     function switchTab(tabName) {
+      triggerHaptic();
       ['search', 'steps', 'tenth', 'topics', 'saved'].forEach(t => {
         const tabEl = document.getElementById(`tab-${t}`); if (tabEl) tabEl.classList.add('hidden');
         const btn = document.getElementById(`nav-${t}`); if (btn) btn.className = "nav-btn px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-all flex items-center gap-2";
@@ -890,6 +905,7 @@
     }
 
     async function fetchSearchBatch(query, count, excludeTitles, isFirstBatch) {
+      triggerHaptic();
       const apiKey = getApiKey();
       if (!apiKey) return;
 
@@ -1143,6 +1159,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
       }
     }
    function toggleSaveItemById(itemId, btnElement) {
+     triggerHaptic();
   const item = globalMemoryStore[itemId];
   if (!item) return;
   
@@ -1280,10 +1297,12 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
 
     // --- AUDIO WATERFALL LOGIC ---
     async function speakText(itemId) {
+      triggerHaptic();
       const apiKey = getApiKey(); 
       if (!apiKey) { toggleSettingsModal(); return; }
       
       stopAudio(); 
+      triggerHaptic();
       abortAudio = false;
       const item = globalMemoryStore[itemId]; 
       if (!item) return;
@@ -1549,7 +1568,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     window.toggleSaveItemById = toggleSaveItemById; window.removeSaved = removeSaved; window.stopAudio = stopAudio; 
     window.processTenthStep = processTenthStep; window.generateTopic = generateTopic; window.setSavedTab = setSavedTab;
     window.openStepModal = openStepModal; window.closeStepModal = closeStepModal; window.searchStep = searchStep;
-    window.exportData = exportData; window.importData = importData; window.shareItem = shareItem; window.initTopicTab = initTopicTab; window.dismissDisclaimer = dismissDisclaimer;
+    window.exportData = exportData; window.importData = importData; window.shareItem = shareItem; window.initTopicTab = initTopicTab;
   
     function showToast(message) {
   // Create the toast container 
