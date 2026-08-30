@@ -584,6 +584,7 @@
     function clearApiKey() { localStorage.removeItem('serenity_api_key'); document.getElementById('api-key-input').value = ""; }
     
     function toggleSettingsModal() { 
+      triggerHaptic();
       const m = document.getElementById('settings-modal'); 
       if(m.classList.contains('hidden')) { 
         document.getElementById('api-key-input').value = getApiKey(); 
@@ -708,7 +709,9 @@
       try { localStorage.setItem('color-theme', themeClass); } catch(e) {}
     }
 
-    function toggleSerenityPrayerModal() { document.getElementById('serenity-modal').classList.toggle('hidden'); }
+    function toggleSerenityPrayerModal() {
+      triggerHaptic();
+      document.getElementById('serenity-modal').classList.toggle('hidden'); }
 
     var TWELVE_STEPS = [
       { step: 1, title: "Honesty", text: "We admitted we were powerless over alcohol—that our lives had become unmanageable.", query: "Step 1 Powerlessness" },
