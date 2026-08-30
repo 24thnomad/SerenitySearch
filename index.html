@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+=<!DOCTYPE html>
 <html lang="en" class="h-full antialiased">
 <head>
   <meta charset="UTF-8">
@@ -168,7 +168,7 @@
   </div>
 
   <!-- Header -->
-  <header class="sticky top-0 z-40 glass-nav bg-app-bg/80 border-b border-app-border px-4 lg:px-8 py-4 shrink-0">
+ <header id="main-header" class="sticky top-0 z-40 transition-all duration-300 bg-app-bg border-b border-transparent px-4 lg:px-8 py-4 shrink-0">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-4 lg:gap-10">
       
       <!-- Logo -->
@@ -692,6 +692,22 @@
        if (headerSelect) headerSelect.value = savedColorTheme;
     });
 
+    // Scroll-Aware Glass Header Logic
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('main-header');
+      if (!header) return;
+      
+      if (window.scrollY > 20) {
+        // User has scrolled down: Add Glass, Border, and Shadow
+        header.classList.remove('bg-app-bg', 'border-transparent');
+        header.classList.add('glass-nav', 'bg-app-bg/80', 'border-app-border', 'shadow-sm');
+      } else {
+        // User is at the top: Make it flat and seamless
+        header.classList.add('bg-app-bg', 'border-transparent');
+        header.classList.remove('glass-nav', 'bg-app-bg/80', 'border-app-border', 'shadow-sm');
+      }
+    }, { passive: true });
+    
     function toggleTheme() {
       triggerHaptic();
       var html = document.documentElement;
