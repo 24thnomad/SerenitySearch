@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+=<!DOCTYPE html>
 <html lang="en" class="h-full antialiased">
 <head>
   <meta charset="UTF-8">
@@ -325,9 +325,30 @@
       </div>
 
       <!-- Loading State -->
-      <div id="search-loading" class="hidden py-16 text-center space-y-4">
-        <div class="w-8 h-8 border-2 border-app-border border-t-app-brand rounded-full animate-spin mx-auto"></div>
-        <p class="text-sm font-medium text-app-muted tracking-wide uppercase">Searching Literature...</p>
+     <div id="search-loading" class="hidden space-y-6 pt-4">
+        <div class="text-xs font-bold text-app-brand uppercase tracking-widest text-center animate-pulse mb-6">Searching Library...</div>
+        <div class="sleek-card bg-app-card p-6 sm:p-8 rounded-2xl border border-app-border flex flex-col md:flex-row gap-6 animate-pulse">
+          <div class="flex-1 space-y-4 w-full">
+            <div class="h-4 bg-app-border rounded w-24 mb-2"></div>
+            <div class="h-6 bg-app-border rounded w-3/4 mb-4"></div>
+            <div class="h-16 bg-app-border rounded w-full mb-4 border-l-4 border-app-brand/30"></div>
+            <div class="grid sm:grid-cols-2 gap-4 mt-4 pt-4 border-t border-app-border">
+              <div class="space-y-2"><div class="h-3 bg-app-border rounded w-16"></div><div class="h-10 bg-app-bg border border-app-border rounded w-full"></div></div>
+              <div class="space-y-2"><div class="h-3 bg-app-border rounded w-16"></div><div class="h-10 bg-app-bg border border-app-border rounded w-full"></div></div>
+            </div>
+          </div>
+          <div class="hidden md:flex flex-col gap-2 shrink-0 border-l border-app-border pl-6">
+            <div class="w-10 h-10 rounded-full bg-app-border"></div>
+            <div class="w-10 h-10 rounded-full bg-app-border"></div>
+          </div>
+        </div>
+        <div class="sleek-card bg-app-card p-6 sm:p-8 rounded-2xl border border-app-border flex flex-col md:flex-row gap-6 animate-pulse opacity-50">
+           <div class="flex-1 space-y-4 w-full">
+            <div class="h-4 bg-app-border rounded w-32 mb-2"></div>
+            <div class="h-6 bg-app-border rounded w-2/3 mb-4"></div>
+            <div class="h-12 bg-app-border rounded w-full mb-4 border-l-4 border-app-brand/30"></div>
+          </div>
+        </div>
       </div>
 
       <!-- Search Results Display -->
@@ -368,9 +389,17 @@
           </form>
         </div>
 
-        <div id="tenth-loading" class="hidden py-12 text-center space-y-4">
-          <div class="w-8 h-8 border-2 border-app-border border-t-app-brand rounded-full animate-spin mx-auto"></div>
-          <p class="text-xs font-medium text-app-muted tracking-wide uppercase">Reflecting on principles...</p>
+        <div id="tenth-loading" class="hidden space-y-6 pt-4 animate-pulse">
+          <div class="text-xs font-bold text-app-brand uppercase tracking-widest text-center mb-4">Reflecting on principles...</div>
+          <div class="bg-app-card p-6 md:p-8 rounded-2xl border border-app-border shadow-md">
+            <div class="space-y-6 pt-2">
+              <div><div class="h-3 bg-app-border rounded w-20 mb-3"></div><div class="h-4 bg-app-bg border border-app-border rounded w-5/6"></div></div>
+              <div class="w-8 h-[1px] bg-app-border"></div>
+              <div><div class="h-3 bg-app-border rounded w-32 mb-3"></div><div class="h-6 bg-app-border rounded w-full mb-2"></div><div class="h-6 bg-app-border rounded w-4/5"></div></div>
+              <div class="w-8 h-[1px] bg-app-border"></div>
+              <div><div class="h-3 bg-app-border rounded w-24 mb-3"></div><div class="h-4 bg-app-bg border border-app-border rounded w-3/4"></div></div>
+            </div>
+          </div>
         </div>
 
         <div id="tenth-result" class="hidden space-y-6 relative"></div>
@@ -394,9 +423,32 @@
         </div>
       </div>
 
-      <div id="topics-loading" class="hidden py-16 text-center space-y-4">
-        <div class="w-8 h-8 border-2 border-app-border border-t-app-brand rounded-full animate-spin mx-auto"></div>
-        <p class="text-xs font-medium text-app-muted tracking-wide uppercase" id="topics-loading-text">Creating topic...</p>
+      <div id="topics-loading" class="hidden space-y-6 pt-4 animate-pulse">
+        <div class="text-xs font-bold text-app-brand uppercase tracking-widest text-center mb-4" id="topics-loading-text">Creating topic...</div>
+        <div class="bg-app-card p-8 md:p-12 rounded-2xl border border-app-border relative shadow-sm">
+          <div class="max-w-2xl mx-auto space-y-8 pt-2">
+            <div class="flex flex-col items-center space-y-4">
+              <div class="h-5 bg-app-border rounded-full w-24"></div>
+              <div class="h-10 bg-app-border rounded w-3/4"></div>
+            </div>
+            <div class="h-16 bg-app-bg border border-app-border rounded w-full border-y border-app-border py-6 my-6"></div>
+            <div>
+              <div class="h-3 bg-app-border rounded w-20 mb-3"></div>
+              <div class="space-y-2">
+                <div class="h-4 bg-app-bg border border-app-border rounded w-full"></div>
+                <div class="h-4 bg-app-bg border border-app-border rounded w-full"></div>
+                <div class="h-4 bg-app-bg border border-app-border rounded w-5/6"></div>
+              </div>
+            </div>
+            <div class="bg-app-bg p-6 rounded-xl border border-app-border">
+              <div class="h-3 bg-app-border rounded w-32 mb-4"></div>
+              <div class="space-y-4">
+                <div class="h-4 bg-app-border rounded w-full"></div>
+                <div class="h-4 bg-app-border rounded w-4/5"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="topics-result" class="min-h-[400px]"></div>
