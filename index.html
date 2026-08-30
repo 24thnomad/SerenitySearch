@@ -821,6 +821,7 @@
     }
 
     function openStepModal(idx) {
+      triggerHaptic();
       const step = TWELVE_STEPS[idx];
       const content = document.getElementById('step-modal-content');
       const action = document.getElementById('step-modal-action');
