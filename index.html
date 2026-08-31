@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+=<!DOCTYPE html>
 <html lang="en" class="h-full antialiased">
 <head>
   <meta charset="UTF-8">
@@ -30,6 +30,10 @@
       var storedColorTheme = localStorage.getItem('color-theme');
       if (storedColorTheme && storedColorTheme !== 'default') {
         document.documentElement.classList.add(storedColorTheme);
+      }
+      var storedFontSize = localStorage.getItem('serenity_font_size');
+      if (storedFontSize) {
+        document.documentElement.style.fontSize = storedFontSize + 'px';
       }
     } catch(e) {}
   </script>
@@ -543,16 +547,27 @@
         </div>
 
         <div class="w-full h-px bg-app-border my-4"></div>
-        <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest mb-3">Audio Settings</h4>
-        <div class="mb-4 relative">
-          <label class="block text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Reader Voice</label>
-          <select id="tts-voice-input" class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all text-sm appearance-none">
-            <option value="Kore">Female (Kore)</option>
-            <option value="Aoede">Female (Aoede)</option>
-            <option value="Charon">Male (Charon)</option>
-            <option value="Fenrir">Male (Fenrir)</option>
-          </select>
-          <i class="fa-solid fa-chevron-down absolute right-4 top-9 text-app-muted pointer-events-none text-xs"></i>
+        <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest mb-3">Reading Preferences</h4>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div class="relative">
+            <label class="block text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Reader Voice</label>
+            <select id="tts-voice-input" class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all text-sm appearance-none">
+              <option value="Kore">Female (Kore)</option>
+              <option value="Aoede">Female (Aoede)</option>
+              <option value="Charon">Male (Charon)</option>
+              <option value="Fenrir">Male (Fenrir)</option>
+            </select>
+            <i class="fa-solid fa-chevron-down absolute right-4 top-9 text-app-muted pointer-events-none text-xs"></i>
+          </div>
+          
+          <div>
+            <label class="block text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Text Size</label>
+            <div class="flex items-center justify-between w-full h-[46px] bg-app-bg border border-app-border rounded-xl p-1 shadow-inner">
+              <button onclick="changeFontSize('decrease')" class="w-10 h-full rounded-lg flex items-center justify-center text-app-muted hover:text-app-text hover:bg-app-card transition-colors"><i class="fa-solid fa-minus text-xs"></i></button>
+              <span class="text-sm font-bold text-app-text font-serif pointer-events-none">Aa</span>
+              <button onclick="changeFontSize('increase')" class="w-10 h-full rounded-lg flex items-center justify-center text-app-muted hover:text-app-text hover:bg-app-card transition-colors"><i class="fa-solid fa-plus text-xs"></i></button>
+            </div>
+          </div>
         </div>
 
         <div class="flex gap-3 pt-6">
@@ -783,6 +798,26 @@
       try { localStorage.setItem('color-theme', themeClass); } catch(e) {}
     }
 
+    // Dynamic Font Scaler
+    let currentFontSize = parseInt(localStorage.getItem('serenity_font_size')) || 16;
+    
+    function changeFontSize(action) {
+      triggerHaptic();
+      
+      // Increase/Decrease in 2px increments with safety limits (12px min, 24px max)
+      if (action === 'increase' && currentFontSize < 24) currentFontSize += 2;
+      if (action === 'decrease' && currentFontSize > 12) currentFontSize -= 2;
+      
+      // Apply immediately to the root document
+      document.documentElement.style.fontSize = currentFontSize + 'px';
+      
+      // Save their preference silently
+      try { localStorage.setItem('serenity_font_size', currentFontSize); } catch(e) {}
+    }
+    
+    // Expose to the window so the inline HTML buttons can trigger it
+    window.changeFontSize = changeFontSize;
+    
     function toggleSerenityPrayerModal() {
       triggerHaptic();
       document.getElementById('serenity-modal').classList.toggle('hidden'); }
@@ -844,7 +879,6 @@
     }
 
     function closeStepModal() {
-      triggerHaptic();
       document.getElementById('step-modal').classList.add('hidden');
     }
 
