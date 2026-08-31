@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+=<!DOCTYPE html>
 <html lang="en" class="h-full antialiased">
 <head>
   <meta charset="UTF-8">
@@ -1381,16 +1381,19 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     function updateSavedCount() { const c = document.getElementById('saved-count'); if (c) c.innerText = savedPassages.length; }
 
     function removeSaved(index) {
+      triggerHaptic();
       const trueIndex = savedPassages.indexOf(filteredSavedItems()[index]);
       if(trueIndex > -1) {
         savedPassages.splice(trueIndex, 1);
         try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
         updateSavedCount();
         renderSavedList();
+        showToast("Removed from library.");
       }
     }
 
     function clearSaved() {
+      triggerHaptic();
       const itemsToKeep = savedPassages.filter(item => {
         const itemType = item.type || 'literature';
         return itemType !== currentSavedTab;
@@ -1399,6 +1402,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
       try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
       updateSavedCount();
       renderSavedList();
+      showToast("Library cleared.");
     }
 
     function setSavedTab(tabName) {
