@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+=<!DOCTYPE html>
 <html lang="en" class="h-full antialiased">
 <head>
   <meta charset="UTF-8">
@@ -251,6 +251,10 @@
       </div>
     </div>
   </header>
+  
+  <div id="offline-banner" class="hidden bg-amber-100 dark:bg-amber-900/50 border-b border-amber-200 dark:border-amber-700/50 text-amber-800 dark:text-amber-200 px-4 py-2 text-center text-[10px] sm:text-xs font-bold uppercase tracking-widest shrink-0 transition-all">
+    <i class="fa-solid fa-wifi mr-2"></i>Offline Mode: Saved Library & Steps Available
+  </div>
 
   <!-- Mobile Nav Bar -->
   <div class="md:hidden glass-nav bg-app-card/90 border-b border-app-border px-2 py-2 flex justify-around text-[10px] uppercase font-bold tracking-wider z-30 shrink-0">
@@ -817,6 +821,57 @@
     
     // Expose to the window so the inline HTML buttons can trigger it
     window.changeFontSize = changeFontSize;
+    
+    // ==========================================
+    // OFFLINE MODE DETECTION
+    // ==========================================
+    window.addEventListener('offline', () => {
+      triggerHaptic();
+      document.getElementById('offline-banner').classList.remove('hidden');
+      
+      const searchInput = document.getElementById('search-input');
+      const searchBtn = document.getElementById('search-btn');
+      const searchMic = document.getElementById('search-mic-icon');
+      
+      if (searchInput) {
+        searchInput.disabled = true;
+        searchInput.placeholder = "Search requires connection...";
+        searchInput.classList.add('opacity-50', 'bg-app-bg');
+      }
+      if (searchBtn) {
+        searchBtn.disabled = true;
+        searchBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+      if (searchMic) {
+        searchMic.parentElement.disabled = true;
+        searchMic.parentElement.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    });
+
+    window.addEventListener('online', () => {
+      triggerHaptic();
+      document.getElementById('offline-banner').classList.add('hidden');
+      
+      const searchInput = document.getElementById('search-input');
+      const searchBtn = document.getElementById('search-btn');
+      const searchMic = document.getElementById('search-mic-icon');
+      
+      if (searchInput) {
+        searchInput.disabled = false;
+        searchInput.placeholder = "e.g. Step Two, Acceptance, Resentment...";
+        searchInput.classList.remove('opacity-50', 'bg-app-bg');
+      }
+      if (searchBtn) {
+        searchBtn.disabled = false;
+        searchBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+      if (searchMic) {
+        searchMic.parentElement.disabled = false;
+        searchMic.parentElement.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    });
+    // ==========================================
+    
     
     function toggleSerenityPrayerModal() {
       triggerHaptic();
