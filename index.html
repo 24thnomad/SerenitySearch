@@ -1340,6 +1340,69 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     existsIdx = savedPassages.findIndex(s => s.keyQuote === item.keyQuote);
   }
 
+     // ==========================================
+    // NATIVE SWIPE-TO-DELETE GESTURES
+    // ==========================================
+    let touchStartX = 0;
+    let touchCurrentX = 0;
+    let activeSwipeCard = null;
+
+    const savedListEl = document.getElementById('saved-list');
+
+    if (savedListEl) {
+      // 1. Lock onto the card when the finger touches down
+      savedListEl.addEventListener('touchstart', (e) => {
+        const card = e.target.closest('.swipe-card');
+        if (!card) return;
+        activeSwipeCard = card;
+        touchStartX = e.touches[0].clientX;
+        touchCurrentX = touchStartX;
+        
+        // Remove smooth animation so the card tracks 1:1 with the thumb
+        activeSwipeCard.classList.remove('duration-200'); 
+      }, { passive: true });
+
+      // 2. Slide the card horizontally as the thumb moves
+      savedListEl.addEventListener('touchmove', (e) => {
+        if (!activeSwipeCard) return;
+        touchCurrentX = e.touches[0].clientX;
+        const diffX = touchCurrentX - touchStartX;
+        
+        // Only allow swiping to the left (negative X)
+        if (diffX < 0) {
+          activeSwipeCard.style.transform = `translateX(${diffX}px)`;
+        }
+      }, { passive: true });
+
+      // 3. Evaluate when the thumb lifts off the screen
+      savedListEl.addEventListener('touchend', (e) => {
+        if (!activeSwipeCard) return;
+        const diffX = touchCurrentX - touchStartX;
+        
+        // Turn the smooth animation back on for the snap
+        activeSwipeCard.classList.add('duration-200'); 
+        
+        // If they swiped more than 85 pixels left, delete it!
+        if (diffX < -85) {
+          activeSwipeCard.style.transform = `translateX(-100%)`; // Slide completely off-screen
+          
+          const container = activeSwipeCard.closest('.swipe-container');
+          const idx = parseInt(container.getAttribute('data-index'));
+          
+          // Wait for the slide-off animation to finish (200ms), then run your remove function
+          setTimeout(() => {
+            removeSaved(idx);
+          }, 200);
+        } else {
+          // They didn't swipe far enough, gently snap it back to default
+          activeSwipeCard.style.transform = `translateX(0px)`;
+        }
+        
+        // Reset variables for the next swipe
+        activeSwipeCard = null;
+      });
+    }
+     
   let isNowSaved = false;
   if (existsIdx > -1) { 
     savedPassages.splice(existsIdx, 1); 
@@ -1458,10 +1521,15 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
                      <p class="text-sm text-app-muted mt-2 font-serif italic">"${item.keyQuote}"</p>`;
         }
 
-        c.insertAdjacentHTML('beforeend', `
-          <div class="p-5 bg-app-card rounded-xl border border-app-border flex justify-between items-start gap-4 hover:border-app-brand transition-colors">
-            <div class="overflow-hidden w-full">${content}</div>
-            <button onclick="removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors shrink-0 mt-1"><i class="fa-solid fa-trash-can"></i></button>
+       c.insertAdjacentHTML('beforeend', `
+          <div class="relative rounded-xl overflow-hidden swipe-container bg-red-500 border border-transparent shrink-0" data-index="${idx}">
+            <div class="absolute inset-0 flex justify-end items-center px-6 text-white">
+              <i class="fa-solid fa-trash-can text-xl"></i>
+            </div>
+            <div class="swipe-card relative z-10 w-full p-5 bg-app-card rounded-xl border border-app-border flex justify-between items-start gap-4 hover:border-app-brand transition-transform duration-200" style="touch-action: pan-y;">
+              <div class="overflow-hidden w-full pointer-events-none">${content}</div>
+              <button onclick="removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors shrink-0 mt-1 pointer-events-auto"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
           </div>
         `);
       });
