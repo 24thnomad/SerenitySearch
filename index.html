@@ -822,55 +822,6 @@
     // Expose to the window so the inline HTML buttons can trigger it
     window.changeFontSize = changeFontSize;
     
-    // ==========================================
-    // OFFLINE MODE DETECTION
-    // ==========================================
-    window.addEventListener('offline', () => {
-      triggerHaptic();
-      document.getElementById('offline-banner').classList.remove('hidden');
-      
-      const searchInput = document.getElementById('search-input');
-      const searchBtn = document.getElementById('search-btn');
-      const searchMic = document.getElementById('search-mic-icon');
-      
-      if (searchInput) {
-        searchInput.disabled = true;
-        searchInput.placeholder = "Search requires connection...";
-        searchInput.classList.add('opacity-50', 'bg-app-bg');
-      }
-      if (searchBtn) {
-        searchBtn.disabled = true;
-        searchBtn.classList.add('opacity-50', 'cursor-not-allowed');
-      }
-      if (searchMic) {
-        searchMic.parentElement.disabled = true;
-        searchMic.parentElement.classList.add('opacity-50', 'cursor-not-allowed');
-      }
-    });
-
-    window.addEventListener('online', () => {
-      triggerHaptic();
-      document.getElementById('offline-banner').classList.add('hidden');
-      
-      const searchInput = document.getElementById('search-input');
-      const searchBtn = document.getElementById('search-btn');
-      const searchMic = document.getElementById('search-mic-icon');
-      
-      if (searchInput) {
-        searchInput.disabled = false;
-        searchInput.placeholder = "e.g. Step Two, Acceptance, Resentment...";
-        searchInput.classList.remove('opacity-50', 'bg-app-bg');
-      }
-      if (searchBtn) {
-        searchBtn.disabled = false;
-        searchBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-      }
-      if (searchMic) {
-        searchMic.parentElement.disabled = false;
-        searchMic.parentElement.classList.remove('opacity-50', 'cursor-not-allowed');
-      }
-    });
-    // ==========================================
     
     
     function toggleSerenityPrayerModal() {
@@ -1340,69 +1291,6 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     existsIdx = savedPassages.findIndex(s => s.keyQuote === item.keyQuote);
   }
 
-     // ==========================================
-    // NATIVE SWIPE-TO-DELETE GESTURES
-    // ==========================================
-    let touchStartX = 0;
-    let touchCurrentX = 0;
-    let activeSwipeCard = null;
-
-    const savedListEl = document.getElementById('saved-list');
-
-    if (savedListEl) {
-      // 1. Lock onto the card when the finger touches down
-      savedListEl.addEventListener('touchstart', (e) => {
-        const card = e.target.closest('.swipe-card');
-        if (!card) return;
-        activeSwipeCard = card;
-        touchStartX = e.touches[0].clientX;
-        touchCurrentX = touchStartX;
-        
-        // Remove smooth animation so the card tracks 1:1 with the thumb
-        activeSwipeCard.classList.remove('duration-200'); 
-      }, { passive: true });
-
-      // 2. Slide the card horizontally as the thumb moves
-      savedListEl.addEventListener('touchmove', (e) => {
-        if (!activeSwipeCard) return;
-        touchCurrentX = e.touches[0].clientX;
-        const diffX = touchCurrentX - touchStartX;
-        
-        // Only allow swiping to the left (negative X)
-        if (diffX < 0) {
-          activeSwipeCard.style.transform = `translateX(${diffX}px)`;
-        }
-      }, { passive: true });
-
-      // 3. Evaluate when the thumb lifts off the screen
-      savedListEl.addEventListener('touchend', (e) => {
-        if (!activeSwipeCard) return;
-        const diffX = touchCurrentX - touchStartX;
-        
-        // Turn the smooth animation back on for the snap
-        activeSwipeCard.classList.add('duration-200'); 
-        
-        // If they swiped more than 85 pixels left, delete it!
-        if (diffX < -85) {
-          activeSwipeCard.style.transform = `translateX(-100%)`; // Slide completely off-screen
-          
-          const container = activeSwipeCard.closest('.swipe-container');
-          const idx = parseInt(container.getAttribute('data-index'));
-          
-          // Wait for the slide-off animation to finish (200ms), then run your remove function
-          setTimeout(() => {
-            removeSaved(idx);
-          }, 200);
-        } else {
-          // They didn't swipe far enough, gently snap it back to default
-          activeSwipeCard.style.transform = `translateX(0px)`;
-        }
-        
-        // Reset variables for the next swipe
-        activeSwipeCard = null;
-      });
-    }
-     
   let isNowSaved = false;
   if (existsIdx > -1) { 
     savedPassages.splice(existsIdx, 1); 
@@ -1444,19 +1332,16 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     function updateSavedCount() { const c = document.getElementById('saved-count'); if (c) c.innerText = savedPassages.length; }
 
     function removeSaved(index) {
-      triggerHaptic();
       const trueIndex = savedPassages.indexOf(filteredSavedItems()[index]);
       if(trueIndex > -1) {
         savedPassages.splice(trueIndex, 1);
         try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
         updateSavedCount();
         renderSavedList();
-        showToast("Removed from library.");
       }
     }
 
     function clearSaved() {
-      triggerHaptic();
       const itemsToKeep = savedPassages.filter(item => {
         const itemType = item.type || 'literature';
         return itemType !== currentSavedTab;
@@ -1465,7 +1350,6 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
       try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
       updateSavedCount();
       renderSavedList();
-      showToast("Library cleared.");
     }
 
     function setSavedTab(tabName) {
@@ -1522,11 +1406,12 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
         }
 
        c.insertAdjacentHTML('beforeend', `
-          <div class="relative rounded-xl overflow-hidden swipe-container bg-red-500 border border-transparent shrink-0" data-index="${idx}">
-            <div class="absolute inset-0 flex justify-end items-center px-6 text-white">
-              <i class="fa-solid fa-trash-can text-xl"></i>
+          <div class="relative swipe-container shrink-0" data-index="${idx}">
+            <div class="absolute inset-0 flex justify-end items-center px-6 text-red-500 bg-red-50 dark:bg-red-500/10 rounded-xl">
+              <span class="text-xs font-bold uppercase tracking-widest mr-3">Delete</span>
+              <i class="fa-solid fa-trash-can text-lg"></i>
             </div>
-            <div class="swipe-card relative z-10 w-full p-5 bg-app-card rounded-xl border border-app-border flex justify-between items-start gap-4 hover:border-app-brand transition-transform duration-200" style="touch-action: pan-y;">
+            <div class="swipe-card relative z-10 w-full p-5 bg-app-card rounded-xl border border-app-border flex justify-between items-start gap-4 transition-transform duration-200" style="touch-action: pan-y;">
               <div class="overflow-hidden w-full pointer-events-none">${content}</div>
               <button onclick="removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors shrink-0 mt-1 pointer-events-auto"><i class="fa-solid fa-trash-can"></i></button>
             </div>
@@ -1834,6 +1719,51 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
   }, 3000);
 }
   
+      // ==========================================
+    // NATIVE SWIPE-TO-DELETE GESTURES
+    // ==========================================
+    let touchStartX = 0;
+    let touchCurrentX = 0;
+    let activeSwipeCard = null;
+
+    const savedListEl = document.getElementById('saved-list');
+
+    if (savedListEl) {
+      savedListEl.addEventListener('touchstart', (e) => {
+        const card = e.target.closest('.swipe-card');
+        if (!card) return;
+        activeSwipeCard = card;
+        touchStartX = e.touches[0].clientX;
+        touchCurrentX = touchStartX;
+        activeSwipeCard.classList.remove('duration-200'); 
+      }, { passive: true });
+
+      savedListEl.addEventListener('touchmove', (e) => {
+        if (!activeSwipeCard) return;
+        touchCurrentX = e.touches[0].clientX;
+        const diffX = touchCurrentX - touchStartX;
+        if (diffX < 0) {
+          activeSwipeCard.style.transform = `translateX(${diffX}px)`;
+        }
+      }, { passive: true });
+
+      savedListEl.addEventListener('touchend', (e) => {
+        if (!activeSwipeCard) return;
+        const diffX = touchCurrentX - touchStartX;
+        activeSwipeCard.classList.add('duration-200'); 
+        
+        if (diffX < -85) {
+          activeSwipeCard.style.transform = `translateX(-100%)`; 
+          const container = activeSwipeCard.closest('.swipe-container');
+          const idx = parseInt(container.getAttribute('data-index'));
+          setTimeout(() => { removeSaved(idx); }, 200);
+        } else {
+          activeSwipeCard.style.transform = `translateX(0px)`;
+        }
+        activeSwipeCard = null;
+      });
+    }
+      
   </script>
 </body>
 </html>
