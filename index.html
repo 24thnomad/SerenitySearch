@@ -599,7 +599,7 @@
     </div>
   </div>
 
-    <div id="manual-modal" class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+   <div id="manual-modal" class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-app-card max-w-sm w-full rounded-2xl border border-app-border shadow-2xl relative flex flex-col overflow-hidden">
       
       <button onclick="closeVisualManual()" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 text-white hover:bg-black/80 flex items-center justify-center transition-colors">
@@ -609,8 +609,8 @@
       <div id="manual-track" class="flex transition-transform duration-300 ease-in-out w-full" style="transform: translateX(0%);">
         
         <div class="w-full shrink-0 flex flex-col">
-          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border">
-            <img src="Screenshot_20260901-174722.Chrome.png" alt="Install Prompt" class="object-contain h-full w-full">
+          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4">
+            <img src="slide1-install.jpg" alt="Install Prompt" class="object-contain h-full w-full rounded-lg shadow-sm">
           </div>
           <div class="p-6 text-center space-y-3">
             <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">The Basics</span>
@@ -620,46 +620,28 @@
         </div>
 
         <div class="w-full shrink-0 flex flex-col">
-          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border">
-            <img src="Screenshot_20260901-174209.Chrome.png" alt="API Key Settings" class="object-contain h-full w-full">
+          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4">
+            <img src="slide2-apikey.jpg" alt="API Key Settings" class="object-contain h-full w-full rounded-lg shadow-sm">
           </div>
           <div class="p-6 text-center space-y-3">
-        <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">AI Setup</span>
+            <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">AI Setup</span>
             <h3 class="text-xl font-bold text-app-text">Unlock the Search</h3>
-            <p class="text-sm text-app-muted leading-relaxed">SerenitySearch uses AI to find the perfect reading. Create a free Gemini API Key online, then tap the <strong>Gear icon</strong> and paste it here.</p>
+            <p class="text-sm text-app-muted leading-relaxed">
+              SerenitySearch uses AI to find the perfect reading. 
+              <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-app-brand font-bold underline hover:text-app-brandHover transition-colors">Create a free Gemini API Key online</a>, 
+              then tap the <strong>Gear icon</strong> and paste it here.
+            </p>
           </div>
         </div>
 
         <div class="w-full shrink-0 flex flex-col">
-          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border">
-            <img src="Screenshot_20260901-201956.Chrome.png" alt="Swipe Gesture" class="object-cover h-full w-full object-top">
-          </div>
-          <div class="p-6 text-center space-y-3">
-            <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">Pro Tip</span>
-            <h3 class="text-xl font-bold text-app-text">Manage Your Library</h3>
-            <p class="text-sm text-app-muted leading-relaxed">Ready to let go of a saved reading or 10th Step Spot Check? Just <strong>swipe the card to the left</strong> to clear it from your library.</p>
-          </div>
-        </div>
-
-       <div class="w-full shrink-0 flex flex-col">
-          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border relative">
-            <img src="Screenshot_20260901-174500.Chrome.png" alt="Accessibility Settings" class="object-contain w-[140%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%]">
+          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4">
+            <img src="slide3-accessibility.jpg" alt="Accessibility Settings" class="object-contain h-full w-full rounded-lg shadow-sm">
           </div>
           <div class="p-6 text-center space-y-3">
             <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">Accessibility</span>
             <h3 class="text-xl font-bold text-app-text">Reading Preferences</h3>
-            <p class="text-sm text-app-muted leading-relaxed">Make the app work for you. Open Settings to bump up your <strong>Text Size</strong> for comfortable reading, or choose your preferred <strong>Reader Voice</strong> to have the literature read aloud to you.</p>
-          </div>
-        </div>
-
-        <div class="w-full shrink-0 flex flex-col">
-          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border object-top relative">
-            <img src="Screenshot_20260901-174531.Chrome.png" alt="Offline Banner" class="object-cover h-full w-full object-top">
-          </div>
-          <div class="p-6 text-center space-y-3">
-            <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">Connectivity</span>
-            <h3 class="text-xl font-bold text-app-text">Always Available</h3>
-            <p class="text-sm text-app-muted leading-relaxed">Bad cell service in the basement? Don't worry. Your <strong>Saved Library</strong> and the <strong>12 Steps</strong> work even when you're completely offline.</p>
+            <p class="text-sm text-app-muted leading-relaxed">Make the app work for you. Open Settings to bump up your <strong>Text Size</strong> for comfortable reading, or choose your preferred <strong>Reader Voice</strong>.</p>
           </div>
         </div>
 
@@ -671,8 +653,6 @@
         </button>
         <div class="flex gap-2" id="slide-indicators">
           <div class="w-2 h-2 rounded-full bg-app-brand"></div>
-          <div class="w-2 h-2 rounded-full bg-app-border transition-colors"></div>
-          <div class="w-2 h-2 rounded-full bg-app-border transition-colors"></div>
           <div class="w-2 h-2 rounded-full bg-app-border transition-colors"></div>
           <div class="w-2 h-2 rounded-full bg-app-border transition-colors"></div>
         </div>
