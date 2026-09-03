@@ -842,26 +842,49 @@
       // ==========================================
     // OFFLINE MODE DETECTION
     // ==========================================
+// ==========================================
+    // OFFLINE MODE DETECTION
+    // ==========================================
     window.addEventListener('offline', () => {
       triggerHaptic();
       document.getElementById('offline-banner').classList.remove('hidden');
+      
+      // Lock Search
       const searchInput = document.getElementById('search-input');
       const searchBtn = document.getElementById('search-btn');
       const searchMic = document.getElementById('search-mic-icon');
       if (searchInput) { searchInput.disabled = true; searchInput.placeholder = "Search requires connection..."; searchInput.classList.add('opacity-50', 'bg-app-bg'); }
       if (searchBtn) { searchBtn.disabled = true; searchBtn.classList.add('opacity-50', 'cursor-not-allowed'); }
       if (searchMic) { searchMic.parentElement.disabled = true; searchMic.parentElement.classList.add('opacity-50', 'cursor-not-allowed'); }
+
+      // Lock Topics & 10th Step
+      document.querySelectorAll('#tab-topics button, #tab-tenth button[type="submit"]').forEach(btn => {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+      });
+      const tenthInput = document.getElementById('tenth-input');
+      if (tenthInput) { tenthInput.disabled = true; tenthInput.placeholder = "Connection required..."; tenthInput.classList.add('opacity-50'); }
     });
 
     window.addEventListener('online', () => {
       triggerHaptic();
       document.getElementById('offline-banner').classList.add('hidden');
+      
+      // Unlock Search
       const searchInput = document.getElementById('search-input');
       const searchBtn = document.getElementById('search-btn');
       const searchMic = document.getElementById('search-mic-icon');
       if (searchInput) { searchInput.disabled = false; searchInput.placeholder = "e.g. Step Two, Acceptance, Resentment..."; searchInput.classList.remove('opacity-50', 'bg-app-bg'); }
       if (searchBtn) { searchBtn.disabled = false; searchBtn.classList.remove('opacity-50', 'cursor-not-allowed'); }
       if (searchMic) { searchMic.parentElement.disabled = false; searchMic.parentElement.classList.remove('opacity-50', 'cursor-not-allowed'); }
+
+      // Unlock Topics & 10th Step
+      document.querySelectorAll('#tab-topics button, #tab-tenth button[type="submit"]').forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      });
+      const tenthInput = document.getElementById('tenth-input');
+      if (tenthInput) { tenthInput.disabled = false; tenthInput.placeholder = "e.g., I'm frustrated with my coworker for taking credit for my idea..."; tenthInput.classList.remove('opacity-50'); }
     });
 
     // Scroll-Aware Glass Header Logic
