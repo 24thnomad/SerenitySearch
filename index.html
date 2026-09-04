@@ -485,11 +485,12 @@
 
   </main>
 
-  <div id="serenity-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative text-center max-h-[90vh] overflow-y-auto custom-scrollbar">
-      <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl z-10"><i class="fa-solid fa-xmark"></i></button>
+  <div id="serenity-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-app-card w-full sm:max-w-md p-8 rounded-t-3xl sm:rounded-2xl rounded-b-none sm:border border-t border-app-border shadow-2xl relative text-center transition-transform transform translate-y-0">
+      <div class="w-12 h-1.5 bg-app-border rounded-full mx-auto mb-6 sm:hidden"></div>
+      <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
       
-      <i class="fa-solid fa-dove text-app-brand text-3xl mb-4 mt-2"></i>
+      <i class="fa-solid fa-dove text-app-brand text-3xl mb-4"></i>
       <h3 class="text-sm font-bold text-app-text mb-4 uppercase tracking-widest">The Serenity Prayer</h3>
       <p class="font-serif text-xl text-app-text leading-relaxed italic mb-6">
         "God, grant me the serenity<br/>to accept the things I cannot change,<br/>courage to change the things I can,<br/>and wisdom to know the difference."
@@ -499,17 +500,6 @@
         <div class="w-full h-px bg-app-border mb-6"></div>
         <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-4">Sober Time</h4>
         <span id="dove-counter-text" class="inline-flex items-center gap-2 px-4 py-1.5 bg-app-brandSoft border border-app-brand/20 rounded-full text-xs font-bold uppercase tracking-widest text-app-brand"></span>
-      </div>
-
-      <div class="w-full h-px bg-app-border mb-6"></div>
-      <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-4">11th Step Practice</h4>
-      <div class="flex flex-col items-center justify-center bg-app-bg border border-app-border rounded-xl p-6 mb-8 relative">
-        <div id="timer-display" class="text-5xl font-serif font-bold text-app-text mb-5" style="font-variant-numeric: tabular-nums;">05:00</div>
-        <div class="flex gap-4 z-10 relative">
-          <button onclick="adjustTimer(-1)" class="w-12 h-12 rounded-full bg-app-card border border-app-border text-app-muted hover:text-app-brand transition-colors flex items-center justify-center shadow-sm"><i class="fa-solid fa-minus"></i></button>
-          <button onclick="toggleTimer()" id="timer-btn" class="px-8 py-2 bg-app-brand text-app-card font-bold rounded-full hover:bg-app-brandHover transition-colors shadow-sm w-32 tracking-wide">Start</button>
-          <button onclick="adjustTimer(1)" class="w-12 h-12 rounded-full bg-app-card border border-app-border text-app-muted hover:text-app-brand transition-colors flex items-center justify-center shadow-sm"><i class="fa-solid fa-plus"></i></button>
-        </div>
       </div>
 
       <div class="w-full h-px bg-app-border mb-6"></div>
@@ -706,15 +696,9 @@
     let activeDictationInput = null;
     let activeMicIcon = null;
 
-    // Timer state variables
     let defectsChartInstance = null;
-    let timerInterval = null;
-    let timerSeconds = 300; 
-    let isTimerRunning = false;
-    let timerInitialSeconds = 300;
 
     // --- HTML5 Canvas Utilities for Visual Quote Cards ---
-    // Polyfill for rounded rectangles on canvas just in case an older mobile browser tries to run it
     if (!CanvasRenderingContext2D.prototype.roundRect) {
         CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
             if (typeof r === 'undefined') r = 0;
@@ -735,7 +719,8 @@
     }
 
     function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
-        const words = text.split(' ');
+        const textClean = text.replace(/\n/g, ' ');
+        const words = textClean.split(' ');
         let line = '';
         let currentY = y;
         for(let n = 0; n < words.length; n++) {
@@ -759,7 +744,6 @@
         const item = filteredSavedItems()[idx];
         if (!item) return;
 
-        // Grab active theme variables directly from the browser window
         const rootStyle = getComputedStyle(document.documentElement);
         const bgColor = rootStyle.getPropertyValue('--color-bg').trim() || '#F4EFE6';
         const cardColor = rootStyle.getPropertyValue('--color-card').trim() || '#FCFAF5';
@@ -767,142 +751,114 @@
         const textColor = rootStyle.getPropertyValue('--color-text').trim() || '#18181b';
         const mutedColor = rootStyle.getPropertyValue('--color-muted').trim() || '#52525b';
 
-        // Render Canvas
+        // Dynamically build content blocks
+        const blocks = [];
+        if (item.type === 'topic') {
+            blocks.push({ text: "MEETING TOPIC", font: 'bold 24px "Inter", sans-serif', color: brandColor, mb: 40 });
+            blocks.push({ text: item.title, font: 'bold 56px "Inter", sans-serif', color: textColor, mb: 40 });
+            blocks.push({ text: `"${item.quote}"`, font: 'italic 40px "Playfair Display", serif', color: textColor, mb: 60 });
+            blocks.push({ text: "REFLECTION", font: 'bold 20px "Inter", sans-serif', color: brandColor, mb: 15 });
+            blocks.push({ text: item.reflection, font: '32px "Inter", sans-serif', color: mutedColor, mb: 50 });
+            blocks.push({ text: "DISCUSSION QUESTIONS", font: 'bold 20px "Inter", sans-serif', color: brandColor, mb: 15 });
+            if (item.questions) {
+                item.questions.forEach(q => {
+                    blocks.push({ text: "• " + q, font: '28px "Inter", sans-serif', color: mutedColor, mb: 20 });
+                });
+            }
+        } else if (item.type === 'tenth') {
+            const defectStr = item.primaryDefect ? `  •  ${item.primaryDefect.toUpperCase()}` : "";
+            blocks.push({ text: "10TH STEP INVENTORY" + defectStr, font: 'bold 24px "Inter", sans-serif', color: brandColor, mb: 40 });
+            blocks.push({ text: "VALIDATION", font: 'bold 20px "Inter", sans-serif', color: brandColor, mb: 15 });
+            blocks.push({ text: item.validation, font: 'bold 36px "Inter", sans-serif', color: textColor, mb: 50 });
+            blocks.push({ text: "THE TURNAROUND", font: 'bold 20px "Inter", sans-serif', color: brandColor, mb: 15 });
+            blocks.push({ text: `"${item.theTurnaround}"`, font: 'italic 44px "Playfair Display", serif', color: textColor, mb: 50 });
+            blocks.push({ text: "NEXT RIGHT THING", font: 'bold 20px "Inter", sans-serif', color: brandColor, mb: 15 });
+            blocks.push({ text: item.actionStep, font: '32px "Inter", sans-serif', color: mutedColor, mb: 40 });
+        } else {
+            blocks.push({ text: (item.literatureSource || "Literature").toUpperCase(), font: 'bold 24px "Inter", sans-serif', color: brandColor, mb: 40 });
+            blocks.push({ text: `"${item.keyQuote}"`, font: 'italic 54px "Playfair Display", serif', color: textColor, mb: 40 });
+            blocks.push({ text: `— ${item.title}`, font: '36px "Inter", sans-serif', color: mutedColor, mb: 40 });
+        }
+
+        // Temporary canvas context for height calculation
+        const tempCanvas = document.createElement('canvas');
+        const tCtx = tempCanvas.getContext('2d');
+        const maxWidth = 760; // 1080 - 160 (left padding) - 160 (right padding)
+        let computedHeight = 200; // Starting Y coordinate inside card
+
+        blocks.forEach(b => {
+            tCtx.font = b.font;
+            const textClean = b.text.replace(/\n/g, ' ');
+            const words = textClean.split(' ');
+            let line = '';
+            let virtualY = 0;
+            let lineHeight = parseInt(b.font.match(/\d+px/)[0], 10) * 1.4;
+            
+            for(let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' ';
+                const metrics = tCtx.measureText(testLine);
+                if (metrics.width > maxWidth && n > 0) {
+                    line = words[n] + ' ';
+                    virtualY += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            virtualY += lineHeight;
+            computedHeight += virtualY + b.mb;
+        });
+
+        computedHeight += 100; // Add space for the SerenitySearch footer
+        
+        // Define Final Canvas Size (Minimum 1080px for perfect square fallback)
+        const cWidth = 1080;
+        const cHeight = Math.max(1080, computedHeight + 80); 
+
         const canvas = document.createElement('canvas');
-        canvas.width = 1080;
-        canvas.height = 1080;
+        canvas.width = cWidth;
+        canvas.height = cHeight;
         const ctx = canvas.getContext('2d');
 
+        // Draw Background
         ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+        // Draw Card Window
         ctx.fillStyle = cardColor;
         ctx.shadowColor = 'rgba(0,0,0,0.1)';
         ctx.shadowBlur = 40;
         ctx.shadowOffsetY = 10;
-        ctx.roundRect(80, 80, 920, 920, 40);
+        ctx.roundRect(80, 80, cWidth - 160, cHeight - 160, 40);
         ctx.fill();
         ctx.shadowColor = 'transparent';
 
-        // Add brand stripe
+        // Draw Brand Stripe overlay
         ctx.fillStyle = brandColor;
         ctx.beginPath();
-        ctx.roundRect(80, 80, 20, 920, {tl: 40, bl: 40, tr: 0, br: 0});
+        ctx.roundRect(80, 80, 20, cHeight - 160, {tl: 40, bl: 40, tr: 0, br: 0});
         ctx.fill();
 
-        // Extract Text Data
-        const quote = item.type === 'topic' ? item.quote : item.keyQuote || item.theTurnaround || "Serenity Reflection";
-        const title = item.title || item.validation || "10th Step Spot Check";
-        const source = item.literatureSource || (item.type === 'topic' ? "Meeting Topic" : "Personal Inventory");
+        // Draw text blocks onto canvas
+        let drawY = 200;
+        blocks.forEach(b => {
+            ctx.fillStyle = b.color;
+            ctx.font = b.font;
+            let lineHeight = parseInt(b.font.match(/\d+px/)[0], 10) * 1.4;
+            drawY = wrapCanvasText(ctx, b.text, 160, drawY, maxWidth, lineHeight);
+            drawY += b.mb - lineHeight; // Adjust for spacing 
+        });
 
-        ctx.fillStyle = brandColor;
-        ctx.font = 'bold 30px "Inter", sans-serif';
-        ctx.fillText(source.toUpperCase(), 160, 200);
-
-        ctx.fillStyle = textColor;
-        ctx.font = 'italic 54px "Playfair Display", serif';
-        const endY = wrapCanvasText(ctx, `"${quote}"`, 160, 300, 760, 75);
-
-        ctx.fillStyle = mutedColor;
-        ctx.font = '36px "Inter", sans-serif';
-        wrapCanvasText(ctx, `— ${title}`, 160, endY + 40, 760, 50);
-
+        // Draw Footer Identity
         ctx.fillStyle = brandColor;
         ctx.font = 'bold 36px "Inter", sans-serif';
-        ctx.fillText("SerenitySearch", 160, 920);
+        ctx.fillText("SerenitySearch", 160, cHeight - 140);
 
-        // Convert to image and prompt download
+        // Trigger Download
         const link = document.createElement('a');
-        link.download = `SerenityQuote_${Date.now()}.png`;
+        link.download = `SerenitySearch_${item.type}_${Date.now()}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
         showToast("Image saved!");
-    }
-
-    // --- 11th Step Timer Logic ---
-    function updateTimerDisplay() {
-        const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
-        const s = (timerSeconds % 60).toString().padStart(2, '0');
-        document.getElementById('timer-display').innerText = `${m}:${s}`;
-    }
-
-    function adjustTimer(dir) {
-        if (isTimerRunning) return;
-        triggerHaptic();
-        timerSeconds += dir * 60;
-        if (timerSeconds < 60) timerSeconds = 60;
-        if (timerSeconds > 3600) timerSeconds = 3600;
-        timerInitialSeconds = timerSeconds;
-        updateTimerDisplay();
-    }
-
-    function toggleTimer() {
-        triggerHaptic('heavy');
-        const btn = document.getElementById('timer-btn');
-        if (isTimerRunning) {
-            clearInterval(timerInterval);
-            isTimerRunning = false;
-            btn.innerText = "Resume";
-            btn.classList.replace('bg-app-card', 'bg-app-brand');
-            btn.classList.replace('text-app-text', 'text-app-card');
-            btn.classList.replace('border-app-brand', 'border-transparent');
-        } else {
-            isTimerRunning = true;
-            btn.innerText = "Pause";
-            btn.classList.replace('bg-app-brand', 'bg-app-card');
-            btn.classList.replace('text-app-card', 'text-app-text');
-            btn.classList.replace('border-transparent', 'border-app-brand');
-            
-            timerInterval = setInterval(() => {
-                timerSeconds--;
-                updateTimerDisplay();
-                if (timerSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    isTimerRunning = false;
-                    timerSeconds = timerInitialSeconds;
-                    btn.innerText = "Start";
-                    btn.classList.replace('bg-app-card', 'bg-app-brand');
-                    btn.classList.replace('text-app-text', 'text-app-card');
-                    btn.classList.replace('border-app-brand', 'border-transparent');
-                    updateTimerDisplay();
-                    playMeditationChime();
-                }
-            }, 1000);
-        }
-    }
-
-    // Completely Native, Zero-File Web Audio Synthesizer
-    function playMeditationChime() {
-        try {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const masterGain = ctx.createGain();
-            masterGain.connect(ctx.destination);
-            
-            const strikeOsc = ctx.createOscillator();
-            const strikeGain = ctx.createGain();
-            strikeOsc.type = 'sine';
-            strikeOsc.frequency.setValueAtTime(800, ctx.currentTime);
-            strikeOsc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.1);
-            strikeGain.gain.setValueAtTime(0, ctx.currentTime);
-            strikeGain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.02);
-            strikeGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
-            strikeOsc.connect(strikeGain);
-            strikeGain.connect(masterGain);
-            strikeOsc.start();
-            strikeOsc.stop(ctx.currentTime + 0.5);
-
-            const sustainOsc = ctx.createOscillator();
-            const sustainGain = ctx.createGain();
-            sustainOsc.type = 'sine';
-            sustainOsc.frequency.setValueAtTime(432, ctx.currentTime); // 432Hz calming frequency
-            sustainGain.gain.setValueAtTime(0, ctx.currentTime);
-            sustainGain.gain.linearRampToValueAtTime(0.8, ctx.currentTime + 0.1);
-            sustainGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 6.0);
-            sustainOsc.connect(sustainGain);
-            sustainGain.connect(masterGain);
-            sustainOsc.start();
-            sustainOsc.stop(ctx.currentTime + 6.0);
-        } catch(e) { console.log("Web Audio not supported in this environment"); }
     }
 
 
@@ -1253,7 +1209,7 @@
       const activeBtn = document.getElementById(`nav-${tabName}`); if (activeBtn) activeBtn.classList.add('active');
       const activeMobBtn = document.getElementById(`mob-nav-${tabName}`); if (activeMobBtn) activeMobBtn.className = "mob-nav-btn text-app-brand flex flex-col items-center gap-1 p-2 transition-colors";
       if (tabName === 'saved') renderSavedList();
-      if (tabName === 'tenth') setTenthTab('write'); // Reset view to write
+      if (tabName === 'tenth') setTenthTab('write'); 
       if (tabName === 'topics' && !document.getElementById('topics-result').innerHTML && getApiKey()) initTopicTab();
     }
 
@@ -1333,7 +1289,6 @@
       r.innerHTML = ''; 
       l.classList.remove('hidden');
       
-      // Fast chunked search
       fetchSearchBatch(query, 3, [], true);
     }
 
@@ -1477,7 +1432,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
             counts[defect] = (counts[defect] || 0) + 1;
         });
         
-        const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 6); // Top 6 defects
+        const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 6); 
         const labels = sorted.map(i => i[0]);
         const data = sorted.map(i => i[1]);
 
@@ -2082,7 +2037,6 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     window.openStepModal = openStepModal; window.closeStepModal = closeStepModal; window.searchStep = searchStep;
     window.exportData = exportData; window.importData = importData; window.shareItem = shareItem; window.initTopicTab = initTopicTab;
     window.downloadQuoteCard = downloadQuoteCard; window.setTenthTab = setTenthTab; window.renderDefectsChart = renderDefectsChart;
-    window.adjustTimer = adjustTimer; window.toggleTimer = toggleTimer; window.playMeditationChime = playMeditationChime;
   
     // ==========================================
     // NATIVE SWIPE-TO-DELETE GESTURES
