@@ -77,6 +77,9 @@
     body, div, p, h1, h2, h3, button, header, input, select, textarea, a, span {
       transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
     }
+    
+    /* Native App Mimicry: Lock overscroll to disable pull-to-refresh */
+    body { overscroll-behavior-y: none; }
 
     .glass-nav { backdrop-filter: saturate(180%) blur(20px); }
     
@@ -178,7 +181,7 @@
       <!-- Logo -->
       <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer shrink-0" onclick="switchTab('search')">
         <div class="flex items-center justify-center text-app-brand">
-          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100" class="w-8 h-8 sm:w-10 sm:h-10 text-app-brand fill-app-card drop-shadow-sm transition-colors duration-400">
+          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100" class="w-8 h-8 sm:w-10 h-10 text-app-brand fill-app-card drop-shadow-sm transition-colors duration-400">
             <g stroke="currentColor" stroke-width="5" stroke-linejoin="miter">
               <path d="M48,82 C20,92 5,82 8,72 C18,78 30,78 40,75 Z" />
               <path d="M52,82 C80,92 95,82 92,72 C82,78 70,78 60,75 Z" />
@@ -489,12 +492,13 @@
 
   </main>
 
-  <!-- SERENITY PRAYER MODAL -->
-  <div id="serenity-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative text-center">
-      <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
+  <!-- SERENITY PRAYER MODAL (Bottom Sheet on Mobile) -->
+  <div id="serenity-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-app-card w-full sm:max-w-md p-8 rounded-t-3xl sm:rounded-2xl rounded-b-none sm:border border-t border-app-border shadow-2xl relative text-center transition-transform transform translate-y-0">
+      <div class="w-12 h-1.5 bg-app-border rounded-full mx-auto mb-6 sm:hidden"></div>
+      <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
       
-<i class="fa-solid fa-dove text-app-brand text-3xl mb-4"></i>
+      <i class="fa-solid fa-dove text-app-brand text-3xl mb-4"></i>
       <h3 class="text-sm font-bold text-app-text mb-4 uppercase tracking-widest">The Serenity Prayer</h3>
       <p class="font-serif text-xl text-app-text leading-relaxed italic mb-6">
         "God, grant me the serenity<br/>to accept the things I cannot change,<br/>courage to change the things I can,<br/>and wisdom to know the difference."
@@ -520,18 +524,17 @@
     </div>
   </div>
 
-  <!-- API KEY & BACKUP SETTINGS MODAL -->
-  <div id="settings-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative">
-      <button onclick="toggleSettingsModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
-      <div class="flex items-center gap-3 mb-6">
-        <i class="fa-solid fa-key text-app-brand text-2xl"></i><h3 class="text-xl font-bold text-app-text">API Configuration</h3>
-      </div>
-      <p class="text-sm text-app-muted mb-6 leading-relaxed">
-        To use the AI features of SerenitySearch, please enter your Google Gemini API key below. Your key is securely stored in your browser's local storage and is never sent to our servers.
-      </p>
+  <!-- API KEY & BACKUP SETTINGS MODAL (Bottom Sheet on Mobile) -->
+  <div id="settings-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-app-card w-full sm:max-w-md p-8 rounded-t-3xl sm:rounded-2xl rounded-b-none border-t sm:border border-app-border shadow-2xl relative transition-transform transform translate-y-0">
+      <div class="w-12 h-1.5 bg-app-border rounded-full mx-auto mb-6 sm:hidden"></div>
+      <button onclick="toggleSettingsModal()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
       
-      <div class="space-y-4">
+      <div class="flex items-center gap-3 mb-6">
+        <i class="fa-solid fa-key text-app-brand text-2xl"></i><h3 class="text-xl font-bold text-app-text">Settings & Backup</h3>
+      </div>
+      
+      <div class="space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar pr-2 pb-2">
        <div>
           <div class="flex justify-between items-center mb-2">
             <label class="block text-xs font-bold text-app-brand uppercase tracking-widest">Gemini API Key</label>
@@ -571,7 +574,7 @@
           
           <div>
             <label class="block text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Text Size</label>
-            <div class="flex items-center justify-between w-full h-[46px] bg-app-bg border border-app-border rounded-xl p-1 shadow-inner">
+            <div class="flex items-center justify-between w-full h-[46px] bg-app-bg border border-app-border rounded-xl p-1 shadow-inner mt-1">
               <button onclick="changeFontSize('decrease')" class="w-10 h-full rounded-lg flex items-center justify-center text-app-muted hover:text-app-text hover:bg-app-card transition-colors"><i class="fa-solid fa-minus text-xs"></i></button>
               <span class="text-sm font-bold text-app-text font-serif pointer-events-none">Aa</span>
               <button onclick="changeFontSize('increase')" class="w-10 h-full rounded-lg flex items-center justify-center text-app-muted hover:text-app-text hover:bg-app-card transition-colors"><i class="fa-solid fa-plus text-xs"></i></button>
@@ -585,7 +588,10 @@
         </div>
         
         <div class="w-full h-px bg-app-border my-4"></div>
-        <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest mb-2">Data Backup</h4>
+        <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest">Manual Backup</h4>
+            <span class="text-[10px] text-app-muted italic"><i class="fa-solid fa-cloud text-app-brand mr-1"></i>Cloud sync active</span>
+        </div>
         <div class="flex gap-3">
           <button onclick="exportData()" class="flex-1 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-app-brand shadow-sm">
             <i class="fa-solid fa-download mr-2"></i>Export
@@ -599,9 +605,14 @@
     </div>
   </div>
 
-   <div id="manual-modal" class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-app-card max-w-sm w-full rounded-2xl border border-app-border shadow-2xl relative flex flex-col overflow-hidden">
+   <!-- App Guide Modal -->
+   <div id="manual-modal" class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-app-card w-full sm:max-w-sm rounded-t-3xl sm:rounded-2xl rounded-b-none sm:border border-t border-app-border shadow-2xl relative flex flex-col overflow-hidden transition-transform transform translate-y-0">
       
+      <div class="absolute top-4 left-0 right-0 flex justify-center z-20 sm:hidden pointer-events-none">
+        <div class="w-12 h-1.5 bg-white/50 rounded-full drop-shadow-md"></div>
+      </div>
+
       <button onclick="closeVisualManual()" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 text-white hover:bg-black/80 flex items-center justify-center transition-colors">
         <i class="fa-solid fa-xmark"></i>
       </button>
@@ -609,10 +620,14 @@
       <div id="manual-track" class="flex transition-transform duration-300 ease-in-out w-full" style="transform: translateX(0%);">
         
         <div class="w-full shrink-0 flex flex-col">
-          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4">
-            <img src="slide1-install.jpg" alt="Install Prompt" class="object-contain h-full w-full rounded-lg shadow-sm">
+          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4 pt-10 sm:pt-4">
+            <!-- Add fallback div styling in case image fails to load -->
+            <div class="flex flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
+                <i class="fa-solid fa-mobile-screen text-4xl mb-3 text-app-brand"></i>
+                <span class="text-sm font-bold uppercase tracking-widest">Install App</span>
+            </div>
           </div>
-          <div class="p-6 text-center space-y-3">
+          <div class="p-6 text-center space-y-3 pb-8 sm:pb-6">
             <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">The Basics</span>
             <h3 class="text-xl font-bold text-app-text">Install the App</h3>
             <p class="text-sm text-app-muted leading-relaxed">Keep your daily reflections one tap away. Open your browser menu and select <strong>Install app</strong> or <strong>Add to Home Screen</strong>.</p>
@@ -620,10 +635,13 @@
         </div>
 
         <div class="w-full shrink-0 flex flex-col">
-          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4">
-            <img src="slide2-apikey.jpg" alt="API Key Settings" class="object-contain h-full w-full rounded-lg shadow-sm">
+          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4 pt-10 sm:pt-4">
+            <div class="flex flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
+                <i class="fa-solid fa-key text-4xl mb-3 text-app-brand"></i>
+                <span class="text-sm font-bold uppercase tracking-widest">API Configuration</span>
+            </div>
           </div>
-          <div class="p-6 text-center space-y-3">
+          <div class="p-6 text-center space-y-3 pb-8 sm:pb-6">
             <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">AI Setup</span>
             <h3 class="text-xl font-bold text-app-text">Unlock the Search</h3>
             <p class="text-sm text-app-muted leading-relaxed">
@@ -635,10 +653,13 @@
         </div>
 
         <div class="w-full shrink-0 flex flex-col">
-          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4">
-            <img src="slide3-accessibility.jpg" alt="Accessibility Settings" class="object-contain h-full w-full rounded-lg shadow-sm">
+          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4 pt-10 sm:pt-4">
+            <div class="flex flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
+                <i class="fa-solid fa-glasses text-4xl mb-3 text-app-brand"></i>
+                <span class="text-sm font-bold uppercase tracking-widest">Accessibility Options</span>
+            </div>
           </div>
-          <div class="p-6 text-center space-y-3">
+          <div class="p-6 text-center space-y-3 pb-8 sm:pb-6">
             <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">Accessibility</span>
             <h3 class="text-xl font-bold text-app-text">Reading Preferences</h3>
             <p class="text-sm text-app-muted leading-relaxed">Make the app work for you. Open Settings to bump up your <strong>Text Size</strong> for comfortable reading, or choose your preferred <strong>Reader Voice</strong>.</p>
@@ -647,7 +668,7 @@
 
       </div>
 
-      <div class="p-4 flex items-center justify-between bg-app-card border-t border-app-border shrink-0">
+      <div class="p-4 sm:p-4 pb-8 sm:pb-4 flex items-center justify-between bg-app-card border-t border-app-border shrink-0">
         <button onclick="prevSlide()" class="w-10 h-10 rounded-full flex items-center justify-center text-app-muted hover:text-app-text hover:bg-app-bg transition-colors disabled:opacity-30" id="slide-prev-btn" disabled>
           <i class="fa-solid fa-chevron-left"></i>
         </button>
@@ -664,23 +685,24 @@
     </div>
   </div>
     
-  <!-- 12 Steps Focus Modal -->
-  <div id="step-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-app-card max-w-2xl w-full p-8 rounded-2xl border border-app-border shadow-2xl relative flex flex-col max-h-[90vh]">
-      <button onclick="closeStepModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
+  <!-- 12 Steps Focus Modal (Bottom Sheet on Mobile) -->
+  <div id="step-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-app-card w-full sm:max-w-2xl p-8 rounded-t-3xl sm:rounded-2xl rounded-b-none border-t sm:border border-app-border shadow-2xl relative flex flex-col max-h-[90vh] transition-transform transform translate-y-0">
+      <div class="w-12 h-1.5 bg-app-border rounded-full mx-auto mb-6 sm:hidden"></div>
+      <button onclick="closeStepModal()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
       
       <div id="step-modal-content" class="overflow-y-auto custom-scrollbar pr-2 mb-6 flex-1 space-y-4 pt-2">
         <!-- Content injected via JS -->
       </div>
       
-      <div id="step-modal-action" class="shrink-0 pt-4 border-t border-app-border">
+      <div id="step-modal-action" class="shrink-0 pt-4 border-t border-app-border pb-4 sm:pb-0">
         <!-- Button injected via JS -->
       </div>
     </div>
   </div>
 
   <!-- Audio Player UI -->
-  <div id="audio-player-bar" class="fixed bottom-6 right-6 z-50 bg-app-card border border-app-border p-4 rounded-xl shadow-xl hidden flex items-center space-x-4">
+  <div id="audio-player-bar" class="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 z-50 bg-app-card border border-app-border p-4 rounded-xl shadow-xl hidden flex items-center space-x-4">
     <div id="audio-icon-container" class="w-8 h-8 rounded-full bg-app-brandSoft text-app-brand flex items-center justify-center">
       <i id="audio-icon" class="fa-solid fa-volume-high text-sm"></i>
     </div>
@@ -704,6 +726,11 @@
     let speechRecognition = null;
     let activeDictationInput = null;
     let activeMicIcon = null;
+
+    // --- Firebase Sync Global Variables ---
+    let fbDb = null;
+    let fbAuth = null;
+    let fbUser = null;
 
     function getApiKey() { return localStorage.getItem('serenity_api_key') || ""; }
     
@@ -839,7 +866,7 @@
        if (headerSelect) headerSelect.value = savedColorTheme;
     });
       
-      // ==========================================
+    // ==========================================
     // OFFLINE MODE DETECTION
     // ==========================================
     window.addEventListener('offline', () => {
@@ -880,14 +907,15 @@
       }
     }, { passive: true });
     
-// Update the phone's native status bar to match the app theme
+    // Update the phone's native status bar to match the app theme
     function updateStatusBarColor() {
-      // 50ms timeout ensures the CSS class has fully applied first
+      // 50ms timeout ensures the browser's CSS paint cycle has completely finished
       setTimeout(() => {
-        const currentBgColor = getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim();
+        // Grab the exact rendered RGB background color of the app
+        const bodyColor = getComputedStyle(document.body).backgroundColor;
         const metaTheme = document.querySelector('meta[name="theme-color"]');
-        if (metaTheme && currentBgColor) {
-          metaTheme.setAttribute('content', currentBgColor);
+        if (metaTheme && bodyColor) {
+          metaTheme.setAttribute('content', bodyColor);
         }
       }, 50);
     }
@@ -921,31 +949,24 @@
       // Force the status bar to update immediately
       updateStatusBarColor();
     }
+
     // Dynamic Font Scaler
     let currentFontSize = parseInt(localStorage.getItem('serenity_font_size')) || 16;
     
     function changeFontSize(action) {
       triggerHaptic();
-      
-      // Increase/Decrease in 2px increments with safety limits (12px min, 24px max)
       if (action === 'increase' && currentFontSize < 24) currentFontSize += 2;
       if (action === 'decrease' && currentFontSize > 12) currentFontSize -= 2;
-      
-      // Apply immediately to the root document
       document.documentElement.style.fontSize = currentFontSize + 'px';
-      
-      // Save their preference silently
       try { localStorage.setItem('serenity_font_size', currentFontSize); } catch(e) {}
     }
     
-    // Expose to the window so the inline HTML buttons can trigger it
     window.changeFontSize = changeFontSize;
-    
-    
     
     function toggleSerenityPrayerModal() {
       triggerHaptic();
-      document.getElementById('serenity-modal').classList.toggle('hidden'); }
+      document.getElementById('serenity-modal').classList.toggle('hidden'); 
+    }
 
     var TWELVE_STEPS = [
       { step: 1, title: "Honesty", text: "We admitted we were powerless over alcohol—that our lives had become unmanageable.", query: "Step 1 Powerlessness" },
@@ -1018,33 +1039,103 @@
       if (!navigator.vibrate) return;
       
       if (type === 'light') {
-        navigator.vibrate(15); // A sharp, premium click
+        navigator.vibrate(15);
       } else if (type === 'success') {
-        navigator.vibrate([20, 50, 20]); // A pleasant double-tap
+        navigator.vibrate([20, 50, 20]);
       } else if (type === 'heavy') {
-        navigator.vibrate([50, 100, 50]); // A warning thump
+        navigator.vibrate([50, 100, 50]);
       }
     }
     
-    // Expose it to the window so inline HTML buttons can use it
     window.triggerHaptic = triggerHaptic;
     
    function dismissDisclaimer() {
-      triggerHaptic(); // Added haptic bump!
+      triggerHaptic();
       const d = document.getElementById('ai-disclaimer');
       if (d) {
         d.classList.add('hidden');
         try { localStorage.setItem('serenity_disclaimer_dismissed', 'true'); } catch(e) {}
       }
     }
+
+    // ==========================================
+    // CLOUD SYNC INITIALIZATION
+    // ==========================================
+    async function initCloudSync() {
+      if (typeof __firebase_config === 'undefined' || !__firebase_config) return;
+
+      try {
+          const appId = typeof __app_id !== 'undefined' ? __app_id : 'serenity-search';
+          const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
+          const { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+          const { getFirestore, doc, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+
+          const firebaseConfig = JSON.parse(__firebase_config);
+          const app = initializeApp(firebaseConfig);
+          fbAuth = getAuth(app);
+          fbDb = getFirestore(app);
+
+          // Strictly Authenticate First
+          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+              await signInWithCustomToken(fbAuth, __initial_auth_token);
+          } else {
+              await signInAnonymously(fbAuth);
+          }
+
+          onAuthStateChanged(fbAuth, async (user) => {
+              fbUser = user;
+              if (user && fbDb) {
+                  // Fetch library on boot silently
+                  try {
+                      const docRef = doc(fbDb, 'artifacts', appId, 'users', user.uid, 'library', 'savedData');
+                      const snap = await getDoc(docRef);
+                      if (snap.exists()) {
+                          const data = snap.data();
+                          // Keep the larger library array if there is a discrepancy
+                          if (data.passages && data.passages.length > savedPassages.length) {
+                              savedPassages = data.passages;
+                              try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
+                              updateSavedCount();
+                              if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
+                          }
+                      }
+                  } catch(e) { console.error("Cloud fetch sync error", e); }
+              }
+          });
+      } catch(e) {
+          console.error("Cloud Sync Setup Failed:", e);
+      }
+    }
+
+    async function syncLibraryToCloud() {
+        if (!fbUser || !fbDb) return;
+        try {
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'serenity-search';
+            const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+            const docRef = doc(fbDb, 'artifacts', appId, 'users', fbUser.uid, 'library', 'savedData');
+            // Write to Firestore replacing existing sync document
+            await setDoc(docRef, { passages: savedPassages, updatedAt: Date.now() });
+        } catch(e) {
+            console.error("Cloud sync save error", e);
+        }
+    }
+
     function initApp() {
       if (window.__serenityInitialized) return; 
 
-      // PWA Shortcut Router
+      // PWA Shortcut & Share Target Router
       const urlParams = new URLSearchParams(window.location.search);
+      const sharedTitle = urlParams.get('title');
+      const sharedText = urlParams.get('text');
       const tabParam = urlParams.get('tab');
-      if (tabParam) {
-        // Clear the URL so refreshing doesn't trap them on this tab
+      
+      if (sharedText || sharedTitle) {
+        // Catcher for Native Web Share Target
+        window.history.replaceState(null, '', window.location.pathname);
+        switchTab('tenth');
+        document.getElementById('tenth-input').value = (sharedTitle ? sharedTitle + "\n\n" : "") + (sharedText || "");
+        triggerHaptic('success');
+      } else if (tabParam) {
         window.history.replaceState(null, '', window.location.pathname);
         switchTab(tabParam);
       }
@@ -1058,10 +1149,12 @@
       renderStepsGrid();
       initFilterMenu();
       updateCounters();
+      initCloudSync(); // Kick off silent Firebase sync
       if(getApiKey()) initTopicTab();
       updateStatusBarColor();
       window.__serenityInitialized = true;
     }
+    
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initApp);
     else setTimeout(initApp, 50);
 
@@ -1155,7 +1248,6 @@
       r.innerHTML = ''; 
       l.classList.remove('hidden');
       
-      // Fast chunked search
       fetchSearchBatch(query, 3, [], true);
     }
 
@@ -1306,12 +1398,10 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
         l.classList.add('hidden'); r.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl border border-red-200 text-center"><p class="text-red-600 font-bold text-sm mb-2">Error</p><p class="text-red-600 text-xs">${err.message}</p></div>`; r.classList.remove('hidden');
       }
     }
-
-    // --- TOPIC GENERATION & STORAGE LOGIC ---
     
     function renderTopicHTML(item, isTailored, itemId) {
       const c = document.getElementById('topics-result');
-      globalMemoryStore[itemId] = item; // Ensure it is in memory for audio/saving
+      globalMemoryStore[itemId] = item; 
 
       const badge = isTailored ? `<span class="inline-block px-3 py-1 bg-app-brandSoft border border-app-brand/20 rounded-full text-[10px] font-bold uppercase tracking-widest text-app-brand"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Tailored Topic</span>` : `<span class="inline-block px-3 py-1 bg-app-bg border border-app-border rounded-full text-[10px] font-bold uppercase tracking-widest text-app-brand">Meeting Topic</span>`;
       const qHtml = item.questions.map(q => `<li class="flex items-start gap-3"><i class="fa-solid fa-circle-question text-app-brand mt-1 text-sm"></i><span class="text-app-text font-medium">${q}</span></li>`).join('');
@@ -1336,18 +1426,14 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     function initTopicTab() {
       try {
         const stored = JSON.parse(localStorage.getItem('serenity_current_topic'));
-        // Check if a topic exists and has a timestamp
         if (stored && stored.item && stored.timestamp) {
           const ageHours = (Date.now() - stored.timestamp) / (1000 * 60 * 60);
-          // If it is less than 24 hours old, load it from memory
           if (ageHours < 24) {
             renderTopicHTML(stored.item, stored.isTailored, stored.itemId);
             return; 
           }
         }
       } catch(e) {}
-      
-      // If no valid stored topic exists, or it expired, generate a new one
       generateTopic(false, false);
     }
 
@@ -1388,7 +1474,6 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
         const item = safeJSONParse(data.candidates?.[0]?.content?.parts?.[0]?.text);
 
         if(item && item.title) {
-          // 1. Save to recent list for anti-duplication
           recentTopics.push({ title: item.title, timestamp: Date.now() });
           try { localStorage.setItem('serenity_recent_topics', JSON.stringify(recentTopics)); } catch(e) {}
 
@@ -1396,7 +1481,6 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
           const itemId = 'topic_' + Date.now();
           const actualTailored = (isTailored && memory.length > 0);
           
-          // 2. Lock this exact topic in for the next 24 hours
           try { 
             localStorage.setItem('serenity_current_topic', JSON.stringify({ 
               item: item, 
@@ -1406,64 +1490,58 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
             })); 
           } catch(e) {}
 
-          // 3. Render it to the screen
           renderTopicHTML(item, actualTailored, itemId);
         }
       } catch(err) {
         l.classList.add('hidden'); c.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl border border-red-200 text-center"><p class="text-red-600 font-bold text-sm mb-2">Error</p><p class="text-red-600 text-xs">${err.message}</p></div>`; c.classList.remove('hidden');
       }
     }
+
    function toggleSaveItemById(itemId, btnElement) {
-     triggerHaptic();
-  const item = globalMemoryStore[itemId];
-  if (!item) return;
-  
-  let existsIdx = -1;
-  if (item.type === 'tenth') {
-    existsIdx = savedPassages.findIndex(s => s.validation === item.validation);
-  } else if (item.type === 'topic') {
-    existsIdx = savedPassages.findIndex(s => s.title === item.title);
-  } else { 
-    existsIdx = savedPassages.findIndex(s => s.keyQuote === item.keyQuote);
-  }
+    triggerHaptic();
+    const item = globalMemoryStore[itemId];
+    if (!item) return;
+    
+    let existsIdx = -1;
+    if (item.type === 'tenth') {
+      existsIdx = savedPassages.findIndex(s => s.validation === item.validation);
+    } else if (item.type === 'topic') {
+      existsIdx = savedPassages.findIndex(s => s.title === item.title);
+    } else { 
+      existsIdx = savedPassages.findIndex(s => s.keyQuote === item.keyQuote);
+    }
 
-  let isNowSaved = false;
-  if (existsIdx > -1) { 
-    savedPassages.splice(existsIdx, 1); 
-    isNowSaved = false;
-    showToast('Removed from library.');
-  } else { 
-    savedPassages.unshift(item); 
-    isNowSaved = true;
-    showToast('Saved to library!');
-  }
-  
-  try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
-  updateSavedCount();
-  if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
+    let isNowSaved = false;
+    if (existsIdx > -1) { 
+      savedPassages.splice(existsIdx, 1); 
+      isNowSaved = false;
+      showToast('Removed from library.');
+    } else { 
+      savedPassages.unshift(item); 
+      isNowSaved = true;
+      showToast('Saved to library!');
+    }
+    
+    try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
+    updateSavedCount();
+    syncLibraryToCloud(); // Fire & forget backup
+    if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
 
-  // --- VISUAL UI UPDATE LOGIC ---
-  if (btnElement) {
-    const icon = btnElement.querySelector('i');
-    if (icon) {
-      // Ensure the icon has the transition class for the "pop" animation
-      icon.classList.add('transition-all', 'duration-200');
-      
-      if (isNowSaved) {
-        // Change to solid gold and scale up slightly
-        icon.classList.remove('fa-regular', 'text-app-muted');
-        icon.classList.add('fa-solid', 'text-app-brand', 'scale-125');
-        
-        // Return to normal size after a fraction of a second (creates the pop)
-        setTimeout(() => icon.classList.remove('scale-125'), 200);
-      } else {
-        // Revert to hollow gray outline
-        icon.classList.remove('fa-solid', 'text-app-brand', 'scale-125');
-        icon.classList.add('fa-regular', 'text-app-muted');
+    if (btnElement) {
+      const icon = btnElement.querySelector('i');
+      if (icon) {
+        icon.classList.add('transition-all', 'duration-200');
+        if (isNowSaved) {
+          icon.classList.remove('fa-regular', 'text-app-muted');
+          icon.classList.add('fa-solid', 'text-app-brand', 'scale-125');
+          setTimeout(() => icon.classList.remove('scale-125'), 200);
+        } else {
+          icon.classList.remove('fa-solid', 'text-app-brand', 'scale-125');
+          icon.classList.add('fa-regular', 'text-app-muted');
+        }
       }
     }
   }
-}
 
     function updateSavedCount() { const c = document.getElementById('saved-count'); if (c) c.innerText = savedPassages.length; }
 
@@ -1474,6 +1552,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
         savedPassages.splice(trueIndex, 1);
         try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
         updateSavedCount();
+        syncLibraryToCloud();
         renderSavedList();
         showToast("Removed from library.");
       }
@@ -1488,6 +1567,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
       savedPassages = itemsToKeep;
       try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
       updateSavedCount();
+      syncLibraryToCloud();
       renderSavedList();
       showToast("Library cleared.");
     }
@@ -1799,6 +1879,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
             localStorage.setItem('serenity_saved', JSON.stringify(savedPassages));
             savedPassages.forEach((item, idx) => { globalMemoryStore['imported_' + idx] = item; });
             updateSavedCount();
+            syncLibraryToCloud(); // Backup freshly imported data to cloud
             if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
           }
           if (data.memory) localStorage.setItem('serenity_daily_memory', JSON.stringify(data.memory));
@@ -1835,7 +1916,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     window.openStepModal = openStepModal; window.closeStepModal = closeStepModal; window.searchStep = searchStep;
     window.exportData = exportData; window.importData = importData; window.shareItem = shareItem; window.initTopicTab = initTopicTab;
   
-      // ==========================================
+    // ==========================================
     // NATIVE SWIPE-TO-DELETE GESTURES
     // ==========================================
     let touchStartX = 0;
@@ -1884,7 +1965,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     // VISUAL MANUAL CAROUSEL LOGIC
     // ==========================================
     let currentSlide = 0;
-    const totalSlides = 5;
+    const totalSlides = 3;
 
     function openVisualManual() {
       triggerHaptic();
@@ -1896,7 +1977,6 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     function closeVisualManual() {
       triggerHaptic();
       document.getElementById('manual-modal').classList.add('hidden');
-      // Reset back to slide 1 for the next time they open it
       setTimeout(() => { currentSlide = 0; updateCarouselUI(); }, 300);
     }
 
@@ -1906,7 +1986,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
         currentSlide++;
         updateCarouselUI();
       } else {
-        closeVisualManual(); // Close it if they hit next on the last slide
+        closeVisualManual();
       }
     }
 
@@ -1924,14 +2004,11 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
       const nextBtn = document.getElementById('slide-next-btn');
       const dots = document.getElementById('slide-indicators').children;
 
-      // Slide the track
       track.style.transform = `translateX(-${currentSlide * 100}%)`;
 
-      // Update buttons
       prevBtn.disabled = currentSlide === 0;
       nextBtn.innerHTML = currentSlide === totalSlides - 1 ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-chevron-right"></i>';
 
-      // Update dots
       Array.from(dots).forEach((dot, index) => {
         if (index === currentSlide) {
           dot.classList.remove('bg-app-border');
@@ -1943,7 +2020,6 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
       });
     }
     
-    // Expose to window
     window.openVisualManual = openVisualManual;
     window.closeVisualManual = closeVisualManual;
     window.nextSlide = nextSlide;
