@@ -1040,9 +1040,6 @@
     }
     function initApp() {
       if (window.__serenityInitialized) return; 
-      
-      function initApp() {
-      if (window.__serenityInitialized) return; 
 
       // PWA Shortcut Router
       const urlParams = new URLSearchParams(window.location.search);
@@ -1054,11 +1051,10 @@
       }
 
       if (localStorage.getItem('serenity_disclaimer_dismissed') === 'true') {
-      
-      if (localStorage.getItem('serenity_disclaimer_dismissed') === 'true') {
         const d = document.getElementById('ai-disclaimer');
         if (d) d.classList.add('hidden');
       }
+      
       updateSavedCount();
       renderStepsGrid();
       initFilterMenu();
