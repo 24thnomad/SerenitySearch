@@ -880,22 +880,16 @@
       }
     }, { passive: true });
     
-   // Update the phone's native status bar to match the app theme
+// Update the phone's native status bar to match the app theme
     function updateStatusBarColor() {
-      // 100ms timeout ensures the CSS classes have fully applied
+      // 50ms timeout ensures the CSS class has fully applied first
       setTimeout(() => {
-        // Grab the exact CSS variable directly to avoid catching mid-transition muddy colors
         const currentBgColor = getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim();
-        const oldMeta = document.querySelector('meta[name="theme-color"]');
-        
-        if (oldMeta && currentBgColor) {
-          // Android PWA trick: Completely replace the HTML tag to force a system-level UI repaint
-          const newMeta = document.createElement('meta');
-          newMeta.name = "theme-color";
-          newMeta.content = currentBgColor;
-          document.head.replaceChild(newMeta, oldMeta);
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
+        if (metaTheme && currentBgColor) {
+          metaTheme.setAttribute('content', currentBgColor);
         }
-      }, 100);
+      }, 50);
     }
 
     function toggleTheme() {
