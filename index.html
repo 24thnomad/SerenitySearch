@@ -850,20 +850,27 @@
             drawY += b.mb;
         });
 
-        // Draw Footer Identity
+        // Generate SVG logo and trigger download
         ctx.fillStyle = brandColor;
         ctx.font = 'bold 36px "Inter", sans-serif';
-        ctx.textBaseline = 'bottom';
-        ctx.fillText("SerenitySearch", 160, cHeight - 120);
+        ctx.textBaseline = 'middle';
+        
+        const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g stroke="${brandColor}" fill="${cardColor}" stroke-width="5" stroke-linejoin="miter"><path d="M48,82 C20,92 5,82 8,72 C18,78 30,78 40,75 Z" /><path d="M52,82 C80,92 95,82 92,72 C82,78 70,78 60,75 Z" /><path d="M40,78 C12,72 5,48 8,42 C16,52 26,55 32,55 Z" /><path d="M60,78 C88,72 95,48 92,42 C84,52 74,55 68,55 Z" /><path d="M48,75 C20,62 18,30 26,22 C32,36 42,46 48,50 Z" /><path d="M52,75 C80,62 82,30 74,22 C68,36 58,46 52,50 Z" /><path d="M50,78 C42,84 45,98 50,98 C55,98 58,84 50,78 Z" /><path d="M50,78 C35,60 40,20 50,12 C60,20 65,60 50,78 Z" /></g></svg>`;
 
-        // Trigger Download
-        const link = document.createElement('a');
-        link.download = `SerenitySearch_${item.type}_${Date.now()}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        showToast("Image saved!");
+        const img = new Image();
+        img.onload = () => {
+            // Draw logo and text side by side
+            ctx.drawImage(img, 150, cHeight - 165, 50, 50);
+            ctx.fillText("SerenitySearch", 215, cHeight - 140);
+            
+            const link = document.createElement('a');
+            link.download = `SerenitySearch_${item.type}_${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast("Image saved!");
+        };
+        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
     }
-
 
     function getApiKey() { return localStorage.getItem('serenity_api_key') || ""; }
     
