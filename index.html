@@ -536,7 +536,7 @@
           <div class="flex justify-between items-center mb-2">
             <label class="block text-xs font-bold text-app-brand uppercase tracking-widest">Gemini API Key</label>
             <button onclick="openVisualManual()" class="text-[10px] font-bold text-app-muted hover:text-app-brand transition-colors flex items-center gap-1 uppercase tracking-widest">
-              <i class="fa-solid fa-circle-question"></i> Getting Started
+              <i class="fa-solid fa-circle-question"></i> App Guide & Tips
             </button>
           </div>
           <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all">
@@ -842,49 +842,26 @@
       // ==========================================
     // OFFLINE MODE DETECTION
     // ==========================================
-// ==========================================
-    // OFFLINE MODE DETECTION
-    // ==========================================
     window.addEventListener('offline', () => {
       triggerHaptic();
       document.getElementById('offline-banner').classList.remove('hidden');
-      
-      // Lock Search
       const searchInput = document.getElementById('search-input');
       const searchBtn = document.getElementById('search-btn');
       const searchMic = document.getElementById('search-mic-icon');
       if (searchInput) { searchInput.disabled = true; searchInput.placeholder = "Search requires connection..."; searchInput.classList.add('opacity-50', 'bg-app-bg'); }
       if (searchBtn) { searchBtn.disabled = true; searchBtn.classList.add('opacity-50', 'cursor-not-allowed'); }
       if (searchMic) { searchMic.parentElement.disabled = true; searchMic.parentElement.classList.add('opacity-50', 'cursor-not-allowed'); }
-
-      // Lock Topics & 10th Step
-      document.querySelectorAll('#tab-topics button, #tab-tenth button[type="submit"]').forEach(btn => {
-        btn.disabled = true;
-        btn.classList.add('opacity-50', 'cursor-not-allowed');
-      });
-      const tenthInput = document.getElementById('tenth-input');
-      if (tenthInput) { tenthInput.disabled = true; tenthInput.placeholder = "Connection required..."; tenthInput.classList.add('opacity-50'); }
     });
 
     window.addEventListener('online', () => {
       triggerHaptic();
       document.getElementById('offline-banner').classList.add('hidden');
-      
-      // Unlock Search
       const searchInput = document.getElementById('search-input');
       const searchBtn = document.getElementById('search-btn');
       const searchMic = document.getElementById('search-mic-icon');
       if (searchInput) { searchInput.disabled = false; searchInput.placeholder = "e.g. Step Two, Acceptance, Resentment..."; searchInput.classList.remove('opacity-50', 'bg-app-bg'); }
       if (searchBtn) { searchBtn.disabled = false; searchBtn.classList.remove('opacity-50', 'cursor-not-allowed'); }
       if (searchMic) { searchMic.parentElement.disabled = false; searchMic.parentElement.classList.remove('opacity-50', 'cursor-not-allowed'); }
-
-      // Unlock Topics & 10th Step
-      document.querySelectorAll('#tab-topics button, #tab-tenth button[type="submit"]').forEach(btn => {
-        btn.disabled = false;
-        btn.classList.remove('opacity-50', 'cursor-not-allowed');
-      });
-      const tenthInput = document.getElementById('tenth-input');
-      if (tenthInput) { tenthInput.disabled = false; tenthInput.placeholder = "e.g., I'm frustrated with my coworker for taking credit for my idea..."; tenthInput.classList.remove('opacity-50'); }
     });
 
     // Scroll-Aware Glass Header Logic
@@ -903,21 +880,46 @@
       }
     }, { passive: true });
     
+    // Update the phone's native status bar to match the app theme
+    function updateStatusBarColor() {
+      // Small timeout ensures the CSS class has fully applied first
+      setTimeout(() => {
+        const currentBgColor = getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim();
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
+        if (metaTheme && currentBgColor) {
+          metaTheme.setAttribute('content', currentBgColor);
+        }
+      }, 50);
+    }
+
     function toggleTheme() {
       triggerHaptic();
       var html = document.documentElement;
-      if (html.classList.contains('dark')) { html.classList.remove('dark'); try { localStorage.setItem('theme-mode', 'light'); } catch(e) {} } 
-      else { html.classList.add('dark'); try { localStorage.setItem('theme-mode', 'dark'); } catch(e) {} }
+      if (html.classList.contains('dark')) { 
+        html.classList.remove('dark'); 
+        try { localStorage.setItem('theme-mode', 'light'); } catch(e) {} 
+      } else { 
+        html.classList.add('dark'); 
+        try { localStorage.setItem('theme-mode', 'dark'); } catch(e) {} 
+      }
+      
+      // "Call" the function to apply the status bar change immediately
+      updateStatusBarColor();
     }
 
     function changeTheme(themeClass) {
       triggerHaptic();
       const html = document.documentElement;
       html.classList.remove('theme-sapphire', 'theme-emerald', 'theme-amethyst', 'theme-crimson', 'theme-reef', 'theme-sunset', 'theme-wildflower', 'theme-carnival', 'theme-monochrome', 'theme-oasis', 'theme-miami-synth', 'theme-motor', 'theme-lions', 'theme-piston');
+      
       if (themeClass !== 'default') { html.classList.add(themeClass); }
+      
       const headerSelect = document.getElementById('header-theme-switcher');
       if (headerSelect) headerSelect.value = themeClass;
       try { localStorage.setItem('color-theme', themeClass); } catch(e) {}
+      
+      // "Call" the function to apply the status bar change immediately
+      updateStatusBarColor();
     }
 
     // Dynamic Font Scaler
@@ -1013,10 +1015,15 @@
 
     var isAppInitialized = false;
     // Haptic Feedback Utility
-    function triggerHaptic() {
-      // Checks if the browser/device supports the vibration API
-      if (navigator.vibrate) {
-        navigator.vibrate(50); // 50 milliseconds is the sweet spot for a "click" feel
+    function triggerHaptic(type = 'light') {
+      if (!navigator.vibrate) return;
+      
+      if (type === 'light') {
+        navigator.vibrate(15); // A sharp, premium click
+      } else if (type === 'success') {
+        navigator.vibrate([20, 50, 20]); // A pleasant double-tap
+      } else if (type === 'heavy') {
+        navigator.vibrate([50, 100, 50]); // A warning thump
       }
     }
     
@@ -1033,6 +1040,21 @@
     }
     function initApp() {
       if (window.__serenityInitialized) return; 
+      
+      function initApp() {
+      if (window.__serenityInitialized) return; 
+
+      // PWA Shortcut Router
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get('tab');
+      if (tabParam) {
+        // Clear the URL so refreshing doesn't trap them on this tab
+        window.history.replaceState(null, '', window.location.pathname);
+        switchTab(tabParam);
+      }
+
+      if (localStorage.getItem('serenity_disclaimer_dismissed') === 'true') {
+      
       if (localStorage.getItem('serenity_disclaimer_dismissed') === 'true') {
         const d = document.getElementById('ai-disclaimer');
         if (d) d.classList.add('hidden');
@@ -1866,7 +1888,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     // VISUAL MANUAL CAROUSEL LOGIC
     // ==========================================
     let currentSlide = 0;
-    const totalSlides = 3;
+    const totalSlides = 5;
 
     function openVisualManual() {
       triggerHaptic();
