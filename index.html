@@ -531,7 +531,7 @@
           <div class="flex justify-between items-center mb-2">
             <label class="block text-xs font-bold text-app-brand uppercase tracking-widest">Gemini API Key</label>
             <button onclick="openVisualManual()" class="text-[10px] font-bold text-app-muted hover:text-app-brand transition-colors flex items-center gap-1 uppercase tracking-widest">
-              <i class="fa-solid fa-circle-question"></i> Getting Started
+              <i class="fa-solid fa-circle-question"></i> App Guide & Tips
             </button>
           </div>
           <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all">
@@ -1119,15 +1119,22 @@
     ];
 
     function renderStepsGrid() {
-      const grid = document.getElementById('steps-grid'); 
-      if (!grid) return; 
+      const grid = document.getElementById('steps-grid');
+      if (!grid) return;
       grid.innerHTML = '';
-      
+      const activeStep = parseInt(localStorage.getItem('serenity_active_step'));
+
       TWELVE_STEPS.forEach((s, idx) => {
+        const isActive = idx === activeStep;
+        const ringClass = isActive ? "bg-app-brand text-app-card shadow-md border-transparent" : "bg-app-bg text-app-muted group-hover:bg-app-brandSoft group-hover:text-app-brand border border-app-border group-hover:border-transparent";
+        const badgeHtml = isActive ? `<span class="absolute top-3 right-3 text-[8px] font-bold text-app-brand uppercase tracking-widest bg-app-brandSoft px-2 py-0.5 rounded-full border border-app-brand/20 shadow-sm">Focus</span>` : '';
+        const cardBorder = isActive ? "border-app-brand shadow-sm bg-app-bg" : "border-app-border bg-app-card hover:border-app-brand";
+
         grid.insertAdjacentHTML('beforeend', `
-          <div onclick="openStepModal(${idx})" class="sleek-card bg-app-card p-5 rounded-2xl border border-app-border cursor-pointer flex items-center gap-4 group hover:border-app-brand">
-            <div class="w-10 h-10 rounded-full bg-app-bg text-app-muted group-hover:bg-app-brandSoft group-hover:text-app-brand font-bold text-lg flex items-center justify-center shrink-0 transition-colors border border-app-border group-hover:border-transparent">${s.step}</div>
-            <div class="overflow-hidden">
+          <div onclick="openStepModal(${idx})" class="sleek-card relative p-5 rounded-2xl border ${cardBorder} cursor-pointer flex items-center gap-4 group">
+            ${badgeHtml}
+            <div class="w-10 h-10 rounded-full font-bold text-lg flex items-center justify-center shrink-0 transition-colors ${ringClass}">${s.step}</div>
+            <div class="overflow-hidden pr-8">
               <h3 class="font-bold text-app-text text-sm tracking-wide uppercase">${s.title}</h3>
               <p class="text-xs text-app-muted mt-0.5">${s.text.substring(0, 50)}...</p>
             </div>
@@ -1141,6 +1148,8 @@
       const step = TWELVE_STEPS[idx];
       const content = document.getElementById('step-modal-content');
       const action = document.getElementById('step-modal-action');
+      const activeStep = parseInt(localStorage.getItem('serenity_active_step'));
+      const isActive = idx === activeStep;
       
       content.innerHTML = `
         <span class="inline-block px-3 py-1 bg-app-brandSoft text-app-brand text-[10px] font-bold uppercase tracking-widest rounded-full mb-2">Step ${step.step} • ${step.title}</span>
@@ -1151,13 +1160,38 @@
       `;
       
       action.innerHTML = `
-        <button onclick="searchStep('${step.query}')" class="w-full py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover shadow-sm flex items-center justify-center gap-2">
-          <i class="fa-solid fa-magnifying-glass"></i> Search Literature for Step ${step.step}
-        </button>
+        <div class="flex flex-col gap-3">
+          <button onclick="searchStep('${step.query}')" class="w-full py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover shadow-sm flex items-center justify-center gap-2">
+            <i class="fa-solid fa-magnifying-glass"></i> Search Literature for Step ${step.step}
+          </button>
+          ${isActive
+            ? `<button onclick="clearFocusStep()" class="w-full py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-red-500 hover:text-red-500 flex items-center justify-center gap-2"><i class="fa-solid fa-star-half-stroke text-app-muted hover:text-red-500 transition-colors"></i> Remove Focus</button>`
+            : `<button onclick="setFocusStep(${idx})" class="w-full py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-app-brand shadow-sm flex items-center justify-center gap-2"><i class="fa-regular fa-star text-app-brand"></i> Set as Current Focus</button>`
+          }
+        </div>
       `;
       
       document.getElementById('step-modal').classList.remove('hidden');
     }
+
+    function setFocusStep(idx) {
+        triggerHaptic('success');
+        localStorage.setItem('serenity_active_step', idx);
+        renderStepsGrid();
+        closeStepModal();
+        showToast(`Step ${TWELVE_STEPS[idx].step} set as current focus.`);
+    }
+
+    function clearFocusStep() {
+        triggerHaptic();
+        localStorage.removeItem('serenity_active_step');
+        renderStepsGrid();
+        closeStepModal();
+        showToast("Focus step cleared.");
+    }
+    
+    window.setFocusStep = setFocusStep;
+    window.clearFocusStep = clearFocusStep;
 
     function closeStepModal() {
       document.getElementById('step-modal').classList.add('hidden');
