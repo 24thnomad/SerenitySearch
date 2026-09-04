@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SerenitySearch - AA & Recovery Literature Finder</title>
   
-  <!-- PWA Manifest & App Icons -->
- <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#B58C3D">
   
-  <!-- Updated Icons for High-Res Displays -->
   <link rel="icon" type="image/svg+xml" href="/icon.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png">
   
@@ -17,7 +15,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Serenity">
 
-  <!-- Theme Initialization Script -->
   <script>
     try {
       var storedMode = localStorage.getItem('theme-mode');
@@ -38,14 +35,13 @@
     } catch(e) {}
   </script>
 
-  <!-- Tailwind CSS & Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
   
-  <!-- Semantic Theme Configuration -->
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -77,9 +73,6 @@
     body, div, p, h1, h2, h3, button, header, input, select, textarea, a, span {
       transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
     }
-    
-    /* Native App Mimicry: Lock overscroll to disable pull-to-refresh */
-    body { overscroll-behavior-y: none; }
 
     .glass-nav { backdrop-filter: saturate(180%) blur(20px); }
     
@@ -162,11 +155,9 @@
 </head>
 <body class="h-full flex flex-col font-sans bg-app-bg text-app-text overflow-x-hidden custom-scrollbar selection:bg-app-brand/30">
 
-  <!-- Toast Notification Container -->
   <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- AI Accuracy Disclaimer -->
- <div id="ai-disclaimer" onclick="dismissDisclaimer()" class="bg-app-card text-app-text text-[11px] text-center py-2 px-8 tracking-wide border-b border-app-border shrink-0 relative cursor-pointer hover:bg-app-bg transition-colors group flex items-center justify-center">
+  <div id="ai-disclaimer" onclick="dismissDisclaimer()" class="bg-app-card text-app-text text-[11px] text-center py-2 px-8 tracking-wide border-b border-app-border shrink-0 relative cursor-pointer hover:bg-app-bg transition-colors group flex items-center justify-center">
     <div>
       <i class="fa-solid fa-triangle-exclamation text-app-brand mr-2"></i>
       An AI guide for your daily reprieve. Quotes and chapter locations are gathered for reflection and may vary slightly.
@@ -174,14 +165,12 @@
     <i class="fa-solid fa-xmark absolute right-4 text-app-muted opacity-50 group-hover:opacity-100 transition-opacity"></i>
   </div>
 
-  <!-- Header -->
- <header id="main-header" class="sticky top-0 z-40 transition-all duration-300 bg-app-bg border-b border-transparent px-4 lg:px-8 py-4 shrink-0">
+  <header id="main-header" class="sticky top-0 z-40 transition-all duration-300 bg-app-bg border-b border-transparent px-4 lg:px-8 py-4 shrink-0">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-4 lg:gap-10">
       
-      <!-- Logo -->
       <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer shrink-0" onclick="switchTab('search')">
         <div class="flex items-center justify-center text-app-brand">
-          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100" class="w-8 h-8 sm:w-10 h-10 text-app-brand fill-app-card drop-shadow-sm transition-colors duration-400">
+          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 100" class="w-8 h-8 sm:w-10 sm:h-10 text-app-brand fill-app-card drop-shadow-sm transition-colors duration-400">
             <g stroke="currentColor" stroke-width="5" stroke-linejoin="miter">
               <path d="M48,82 C20,92 5,82 8,72 C18,78 30,78 40,75 Z" />
               <path d="M52,82 C80,92 95,82 92,72 C82,78 70,78 60,75 Z" />
@@ -199,7 +188,6 @@
         </h1>
       </div>
 
-      <!-- Segmented Control Navigation (Desktop) -->
       <nav class="hidden md:flex items-center gap-1.5 bg-app-card p-1.5 rounded-xl border border-app-border">
         <button id="nav-search" onclick="switchTab('search')" class="nav-btn active px-4 py-2 rounded-lg text-sm font-medium text-app-muted hover:text-app-text transition-colors flex items-center gap-2">
           <i class="fa-solid fa-magnifying-glass"></i>Search
@@ -219,8 +207,7 @@
         </button>
       </nav>
 
-      <!-- Control cluster -->
-    <div class="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
+      <div class="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
         <div class="relative flex items-center justify-center w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-app-card border border-app-border text-app-muted hover:text-app-text transition-colors shadow-sm cursor-pointer" title="Change Color Theme">
           <i class="fa-solid fa-palette text-sm sm:text-lg pointer-events-none"></i>
           <select id="header-theme-switcher" onchange="changeTheme(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none">
@@ -259,7 +246,6 @@
     <i class="fa-solid fa-wifi mr-2"></i>Offline Mode: Saved Library & Steps Available
   </div>
 
-  <!-- Mobile Nav Bar -->
   <div class="md:hidden glass-nav bg-app-card/90 border-b border-app-border px-2 py-2 flex justify-around text-[10px] uppercase font-bold tracking-wider z-30 shrink-0">
     <button onclick="switchTab('search')" class="mob-nav-btn text-app-brand flex flex-col items-center gap-1 p-2 transition-colors" id="mob-nav-search">
       <i class="fa-solid fa-magnifying-glass text-lg"></i>Search
@@ -278,14 +264,11 @@
     </button>
   </div>
 
-  <!-- MAIN CONTAINER -->
   <main class="flex-1 max-w-5xl w-full mx-auto p-4 lg:p-8 space-y-8 pb-32">
 
-    <!-- SEARCH TAB SECTION -->
     <section id="tab-search" class="space-y-8">
       <div class="text-center py-12 md:py-20 space-y-6">
         
-        <!-- Home Counter -->
         <div id="home-counter-container" class="hidden justify-center mb-4">
           <div class="inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-4 px-6 py-3 bg-app-card border border-app-border rounded-2xl shadow-sm cursor-default hover:border-app-brand transition-colors">
              <div class="text-[10px] sm:text-xs font-bold text-app-brand uppercase tracking-widest">
@@ -317,7 +300,6 @@
           </div>
         </form>
 
-        <!-- Multi-Select Filter Container -->
         <div class="flex items-center justify-center pt-6" id="filter-container">
           <div class="relative flex items-center" id="multi-select-wrapper">
             <span class="text-xs font-semibold text-app-muted uppercase tracking-widest mr-3 hidden sm:inline-block">Filter Source:</span>
@@ -339,8 +321,7 @@
         </div>
       </div>
 
-      <!-- Loading State -->
-     <div id="search-loading" class="hidden space-y-6 pt-4">
+      <div id="search-loading" class="hidden space-y-6 pt-4">
         <div class="text-xs font-bold text-app-brand uppercase tracking-widest text-center animate-pulse mb-6">Searching Library...</div>
         <div class="sleek-card bg-app-card p-6 sm:p-8 rounded-2xl border border-app-border flex flex-col md:flex-row gap-6 animate-pulse">
           <div class="flex-1 space-y-4 w-full">
@@ -366,13 +347,11 @@
         </div>
       </div>
 
-      <!-- Search Results Display -->
       <div id="results-container" class="space-y-6">
         <div id="results-list" class="space-y-6"></div>
       </div>
     </section>
 
-    <!-- STEPS GUIDE TAB -->
     <section id="tab-steps" class="hidden space-y-8">
       <div class="text-center py-8">
         <h2 class="text-3xl font-bold font-serif text-app-text">The Twelve Steps</h2>
@@ -381,14 +360,18 @@
       <div id="steps-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </section>
 
-    <!-- 10TH STEP SPOT CHECK TAB -->
     <section id="tab-tenth" class="hidden space-y-6">
-      <div class="text-center py-8 border-b border-app-border">
-        <h2 class="text-3xl font-bold font-serif text-app-text">10th Step Spot Check</h2>
-        <p class="text-app-muted mt-2">"Continued to take personal inventory and when we were wrong promptly admitted it."</p>
+      <div class="text-center py-8 border-b border-app-border pb-4">
+        <h2 class="text-3xl font-bold font-serif text-app-text mb-2">10th Step Inventory</h2>
+        <p class="text-app-muted mb-6">"Continued to take personal inventory and when we were wrong promptly admitted it."</p>
+        
+        <div class="flex gap-2 justify-center mt-2">
+            <button onclick="setTenthTab('write')" id="tenth-tab-write" class="px-6 py-2 bg-app-brand text-app-card rounded-full text-sm font-bold shadow-sm transition-colors">Spot Check</button>
+            <button onclick="setTenthTab('insights')" id="tenth-tab-insights" class="px-6 py-2 bg-app-bg border border-app-border text-app-text hover:border-app-brand rounded-full text-sm font-bold shadow-sm transition-colors">My Patterns</button>
+        </div>
       </div>
       
-      <div class="max-w-2xl mx-auto space-y-6">
+      <div id="tenth-write-section" class="max-w-2xl mx-auto space-y-6">
         <div class="bg-app-card p-6 md:p-8 rounded-2xl border border-app-border shadow-sm">
           <form onsubmit="processTenthStep(event)" class="space-y-4">
             <label class="block text-sm font-bold text-app-brand uppercase tracking-widest">What is disturbing your peace right now?</label>
@@ -419,9 +402,21 @@
 
         <div id="tenth-result" class="hidden space-y-6 relative"></div>
       </div>
+      
+      <div id="tenth-insights-section" class="hidden max-w-2xl mx-auto space-y-6">
+        <div class="bg-app-card p-6 md:p-8 rounded-2xl border border-app-border shadow-sm">
+            <h3 class="text-lg font-bold text-app-text text-center mb-4 uppercase tracking-widest">Character Defect Trends</h3>
+            <div class="relative h-72 w-full flex items-center justify-center">
+                <canvas id="defectsChart"></canvas>
+                <div id="defects-empty-state" class="absolute inset-0 flex items-center justify-center hidden">
+                    <p class="text-sm text-app-muted italic text-center px-8">Complete and save Spot Checks to reveal your recurring defect patterns here.</p>
+                </div>
+            </div>
+            <p class="text-xs text-app-muted text-center mt-6 uppercase tracking-widest opacity-80">Tracking themes from saved checks to illuminate areas for growth.</p>
+        </div>
+      </div>
     </section>
 
-    <!-- MEETING TOPICS TAB -->
     <section id="tab-topics" class="hidden space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-app-border pb-4 gap-4">
         <div>
@@ -469,7 +464,6 @@
       <div id="topics-result" class="min-h-[400px]"></div>
     </section>
 
-    <!-- SAVED LITERATURE TAB -->
     <section id="tab-saved" class="hidden space-y-6">
       <div class="flex justify-between items-end border-b border-app-border pb-4">
         <div>
@@ -480,7 +474,6 @@
         </button>
       </div>
       
-      <!-- Sub-Navigation for Saved Tab -->
       <div class="flex gap-2 mb-2 overflow-x-auto custom-scrollbar pb-2">
         <button onclick="setSavedTab('literature')" id="saved-tab-literature" class="px-5 py-2 bg-app-brand text-app-card rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">Library</button>
         <button onclick="setSavedTab('tenth')" id="saved-tab-tenth" class="px-5 py-2 bg-app-bg border border-app-border text-app-text hover:border-app-brand rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">Spot Checks</button>
@@ -492,13 +485,11 @@
 
   </main>
 
-  <!-- SERENITY PRAYER MODAL (Bottom Sheet on Mobile) -->
-  <div id="serenity-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-app-card w-full sm:max-w-md p-8 rounded-t-3xl sm:rounded-2xl rounded-b-none sm:border border-t border-app-border shadow-2xl relative text-center transition-transform transform translate-y-0">
-      <div class="w-12 h-1.5 bg-app-border rounded-full mx-auto mb-6 sm:hidden"></div>
-      <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
+  <div id="serenity-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative text-center max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl z-10"><i class="fa-solid fa-xmark"></i></button>
       
-      <i class="fa-solid fa-dove text-app-brand text-3xl mb-4"></i>
+      <i class="fa-solid fa-dove text-app-brand text-3xl mb-4 mt-2"></i>
       <h3 class="text-sm font-bold text-app-text mb-4 uppercase tracking-widest">The Serenity Prayer</h3>
       <p class="font-serif text-xl text-app-text leading-relaxed italic mb-6">
         "God, grant me the serenity<br/>to accept the things I cannot change,<br/>courage to change the things I can,<br/>and wisdom to know the difference."
@@ -508,6 +499,17 @@
         <div class="w-full h-px bg-app-border mb-6"></div>
         <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-4">Sober Time</h4>
         <span id="dove-counter-text" class="inline-flex items-center gap-2 px-4 py-1.5 bg-app-brandSoft border border-app-brand/20 rounded-full text-xs font-bold uppercase tracking-widest text-app-brand"></span>
+      </div>
+
+      <div class="w-full h-px bg-app-border mb-6"></div>
+      <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-4">11th Step Practice</h4>
+      <div class="flex flex-col items-center justify-center bg-app-bg border border-app-border rounded-xl p-6 mb-8 relative">
+        <div id="timer-display" class="text-5xl font-serif font-bold text-app-text mb-5" style="font-variant-numeric: tabular-nums;">05:00</div>
+        <div class="flex gap-4 z-10 relative">
+          <button onclick="adjustTimer(-1)" class="w-12 h-12 rounded-full bg-app-card border border-app-border text-app-muted hover:text-app-brand transition-colors flex items-center justify-center shadow-sm"><i class="fa-solid fa-minus"></i></button>
+          <button onclick="toggleTimer()" id="timer-btn" class="px-8 py-2 bg-app-brand text-app-card font-bold rounded-full hover:bg-app-brandHover transition-colors shadow-sm w-32 tracking-wide">Start</button>
+          <button onclick="adjustTimer(1)" class="w-12 h-12 rounded-full bg-app-card border border-app-border text-app-muted hover:text-app-brand transition-colors flex items-center justify-center shadow-sm"><i class="fa-solid fa-plus"></i></button>
+        </div>
       </div>
 
       <div class="w-full h-px bg-app-border mb-6"></div>
@@ -524,25 +526,22 @@
     </div>
   </div>
 
-  <!-- API KEY & BACKUP SETTINGS MODAL (Bottom Sheet on Mobile) -->
-  <div id="settings-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-app-card w-full sm:max-w-md p-8 rounded-t-3xl sm:rounded-2xl rounded-b-none border-t sm:border border-app-border shadow-2xl relative transition-transform transform translate-y-0">
-      <div class="w-12 h-1.5 bg-app-border rounded-full mx-auto mb-6 sm:hidden"></div>
-      <button onclick="toggleSettingsModal()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
-      
+  <div id="settings-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative">
+      <button onclick="toggleSettingsModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
       <div class="flex items-center gap-3 mb-6">
-        <i class="fa-solid fa-key text-app-brand text-2xl"></i><h3 class="text-xl font-bold text-app-text">Settings & Backup</h3>
+        <i class="fa-solid fa-key text-app-brand text-2xl"></i><h3 class="text-xl font-bold text-app-text">API Configuration</h3>
       </div>
+      <p class="text-sm text-app-muted mb-6 leading-relaxed">
+        To use the AI features of SerenitySearch, please enter your Google Gemini API key below. Your key is securely stored in your browser's local storage and is never sent to our servers.
+      </p>
       
-      <div class="space-y-4 max-h-[85vh] overflow-y-auto custom-scrollbar pr-2 pb-2">
+      <div class="space-y-4">
        <div>
-          <p class="text-sm text-app-muted mb-6 leading-relaxed">
-            To use the AI features of SerenitySearch, please enter your Google Gemini API key below. Your key is securely stored in your browser's local storage and is never sent to our servers.
-          </p>
           <div class="flex justify-between items-center mb-2">
             <label class="block text-xs font-bold text-app-brand uppercase tracking-widest">Gemini API Key</label>
             <button onclick="openVisualManual()" class="text-[10px] font-bold text-app-muted hover:text-app-brand transition-colors flex items-center gap-1 uppercase tracking-widest">
-              <i class="fa-solid fa-circle-question"></i> Getting Started
+              <i class="fa-solid fa-circle-question"></i> App Guide & Tips
             </button>
           </div>
           <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all">
@@ -577,7 +576,7 @@
           
           <div>
             <label class="block text-[10px] font-bold text-app-muted uppercase tracking-widest mb-1">Text Size</label>
-            <div class="flex items-center justify-between w-full h-[46px] bg-app-bg border border-app-border rounded-xl p-1 shadow-inner mt-1">
+            <div class="flex items-center justify-between w-full h-[46px] bg-app-bg border border-app-border rounded-xl p-1 shadow-inner">
               <button onclick="changeFontSize('decrease')" class="w-10 h-full rounded-lg flex items-center justify-center text-app-muted hover:text-app-text hover:bg-app-card transition-colors"><i class="fa-solid fa-minus text-xs"></i></button>
               <span class="text-sm font-bold text-app-text font-serif pointer-events-none">Aa</span>
               <button onclick="changeFontSize('increase')" class="w-10 h-full rounded-lg flex items-center justify-center text-app-muted hover:text-app-text hover:bg-app-card transition-colors"><i class="fa-solid fa-plus text-xs"></i></button>
@@ -591,10 +590,7 @@
         </div>
         
         <div class="w-full h-px bg-app-border my-4"></div>
-        <div class="flex items-center justify-between mb-2">
-            <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest">Manual Backup</h4>
-            <span class="text-[10px] text-app-brand font-bold italic"><i class="fa-solid fa-cloud mr-1"></i>Library Sync Active</span>
-        </div>
+        <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest mb-2">Data Backup</h4>
         <div class="flex gap-3">
           <button onclick="exportData()" class="flex-1 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-app-brand shadow-sm">
             <i class="fa-solid fa-download mr-2"></i>Export
@@ -608,14 +604,9 @@
     </div>
   </div>
 
-   <!-- App Guide Modal -->
-   <div id="manual-modal" class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-app-card w-full sm:max-w-sm rounded-t-3xl sm:rounded-2xl rounded-b-none sm:border border-t border-app-border shadow-2xl relative flex flex-col overflow-hidden transition-transform transform translate-y-0">
+   <div id="manual-modal" class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-app-card max-w-sm w-full rounded-2xl border border-app-border shadow-2xl relative flex flex-col overflow-hidden">
       
-      <div class="absolute top-4 left-0 right-0 flex justify-center z-20 sm:hidden pointer-events-none">
-        <div class="w-12 h-1.5 bg-white/50 rounded-full drop-shadow-md"></div>
-      </div>
-
       <button onclick="closeVisualManual()" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/50 text-white hover:bg-black/80 flex items-center justify-center transition-colors">
         <i class="fa-solid fa-xmark"></i>
       </button>
@@ -623,14 +614,10 @@
       <div id="manual-track" class="flex transition-transform duration-300 ease-in-out w-full" style="transform: translateX(0%);">
         
         <div class="w-full shrink-0 flex flex-col">
-          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4 pt-10 sm:pt-4">
-            <img src="slide1-install.jpg" alt="Install App" class="w-full h-full object-contain drop-shadow-md" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-            <div class="hidden flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
-                <i class="fa-solid fa-mobile-screen text-4xl mb-3 text-app-brand"></i>
-                <span class="text-sm font-bold uppercase tracking-widest">Install App</span>
-            </div>
+          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4">
+            <img src="slide1-install.jpg" alt="Install Prompt" class="object-contain h-full w-full rounded-lg shadow-sm">
           </div>
-          <div class="p-6 text-center space-y-3 pb-8 sm:pb-6">
+          <div class="p-6 text-center space-y-3">
             <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">The Basics</span>
             <h3 class="text-xl font-bold text-app-text">Install the App</h3>
             <p class="text-sm text-app-muted leading-relaxed">Keep your daily reflections one tap away. Open your browser menu and select <strong>Install app</strong> or <strong>Add to Home Screen</strong>.</p>
@@ -638,14 +625,10 @@
         </div>
 
         <div class="w-full shrink-0 flex flex-col">
-          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4 pt-10 sm:pt-4">
-            <img src="slide2-apikey.jpg" alt="API Setup" class="w-full h-full object-contain drop-shadow-md" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-            <div class="hidden flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
-                <i class="fa-solid fa-key text-4xl mb-3 text-app-brand"></i>
-                <span class="text-sm font-bold uppercase tracking-widest">API Configuration</span>
-            </div>
+          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4">
+            <img src="slide2-apikey.jpg" alt="API Key Settings" class="object-contain h-full w-full rounded-lg shadow-sm">
           </div>
-          <div class="p-6 text-center space-y-3 pb-8 sm:pb-6">
+          <div class="p-6 text-center space-y-3">
             <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">AI Setup</span>
             <h3 class="text-xl font-bold text-app-text">Unlock the Search</h3>
             <p class="text-sm text-app-muted leading-relaxed">
@@ -657,14 +640,10 @@
         </div>
 
         <div class="w-full shrink-0 flex flex-col">
-          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4 pt-10 sm:pt-4">
-            <img src="slide3-accessibility.jpg" alt="Accessibility" class="w-full h-full object-contain drop-shadow-md" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-            <div class="hidden flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
-                <i class="fa-solid fa-glasses text-4xl mb-3 text-app-brand"></i>
-                <span class="text-sm font-bold uppercase tracking-widest">Accessibility Options</span>
-            </div>
+          <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4">
+            <img src="slide3-accessibility.jpg" alt="Accessibility Settings" class="object-contain h-full w-full rounded-lg shadow-sm">
           </div>
-          <div class="p-6 text-center space-y-3 pb-8 sm:pb-6">
+          <div class="p-6 text-center space-y-3">
             <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest">Accessibility</span>
             <h3 class="text-xl font-bold text-app-text">Reading Preferences</h3>
             <p class="text-sm text-app-muted leading-relaxed">Make the app work for you. Open Settings to bump up your <strong>Text Size</strong> for comfortable reading, or choose your preferred <strong>Reader Voice</strong>.</p>
@@ -673,7 +652,7 @@
 
       </div>
 
-      <div class="p-4 sm:p-4 pb-8 sm:pb-4 flex items-center justify-between bg-app-card border-t border-app-border shrink-0">
+      <div class="p-4 flex items-center justify-between bg-app-card border-t border-app-border shrink-0">
         <button onclick="prevSlide()" class="w-10 h-10 rounded-full flex items-center justify-center text-app-muted hover:text-app-text hover:bg-app-bg transition-colors disabled:opacity-30" id="slide-prev-btn" disabled>
           <i class="fa-solid fa-chevron-left"></i>
         </button>
@@ -690,24 +669,19 @@
     </div>
   </div>
     
-  <!-- 12 Steps Focus Modal (Bottom Sheet on Mobile) -->
-  <div id="step-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-app-card w-full sm:max-w-2xl p-8 rounded-t-3xl sm:rounded-2xl rounded-b-none border-t sm:border border-app-border shadow-2xl relative flex flex-col max-h-[90vh] transition-transform transform translate-y-0">
-      <div class="w-12 h-1.5 bg-app-border rounded-full mx-auto mb-6 sm:hidden"></div>
-      <button onclick="closeStepModal()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
+  <div id="step-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-app-card max-w-2xl w-full p-8 rounded-2xl border border-app-border shadow-2xl relative flex flex-col max-h-[90vh]">
+      <button onclick="closeStepModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
       
       <div id="step-modal-content" class="overflow-y-auto custom-scrollbar pr-2 mb-6 flex-1 space-y-4 pt-2">
-        <!-- Content injected via JS -->
-      </div>
+        </div>
       
-      <div id="step-modal-action" class="shrink-0 pt-4 border-t border-app-border pb-4 sm:pb-0">
-        <!-- Button injected via JS -->
-      </div>
+      <div id="step-modal-action" class="shrink-0 pt-4 border-t border-app-border">
+        </div>
     </div>
   </div>
 
-  <!-- Audio Player UI -->
-  <div id="audio-player-bar" class="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 z-50 bg-app-card border border-app-border p-4 rounded-xl shadow-xl hidden flex items-center space-x-4">
+  <div id="audio-player-bar" class="fixed bottom-6 right-6 z-50 bg-app-card border border-app-border p-4 rounded-xl shadow-xl hidden flex items-center space-x-4">
     <div id="audio-icon-container" class="w-8 h-8 rounded-full bg-app-brandSoft text-app-brand flex items-center justify-center">
       <i id="audio-icon" class="fa-solid fa-volume-high text-sm"></i>
     </div>
@@ -732,10 +706,205 @@
     let activeDictationInput = null;
     let activeMicIcon = null;
 
-    // --- Firebase Sync Global Variables ---
-    let fbDb = null;
-    let fbAuth = null;
-    let fbUser = null;
+    // Timer state variables
+    let defectsChartInstance = null;
+    let timerInterval = null;
+    let timerSeconds = 300; 
+    let isTimerRunning = false;
+    let timerInitialSeconds = 300;
+
+    // --- HTML5 Canvas Utilities for Visual Quote Cards ---
+    // Polyfill for rounded rectangles on canvas just in case an older mobile browser tries to run it
+    if (!CanvasRenderingContext2D.prototype.roundRect) {
+        CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+            if (typeof r === 'undefined') r = 0;
+            if (typeof r === 'number') r = {tl: r, tr: r, br: r, bl: r};
+            this.beginPath();
+            this.moveTo(x + r.tl, y);
+            this.lineTo(x + w - r.tr, y);
+            this.quadraticCurveTo(x + w, y, x + w, y + r.tr);
+            this.lineTo(x + w, y + h - r.br);
+            this.quadraticCurveTo(x + w, y + h, x + w - r.br, y + h);
+            this.lineTo(x + r.bl, y + h);
+            this.quadraticCurveTo(x, y + h, x, y + h - r.bl);
+            this.lineTo(x, y + r.tl);
+            this.quadraticCurveTo(x, y, x + r.tl, y);
+            this.closePath();
+            return this;
+        }
+    }
+
+    function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
+        const words = text.split(' ');
+        let line = '';
+        let currentY = y;
+        for(let n = 0; n < words.length; n++) {
+            const testLine = line + words[n] + ' ';
+            const metrics = ctx.measureText(testLine);
+            const testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+                ctx.fillText(line, x, currentY);
+                line = words[n] + ' ';
+                currentY += lineHeight;
+            } else {
+                line = testLine;
+            }
+        }
+        ctx.fillText(line, x, currentY);
+        return currentY + lineHeight;
+    }
+
+    function downloadQuoteCard(idx) {
+        triggerHaptic('heavy');
+        const item = filteredSavedItems()[idx];
+        if (!item) return;
+
+        // Grab active theme variables directly from the browser window
+        const rootStyle = getComputedStyle(document.documentElement);
+        const bgColor = rootStyle.getPropertyValue('--color-bg').trim() || '#F4EFE6';
+        const cardColor = rootStyle.getPropertyValue('--color-card').trim() || '#FCFAF5';
+        const brandColor = rootStyle.getPropertyValue('--color-brand').trim() || '#B58C3D';
+        const textColor = rootStyle.getPropertyValue('--color-text').trim() || '#18181b';
+        const mutedColor = rootStyle.getPropertyValue('--color-muted').trim() || '#52525b';
+
+        // Render Canvas
+        const canvas = document.createElement('canvas');
+        canvas.width = 1080;
+        canvas.height = 1080;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = cardColor;
+        ctx.shadowColor = 'rgba(0,0,0,0.1)';
+        ctx.shadowBlur = 40;
+        ctx.shadowOffsetY = 10;
+        ctx.roundRect(80, 80, 920, 920, 40);
+        ctx.fill();
+        ctx.shadowColor = 'transparent';
+
+        // Add brand stripe
+        ctx.fillStyle = brandColor;
+        ctx.beginPath();
+        ctx.roundRect(80, 80, 20, 920, {tl: 40, bl: 40, tr: 0, br: 0});
+        ctx.fill();
+
+        // Extract Text Data
+        const quote = item.type === 'topic' ? item.quote : item.keyQuote || item.theTurnaround || "Serenity Reflection";
+        const title = item.title || item.validation || "10th Step Spot Check";
+        const source = item.literatureSource || (item.type === 'topic' ? "Meeting Topic" : "Personal Inventory");
+
+        ctx.fillStyle = brandColor;
+        ctx.font = 'bold 30px "Inter", sans-serif';
+        ctx.fillText(source.toUpperCase(), 160, 200);
+
+        ctx.fillStyle = textColor;
+        ctx.font = 'italic 54px "Playfair Display", serif';
+        const endY = wrapCanvasText(ctx, `"${quote}"`, 160, 300, 760, 75);
+
+        ctx.fillStyle = mutedColor;
+        ctx.font = '36px "Inter", sans-serif';
+        wrapCanvasText(ctx, `— ${title}`, 160, endY + 40, 760, 50);
+
+        ctx.fillStyle = brandColor;
+        ctx.font = 'bold 36px "Inter", sans-serif';
+        ctx.fillText("SerenitySearch", 160, 920);
+
+        // Convert to image and prompt download
+        const link = document.createElement('a');
+        link.download = `SerenityQuote_${Date.now()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast("Image saved!");
+    }
+
+    // --- 11th Step Timer Logic ---
+    function updateTimerDisplay() {
+        const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+        const s = (timerSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('timer-display').innerText = `${m}:${s}`;
+    }
+
+    function adjustTimer(dir) {
+        if (isTimerRunning) return;
+        triggerHaptic();
+        timerSeconds += dir * 60;
+        if (timerSeconds < 60) timerSeconds = 60;
+        if (timerSeconds > 3600) timerSeconds = 3600;
+        timerInitialSeconds = timerSeconds;
+        updateTimerDisplay();
+    }
+
+    function toggleTimer() {
+        triggerHaptic('heavy');
+        const btn = document.getElementById('timer-btn');
+        if (isTimerRunning) {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            btn.innerText = "Resume";
+            btn.classList.replace('bg-app-card', 'bg-app-brand');
+            btn.classList.replace('text-app-text', 'text-app-card');
+            btn.classList.replace('border-app-brand', 'border-transparent');
+        } else {
+            isTimerRunning = true;
+            btn.innerText = "Pause";
+            btn.classList.replace('bg-app-brand', 'bg-app-card');
+            btn.classList.replace('text-app-card', 'text-app-text');
+            btn.classList.replace('border-transparent', 'border-app-brand');
+            
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    isTimerRunning = false;
+                    timerSeconds = timerInitialSeconds;
+                    btn.innerText = "Start";
+                    btn.classList.replace('bg-app-card', 'bg-app-brand');
+                    btn.classList.replace('text-app-text', 'text-app-card');
+                    btn.classList.replace('border-app-brand', 'border-transparent');
+                    updateTimerDisplay();
+                    playMeditationChime();
+                }
+            }, 1000);
+        }
+    }
+
+    // Completely Native, Zero-File Web Audio Synthesizer
+    function playMeditationChime() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const masterGain = ctx.createGain();
+            masterGain.connect(ctx.destination);
+            
+            const strikeOsc = ctx.createOscillator();
+            const strikeGain = ctx.createGain();
+            strikeOsc.type = 'sine';
+            strikeOsc.frequency.setValueAtTime(800, ctx.currentTime);
+            strikeOsc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.1);
+            strikeGain.gain.setValueAtTime(0, ctx.currentTime);
+            strikeGain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.02);
+            strikeGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+            strikeOsc.connect(strikeGain);
+            strikeGain.connect(masterGain);
+            strikeOsc.start();
+            strikeOsc.stop(ctx.currentTime + 0.5);
+
+            const sustainOsc = ctx.createOscillator();
+            const sustainGain = ctx.createGain();
+            sustainOsc.type = 'sine';
+            sustainOsc.frequency.setValueAtTime(432, ctx.currentTime); // 432Hz calming frequency
+            sustainGain.gain.setValueAtTime(0, ctx.currentTime);
+            sustainGain.gain.linearRampToValueAtTime(0.8, ctx.currentTime + 0.1);
+            sustainGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 6.0);
+            sustainOsc.connect(sustainGain);
+            sustainGain.connect(masterGain);
+            sustainOsc.start();
+            sustainOsc.stop(ctx.currentTime + 6.0);
+        } catch(e) { console.log("Web Audio not supported in this environment"); }
+    }
+
 
     function getApiKey() { return localStorage.getItem('serenity_api_key') || ""; }
     
@@ -902,11 +1071,9 @@
       if (!header) return;
       
       if (window.scrollY > 20) {
-        // User has scrolled down: Add Glass, Border, and Shadow
         header.classList.remove('bg-app-bg', 'border-transparent');
         header.classList.add('glass-nav', 'bg-app-bg/80', 'border-app-border', 'shadow-sm');
       } else {
-        // User is at the top: Make it flat and seamless
         header.classList.add('bg-app-bg', 'border-transparent');
         header.classList.remove('glass-nav', 'bg-app-bg/80', 'border-app-border', 'shadow-sm');
       }
@@ -914,13 +1081,11 @@
     
     // Update the phone's native status bar to match the app theme
     function updateStatusBarColor() {
-      // 50ms timeout ensures the browser's CSS paint cycle has completely finished
       setTimeout(() => {
-        // Grab the exact rendered RGB background color of the app
-        const bodyColor = getComputedStyle(document.body).backgroundColor;
+        const currentBgColor = getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim();
         const metaTheme = document.querySelector('meta[name="theme-color"]');
-        if (metaTheme && bodyColor) {
-          metaTheme.setAttribute('content', bodyColor);
+        if (metaTheme && currentBgColor) {
+          metaTheme.setAttribute('content', currentBgColor);
         }
       }, 50);
     }
@@ -935,8 +1100,6 @@
         html.classList.add('dark'); 
         try { localStorage.setItem('theme-mode', 'dark'); } catch(e) {} 
       }
-      
-      // Force the status bar to update immediately
       updateStatusBarColor();
     }
 
@@ -950,12 +1113,9 @@
       const headerSelect = document.getElementById('header-theme-switcher');
       if (headerSelect) headerSelect.value = themeClass;
       try { localStorage.setItem('color-theme', themeClass); } catch(e) {}
-      
-      // Force the status bar to update immediately
       updateStatusBarColor();
     }
 
-    // Dynamic Font Scaler
     let currentFontSize = parseInt(localStorage.getItem('serenity_font_size')) || 16;
     
     function changeFontSize(action) {
@@ -970,8 +1130,7 @@
     
     function toggleSerenityPrayerModal() {
       triggerHaptic();
-      document.getElementById('serenity-modal').classList.toggle('hidden'); 
-    }
+      document.getElementById('serenity-modal').classList.toggle('hidden'); }
 
     var TWELVE_STEPS = [
       { step: 1, title: "Honesty", text: "We admitted we were powerless over alcohol—that our lives had become unmanageable.", query: "Step 1 Powerlessness" },
@@ -1042,16 +1201,10 @@
     // Haptic Feedback Utility
     function triggerHaptic(type = 'light') {
       if (!navigator.vibrate) return;
-      
-      if (type === 'light') {
-        navigator.vibrate(15);
-      } else if (type === 'success') {
-        navigator.vibrate([20, 50, 20]);
-      } else if (type === 'heavy') {
-        navigator.vibrate([50, 100, 50]);
-      }
+      if (type === 'light') { navigator.vibrate(15); } 
+      else if (type === 'success') { navigator.vibrate([20, 50, 20]); } 
+      else if (type === 'heavy') { navigator.vibrate([50, 100, 50]); }
     }
-    
     window.triggerHaptic = triggerHaptic;
     
    function dismissDisclaimer() {
@@ -1062,85 +1215,13 @@
         try { localStorage.setItem('serenity_disclaimer_dismissed', 'true'); } catch(e) {}
       }
     }
-
-    // ==========================================
-    // CLOUD SYNC INITIALIZATION
-    // ==========================================
-    async function initCloudSync() {
-      if (typeof __firebase_config === 'undefined' || !__firebase_config) return;
-
-      try {
-          const appId = typeof __app_id !== 'undefined' ? __app_id : 'serenity-search';
-          const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
-          const { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
-          const { getFirestore, doc, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
-
-          const firebaseConfig = JSON.parse(__firebase_config);
-          const app = initializeApp(firebaseConfig);
-          fbAuth = getAuth(app);
-          fbDb = getFirestore(app);
-
-          // Strictly Authenticate First
-          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-              await signInWithCustomToken(fbAuth, __initial_auth_token);
-          } else {
-              await signInAnonymously(fbAuth);
-          }
-
-          onAuthStateChanged(fbAuth, async (user) => {
-              fbUser = user;
-              if (user && fbDb) {
-                  // Fetch library on boot silently
-                  try {
-                      const docRef = doc(fbDb, 'artifacts', appId, 'users', user.uid, 'library', 'savedData');
-                      const snap = await getDoc(docRef);
-                      if (snap.exists()) {
-                          const data = snap.data();
-                          // Keep the larger library array if there is a discrepancy
-                          if (data.passages && data.passages.length > savedPassages.length) {
-                              savedPassages = data.passages;
-                              try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
-                              updateSavedCount();
-                              if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
-                          }
-                      }
-                  } catch(e) { console.error("Cloud fetch sync error", e); }
-              }
-          });
-      } catch(e) {
-          console.error("Cloud Sync Setup Failed:", e);
-      }
-    }
-
-    async function syncLibraryToCloud() {
-        if (!fbUser || !fbDb) return;
-        try {
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'serenity-search';
-            const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
-            const docRef = doc(fbDb, 'artifacts', appId, 'users', fbUser.uid, 'library', 'savedData');
-            // Write to Firestore replacing existing sync document
-            await setDoc(docRef, { passages: savedPassages, updatedAt: Date.now() });
-        } catch(e) {
-            console.error("Cloud sync save error", e);
-        }
-    }
-
+    
     function initApp() {
       if (window.__serenityInitialized) return; 
 
-      // PWA Shortcut & Share Target Router
       const urlParams = new URLSearchParams(window.location.search);
-      const sharedTitle = urlParams.get('title');
-      const sharedText = urlParams.get('text');
       const tabParam = urlParams.get('tab');
-      
-      if (sharedText || sharedTitle) {
-        // Catcher for Native Web Share Target
-        window.history.replaceState(null, '', window.location.pathname);
-        switchTab('tenth');
-        document.getElementById('tenth-input').value = (sharedTitle ? sharedTitle + "\n\n" : "") + (sharedText || "");
-        triggerHaptic('success');
-      } else if (tabParam) {
+      if (tabParam) {
         window.history.replaceState(null, '', window.location.pathname);
         switchTab(tabParam);
       }
@@ -1154,12 +1235,10 @@
       renderStepsGrid();
       initFilterMenu();
       updateCounters();
-      initCloudSync(); // Kick off silent Firebase sync
       if(getApiKey()) initTopicTab();
       updateStatusBarColor();
       window.__serenityInitialized = true;
     }
-    
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initApp);
     else setTimeout(initApp, 50);
 
@@ -1174,7 +1253,8 @@
       const activeBtn = document.getElementById(`nav-${tabName}`); if (activeBtn) activeBtn.classList.add('active');
       const activeMobBtn = document.getElementById(`mob-nav-${tabName}`); if (activeMobBtn) activeMobBtn.className = "mob-nav-btn text-app-brand flex flex-col items-center gap-1 p-2 transition-colors";
       if (tabName === 'saved') renderSavedList();
-     if (tabName === 'topics' && !document.getElementById('topics-result').innerHTML && getApiKey()) initTopicTab();
+      if (tabName === 'tenth') setTenthTab('write'); // Reset view to write
+      if (tabName === 'topics' && !document.getElementById('topics-result').innerHTML && getApiKey()) initTopicTab();
     }
 
     function setQuickSearch(queryText) { switchTab('search'); document.getElementById('search-input').value = queryText; performSearch(queryText); }
@@ -1253,6 +1333,7 @@
       r.innerHTML = ''; 
       l.classList.remove('hidden');
       
+      // Fast chunked search
       fetchSearchBatch(query, 3, [], true);
     }
 
@@ -1365,13 +1446,86 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
       });
     }
 
+    // --- 10th Step Logic ---
+    function setTenthTab(tab) {
+        document.getElementById('tenth-write-section').classList.toggle('hidden', tab !== 'write');
+        document.getElementById('tenth-insights-section').classList.toggle('hidden', tab !== 'insights');
+        
+        document.getElementById('tenth-tab-write').className = tab === 'write' ? "px-6 py-2 bg-app-brand text-app-card rounded-full text-sm font-bold shadow-sm transition-colors" : "px-6 py-2 bg-app-bg border border-app-border text-app-text hover:border-app-brand rounded-full text-sm font-bold shadow-sm transition-colors";
+        document.getElementById('tenth-tab-insights').className = tab === 'insights' ? "px-6 py-2 bg-app-brand text-app-card rounded-full text-sm font-bold shadow-sm transition-colors" : "px-6 py-2 bg-app-bg border border-app-border text-app-text hover:border-app-brand rounded-full text-sm font-bold shadow-sm transition-colors";
+        
+        if (tab === 'insights') renderDefectsChart();
+    }
+
+    function renderDefectsChart() {
+        const tenths = savedPassages.filter(p => p.type === 'tenth' && p.primaryDefect);
+        const emptyState = document.getElementById('defects-empty-state');
+        const canvas = document.getElementById('defectsChart');
+
+        if (tenths.length === 0) {
+            emptyState.classList.remove('hidden');
+            canvas.style.opacity = '0';
+            return;
+        } else {
+            emptyState.classList.add('hidden');
+            canvas.style.opacity = '1';
+        }
+
+        const counts = {};
+        tenths.forEach(t => {
+            const defect = t.primaryDefect.trim().toUpperCase();
+            counts[defect] = (counts[defect] || 0) + 1;
+        });
+        
+        const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 6); // Top 6 defects
+        const labels = sorted.map(i => i[0]);
+        const data = sorted.map(i => i[1]);
+
+        const ctx = canvas.getContext('2d');
+        if (defectsChartInstance) defectsChartInstance.destroy();
+        
+        const rootStyle = getComputedStyle(document.documentElement);
+        const brandColor = rootStyle.getPropertyValue('--color-brand').trim() || '#B58C3D';
+        const textColor = rootStyle.getPropertyValue('--color-text').trim() || '#18181b';
+        
+        Chart.defaults.color = textColor;
+        Chart.defaults.font.family = "'Inter', sans-serif";
+
+        defectsChartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        brandColor, 
+                        brandColor + 'CC', 
+                        brandColor + '99', 
+                        brandColor + '66', 
+                        brandColor + '33', 
+                        brandColor + '1A'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { position: 'right', labels: { boxWidth: 12, padding: 15, font: {size: 11, weight: 'bold'} } },
+                }
+            }
+        });
+    }
+
     async function processTenthStep(e) {
       e.preventDefault(); const apiKey = getApiKey(); if (!apiKey) { toggleSettingsModal(); return; }
       const text = document.getElementById('tenth-input').value.trim(); if(!text) return;
       saveToDailyMemory('tenth_step', text);
       const l = document.getElementById('tenth-loading'); const r = document.getElementById('tenth-result'); r.classList.add('hidden'); l.classList.remove('hidden');
-      const prompt = `You are a wise A.A. Serenity Sponsor processing a 10th Step Spot Check: "${text}". Respond in valid JSON matching the schema.`;
-      const sch = { type: "OBJECT", properties: { validation: { type: "STRING" }, theTurnaround: { type: "STRING" }, actionStep: { type: "STRING" } }, required: ["validation", "theTurnaround", "actionStep"] };
+      const prompt = `You are a wise A.A. Serenity Sponsor processing a 10th Step Spot Check: "${text}". Categorize the core character defect in ONE single word (e.g., Resentment, Fear, Ego, Self-Pity) under 'primaryDefect'. Respond in valid JSON matching the schema.`;
+      const sch = { type: "OBJECT", properties: { validation: { type: "STRING" }, theTurnaround: { type: "STRING" }, actionStep: { type: "STRING" }, primaryDefect: { type: "STRING" } }, required: ["validation", "theTurnaround", "actionStep", "primaryDefect"] };
       try {
         const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", responseSchema: sch } };
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
@@ -1390,7 +1544,13 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
                 <button onclick="toggleSaveItemById('${itemId}', this)" class="w-8 h-8 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center"><i class="fa-regular fa-bookmark text-xs"></i></button>
               </div>
               <div class="space-y-6 relative z-10 pt-4">
-                <div><h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">Validation</h4><p class="text-app-text font-medium pr-16">${resObj.validation}</p></div>
+                <div>
+                  <div class="flex justify-between items-center mb-1 pr-24">
+                    <h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest">Validation</h4>
+                    ${resObj.primaryDefect ? `<span class="inline-block px-2 py-0.5 bg-app-brandSoft text-app-brand text-[8px] font-bold uppercase tracking-widest rounded-full shadow-sm">${resObj.primaryDefect}</span>` : ''}
+                  </div>
+                  <p class="text-app-text font-medium pr-16">${resObj.validation}</p>
+                </div>
                 <div class="w-8 h-[1px] bg-app-border"></div>
                 <div><h4 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-1">The Turnaround</h4><p class="text-app-text font-serif italic text-lg leading-relaxed">"${resObj.theTurnaround}"</p></div>
                 <div class="w-8 h-[1px] bg-app-border"></div>
@@ -1403,7 +1563,8 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
         l.classList.add('hidden'); r.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl border border-red-200 text-center"><p class="text-red-600 font-bold text-sm mb-2">Error</p><p class="text-red-600 text-xs">${err.message}</p></div>`; r.classList.remove('hidden');
       }
     }
-    
+
+    // --- TOPIC GENERATION & STORAGE LOGIC ---
     function renderTopicHTML(item, isTailored, itemId) {
       const c = document.getElementById('topics-result');
       globalMemoryStore[itemId] = item; 
@@ -1503,7 +1664,7 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     }
 
    function toggleSaveItemById(itemId, btnElement) {
-    triggerHaptic();
+     triggerHaptic();
     const item = globalMemoryStore[itemId];
     if (!item) return;
     
@@ -1529,7 +1690,6 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     
     try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
     updateSavedCount();
-    syncLibraryToCloud(); // Fire & forget backup
     if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
 
     if (btnElement) {
@@ -1557,7 +1717,6 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
         savedPassages.splice(trueIndex, 1);
         try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
         updateSavedCount();
-        syncLibraryToCloud();
         renderSavedList();
         showToast("Removed from library.");
       }
@@ -1572,7 +1731,6 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
       savedPassages = itemsToKeep;
       try { localStorage.setItem('serenity_saved', JSON.stringify(savedPassages)); } catch(e) {}
       updateSavedCount();
-      syncLibraryToCloud();
       renderSavedList();
       showToast("Library cleared.");
     }
@@ -1610,8 +1768,9 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
       filteredItems.forEach((item, idx) => {
         let content = '';
         if (currentSavedTab === 'tenth') {
-          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-2">Spot Check</span>
-                     <p class="font-bold text-app-text text-sm mb-2">${item.validation}</p>
+          let defectBadge = item.primaryDefect ? `<span class="inline-block px-2 py-0.5 bg-app-brandSoft text-app-brand text-[8px] font-bold uppercase tracking-widest rounded-full float-right">${item.primaryDefect}</span>` : '';
+          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-2 w-full">Spot Check ${defectBadge}</span>
+                     <p class="font-bold text-app-text text-sm mb-2 clear-right">${item.validation}</p>
                      <p class="text-sm text-app-muted font-serif italic mb-3 border-l-2 border-app-brand pl-3">"${item.theTurnaround}"</p>
                      <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">Next Right Thing</span>
                      <p class="text-sm text-app-text">${item.actionStep}</p>`;
@@ -1638,7 +1797,10 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
             </div>
             <div class="swipe-card relative z-10 w-full p-5 bg-app-card rounded-xl border border-app-border flex justify-between items-start gap-4 transition-transform duration-200" style="touch-action: pan-y;">
               <div class="overflow-hidden w-full pointer-events-none">${content}</div>
-              <button onclick="removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors shrink-0 mt-1 pointer-events-auto"><i class="fa-solid fa-trash-can"></i></button>
+              <div class="flex flex-col gap-5 shrink-0 mt-1 pointer-events-auto items-center">
+                <button onclick="removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                <button onclick="downloadQuoteCard(${idx})" class="text-app-muted hover:text-app-brand transition-colors" title="Download Image"><i class="fa-solid fa-image"></i></button>
+              </div>
             </div>
           </div>
         `);
@@ -1884,7 +2046,6 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
             localStorage.setItem('serenity_saved', JSON.stringify(savedPassages));
             savedPassages.forEach((item, idx) => { globalMemoryStore['imported_' + idx] = item; });
             updateSavedCount();
-            syncLibraryToCloud(); // Backup freshly imported data to cloud
             if (!document.getElementById('tab-saved').classList.contains('hidden')) renderSavedList();
           }
           if (data.memory) localStorage.setItem('serenity_daily_memory', JSON.stringify(data.memory));
@@ -1920,6 +2081,8 @@ let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Li
     window.processTenthStep = processTenthStep; window.generateTopic = generateTopic; window.setSavedTab = setSavedTab;
     window.openStepModal = openStepModal; window.closeStepModal = closeStepModal; window.searchStep = searchStep;
     window.exportData = exportData; window.importData = importData; window.shareItem = shareItem; window.initTopicTab = initTopicTab;
+    window.downloadQuoteCard = downloadQuoteCard; window.setTenthTab = setTenthTab; window.renderDefectsChart = renderDefectsChart;
+    window.adjustTimer = adjustTimer; window.toggleTimer = toggleTimer; window.playMeditationChime = playMeditationChime;
   
     // ==========================================
     // NATIVE SWIPE-TO-DELETE GESTURES
