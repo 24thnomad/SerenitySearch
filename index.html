@@ -882,12 +882,13 @@
     
     // Update the phone's native status bar to match the app theme
     function updateStatusBarColor() {
-      // Small timeout ensures the CSS class has fully applied first
+      // 50ms timeout ensures the browser's CSS paint cycle has completely finished
       setTimeout(() => {
-        const currentBgColor = getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim();
+        // Grab the exact rendered RGB background color of the app body
+        const bodyColor = getComputedStyle(document.body).backgroundColor;
         const metaTheme = document.querySelector('meta[name="theme-color"]');
-        if (metaTheme && currentBgColor) {
-          metaTheme.setAttribute('content', currentBgColor);
+        if (metaTheme && bodyColor) {
+          metaTheme.setAttribute('content', bodyColor);
         }
       }, 50);
     }
