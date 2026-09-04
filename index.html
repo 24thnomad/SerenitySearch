@@ -543,6 +543,7 @@
             </button>
           </div>
           <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-4 py-3 rounded-xl bg-app-bg border border-app-border text-app-text focus:outline-none focus:border-app-brand focus:ring-1 focus:ring-app-brand shadow-inner transition-all">
+          <p class="text-[9px] text-app-muted mt-1.5 uppercase tracking-widest"><i class="fa-solid fa-shield-halved mr-1"></i>Stored securely on this device only</p>
         </div>
         
         <div class="w-full h-px bg-app-border my-4"></div>
@@ -590,7 +591,7 @@
         <div class="w-full h-px bg-app-border my-4"></div>
         <div class="flex items-center justify-between mb-2">
             <h4 class="text-xs font-bold text-app-brand uppercase tracking-widest">Manual Backup</h4>
-            <span class="text-[10px] text-app-muted italic"><i class="fa-solid fa-cloud text-app-brand mr-1"></i>Cloud sync active</span>
+            <span class="text-[10px] text-app-brand font-bold italic"><i class="fa-solid fa-cloud mr-1"></i>Library Sync Active</span>
         </div>
         <div class="flex gap-3">
           <button onclick="exportData()" class="flex-1 py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-app-brand shadow-sm">
@@ -621,8 +622,8 @@
         
         <div class="w-full shrink-0 flex flex-col">
           <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4 pt-10 sm:pt-4">
-            <!-- Add fallback div styling in case image fails to load -->
-            <div class="flex flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
+            <img src="screenshot1.png" alt="Install App" class="w-full h-full object-contain drop-shadow-md" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="hidden flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
                 <i class="fa-solid fa-mobile-screen text-4xl mb-3 text-app-brand"></i>
                 <span class="text-sm font-bold uppercase tracking-widest">Install App</span>
             </div>
@@ -636,7 +637,8 @@
 
         <div class="w-full shrink-0 flex flex-col">
           <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4 pt-10 sm:pt-4">
-            <div class="flex flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
+            <img src="screenshot2.png" alt="API Setup" class="w-full h-full object-contain drop-shadow-md" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="hidden flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
                 <i class="fa-solid fa-key text-4xl mb-3 text-app-brand"></i>
                 <span class="text-sm font-bold uppercase tracking-widest">API Configuration</span>
             </div>
@@ -654,7 +656,8 @@
 
         <div class="w-full shrink-0 flex flex-col">
           <div class="h-80 bg-app-bg flex items-center justify-center overflow-hidden border-b border-app-border p-4 pt-10 sm:pt-4">
-            <div class="flex flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
+            <img src="screenshot3.png" alt="Accessibility" class="w-full h-full object-contain drop-shadow-md" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="hidden flex-col items-center justify-center text-app-muted w-full h-full rounded-lg bg-app-card border border-app-border shadow-sm">
                 <i class="fa-solid fa-glasses text-4xl mb-3 text-app-brand"></i>
                 <span class="text-sm font-bold uppercase tracking-widest">Accessibility Options</span>
             </div>
