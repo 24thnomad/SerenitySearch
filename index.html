@@ -903,7 +903,7 @@
         try { localStorage.setItem('theme-mode', 'dark'); } catch(e) {} 
       }
       
-      // "Call" the function to apply the status bar change immediately
+      // Force the status bar to update immediately
       updateStatusBarColor();
     }
 
@@ -918,7 +918,7 @@
       if (headerSelect) headerSelect.value = themeClass;
       try { localStorage.setItem('color-theme', themeClass); } catch(e) {}
       
-      // "Call" the function to apply the status bar change immediately
+      // Force the status bar to update immediately
       updateStatusBarColor();
     }
 
@@ -1060,6 +1060,7 @@
       initFilterMenu();
       updateCounters();
       if(getApiKey()) initTopicTab();
+      updateStatusBarColor();
       window.__serenityInitialized = true;
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initApp);
