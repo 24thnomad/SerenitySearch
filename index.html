@@ -499,10 +499,9 @@
 
   </main>
 
-  <div id="serenity-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-app-card w-full sm:max-w-md p-8 rounded-t-3xl sm:rounded-2xl rounded-b-none sm:border border-t border-app-border shadow-2xl relative text-center transition-transform transform translate-y-0">
-      <div class="w-12 h-1.5 bg-app-border rounded-full mx-auto mb-6 sm:hidden"></div>
-      <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
+ <div id="serenity-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-app-card max-w-md w-full p-8 rounded-2xl border border-app-border shadow-2xl relative text-center">
+      <button onclick="toggleSerenityPrayerModal()" class="absolute top-4 right-4 text-app-muted hover:text-app-text transition-colors text-xl"><i class="fa-solid fa-xmark"></i></button>
       
       <i class="fa-solid fa-dove text-app-brand text-3xl mb-4"></i>
       <h3 class="text-sm font-bold text-app-text mb-4 uppercase tracking-widest">The Serenity Prayer</h3>
@@ -526,7 +525,7 @@
           <span class="flex items-center gap-2"><i class="fa-solid fa-book-open text-app-muted group-hover:text-app-brand transition-colors"></i> Thought for the Day</span><i class="fa-solid fa-arrow-up-right-from-square text-app-muted text-xs"></i>
         </a>
       </div>
-      <button onclick="toggleSerenityPrayerModal()" class="w-full py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover">Close</button>
+      <button onclick="toggleSerenityPrayerModal()" class="w-full py-3 bg-app-brand text-app-card font-bold rounded-xl text-sm transition-all hover:bg-app-brandHover shadow-sm">Close</button>
     </div>
   </div>
 
