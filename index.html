@@ -69,30 +69,25 @@
   </script>
   
   <style>
-    /* Smooth transitions for theme switching */
     body, div, p, h1, h2, h3, button, header, input, select, textarea, a, span {
       transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
     }
 
     .glass-nav { backdrop-filter: saturate(180%) blur(20px); }
     
-    /* Forces the mobile nav to pad itself above the phone's physical home bar */
     @supports (padding-bottom: env(safe-area-inset-bottom)) {
       .glass-nav {
         padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 20px)) !important;
       }
     }
     
-    /* Nav Button Active States */
     .nav-btn.active { background-color: var(--color-card); box-shadow: 0 1px 3px rgba(0,0,0,0.1); color: var(--color-brand); }
     .dark .nav-btn.active { box-shadow: 0 1px 3px rgba(0,0,0,0.5); }
     
-    /* Custom Scrollbar */
     .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: var(--color-border); border-radius: 10px; }
     
-    /* Hover Effects */
     .sleek-card { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.4s ease; }
     .sleek-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
     .dark .sleek-card:hover { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
@@ -362,7 +357,7 @@
     <section id="tab-steps" class="hidden space-y-8">
       <div class="text-center py-8">
         <h2 class="text-3xl font-bold font-serif text-app-text">The Twelve Steps</h2>
-        <p class="text-app-muted mt-2">Select a step to read its principle and explore related literature.</p>
+        <p class="text-app-muted mt-2 max-w-lg mx-auto text-sm">Select a step to explore its principles, or set it as your current focus to personalize your AI insights and daily inventory.</p>
       </div>
       <div id="steps-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </section>
@@ -481,13 +476,25 @@
         </button>
       </div>
       
-      <div class="flex gap-2 mb-2 overflow-x-auto custom-scrollbar pb-2">
-        <button onclick="setSavedTab('literature')" id="saved-tab-literature" class="px-5 py-2 bg-app-brand text-app-card rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">Library</button>
-        <button onclick="setSavedTab('tenth')" id="saved-tab-tenth" class="px-5 py-2 bg-app-bg border border-app-border text-app-text hover:border-app-brand rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">Spot Checks</button>
-        <button onclick="setSavedTab('topic')" id="saved-tab-topic" class="px-5 py-2 bg-app-bg border border-app-border text-app-text hover:border-app-brand rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">Topics</button>
-      </div>
+      <div class="flex flex-col lg:flex-row gap-8 items-start relative">
+        
+        <div class="w-full lg:w-5/12 shrink-0 flex flex-col space-y-4">
+          <div class="flex gap-2 mb-2 overflow-x-auto custom-scrollbar pb-2">
+            <button onclick="setSavedTab('literature')" id="saved-tab-literature" class="px-5 py-2 bg-app-brand text-app-card rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">Library</button>
+            <button onclick="setSavedTab('tenth')" id="saved-tab-tenth" class="px-5 py-2 bg-app-bg border border-app-border text-app-text hover:border-app-brand rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">Spot Checks</button>
+            <button onclick="setSavedTab('topic')" id="saved-tab-topic" class="px-5 py-2 bg-app-bg border border-app-border text-app-text hover:border-app-brand rounded-full text-xs font-bold whitespace-nowrap shadow-sm transition-colors">Topics</button>
+          </div>
+          <div id="saved-list" class="space-y-4 h-auto lg:h-[60vh] overflow-y-visible lg:overflow-y-auto custom-scrollbar pr-0 lg:pr-2 pb-12"></div>
+        </div>
 
-      <div id="saved-list" class="space-y-4 mt-4"></div>
+        <div class="hidden lg:flex flex-1 sticky top-24 bg-app-card border border-app-border rounded-2xl p-8 min-h-[60vh] flex-col transition-all" id="saved-detail-pane">
+           <div class="flex flex-col items-center justify-center w-full h-full text-center m-auto">
+             <i class="fa-regular fa-bookmark text-4xl text-app-border mb-4"></i>
+             <p class="text-app-muted italic text-sm">Select an item from your library to view its details, read aloud, or generate a quote card.</p>
+           </div>
+        </div>
+
+      </div>
     </section>
 
   </main>
@@ -705,7 +712,6 @@
 
     let defectsChartInstance = null;
 
-    // --- HTML5 Canvas Utilities for Visual Quote Cards ---
     if (!CanvasRenderingContext2D.prototype.roundRect) {
         CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
             if (typeof r === 'undefined') r = 0;
@@ -725,7 +731,6 @@
         }
     }
 
-    // Top-baseline wrap text function
     function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
         const textClean = text.replace(/\n/g, ' ');
         const words = textClean.split(' ');
@@ -758,7 +763,6 @@
         const textColor = rootStyle.getPropertyValue('--color-text').trim() || '#18181b';
         const mutedColor = rootStyle.getPropertyValue('--color-muted').trim() || '#52525b';
 
-        // Dynamically build content blocks
         const blocks = [];
         if (item.type === 'topic') {
             blocks.push({ text: "MEETING TOPIC", font: 'bold 20px "Inter", sans-serif', color: brandColor, mb: 10 });
@@ -787,11 +791,10 @@
             blocks.push({ text: `— ${item.title}`, font: '32px "Inter", sans-serif', color: mutedColor, mb: 0 });
         }
 
-        // Temporary canvas context for height calculation
         const tempCanvas = document.createElement('canvas');
         const tCtx = tempCanvas.getContext('2d');
-        const maxWidth = 760; // 1080 - 160 (left padding) - 160 (right padding)
-        let computedHeight = 160; // Top padding inside the card border
+        const maxWidth = 760; 
+        let computedHeight = 160; 
 
         blocks.forEach(b => {
             tCtx.font = b.font;
@@ -811,26 +814,23 @@
                     line = testLine;
                 }
             }
-            computedHeight += lineHeight; // Last line of the block
-            computedHeight += b.mb; // Bottom margin
+            computedHeight += lineHeight; 
+            computedHeight += b.mb; 
         });
 
-        computedHeight += 120; // Padding at bottom for SerenitySearch footer inside card
+        computedHeight += 120; 
         
-        // Final Canvas Size
         const cWidth = 1080;
-        const cHeight = Math.max(1080, computedHeight + 160); // +160 to account for top/bottom outer margins (80+80)
+        const cHeight = Math.max(1080, computedHeight + 160); 
 
         const canvas = document.createElement('canvas');
         canvas.width = cWidth;
         canvas.height = cHeight;
         const ctx = canvas.getContext('2d');
 
-        // Draw Background
         ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Draw Card Window
         ctx.fillStyle = cardColor;
         ctx.shadowColor = 'rgba(0,0,0,0.1)';
         ctx.shadowBlur = 40;
@@ -839,16 +839,14 @@
         ctx.fill();
         ctx.shadowColor = 'transparent';
 
-        // Draw Brand Stripe overlay
         ctx.fillStyle = brandColor;
         ctx.beginPath();
         ctx.roundRect(80, 80, 20, cHeight - 160, {tl: 40, bl: 40, tr: 0, br: 0});
         ctx.fill();
 
-        // Draw text blocks
         ctx.textBaseline = 'top';
         ctx.textAlign = 'left';
-        let drawY = 160; // Top padding inside card
+        let drawY = 160; 
         blocks.forEach(b => {
             ctx.fillStyle = b.color;
             ctx.font = b.font;
@@ -858,7 +856,6 @@
             drawY += b.mb;
         });
 
-        // Generate SVG logo and trigger download
         ctx.fillStyle = brandColor;
         ctx.font = 'bold 36px "Inter", sans-serif';
         ctx.textBaseline = 'middle';
@@ -871,7 +868,6 @@
             const rightMargin = cWidth - 160; 
             const textWidth = ctx.measureText("SerenitySearch").width;
             
-            // Draw logo and text side by side aligned to the right margin
             ctx.drawImage(img, rightMargin - textWidth - 65, cHeight - 165, 50, 50);
             ctx.fillText("SerenitySearch", rightMargin, cHeight - 140);
             
@@ -1018,9 +1014,6 @@
        if (headerSelect) headerSelect.value = savedColorTheme;
     });
       
-    // ==========================================
-    // OFFLINE MODE DETECTION
-    // ==========================================
     window.addEventListener('offline', () => {
       triggerHaptic();
       document.getElementById('offline-banner').classList.remove('hidden');
@@ -1043,7 +1036,6 @@
       if (searchMic) { searchMic.parentElement.disabled = false; searchMic.parentElement.classList.remove('opacity-50', 'cursor-not-allowed'); }
     });
 
-    // Scroll-Aware Glass Header Logic
     window.addEventListener('scroll', () => {
       const header = document.getElementById('main-header');
       if (!header) return;
@@ -1057,7 +1049,6 @@
       }
     }, { passive: true });
     
-    // Update the phone's native status bar to match the app theme
     function updateStatusBarColor() {
       setTimeout(() => {
         const currentBgColor = getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim();
@@ -1214,7 +1205,7 @@
     }
 
     var isAppInitialized = false;
-    // Haptic Feedback Utility
+    
     function triggerHaptic(type = 'light') {
       if (!navigator.vibrate) return;
       if (type === 'light') { navigator.vibrate(15); } 
@@ -1240,6 +1231,34 @@
       if (tabParam) {
         window.history.replaceState(null, '', window.location.pathname);
         switchTab(tabParam);
+      }
+
+      // Web Share Target API Interceptor
+      const sharedTitle = urlParams.get('title');
+      const sharedText = urlParams.get('text');
+      const sharedUrl = urlParams.get('url');
+      
+      let incomingShare = '';
+      if (sharedText) incomingShare += sharedText + ' ';
+      if (sharedTitle) incomingShare += sharedTitle + ' ';
+      if (sharedUrl && !incomingShare.includes(sharedUrl)) incomingShare += sharedUrl;
+      incomingShare = incomingShare.trim();
+
+      if (incomingShare) {
+          if (incomingShare.length > 80) {
+              switchTab('tenth');
+              const input = document.getElementById('tenth-input');
+              if (input) input.value = incomingShare;
+              showToast("Text imported to Spot Check.");
+          } else {
+              switchTab('search');
+              const input = document.getElementById('search-input');
+              if (input) {
+                  input.value = incomingShare;
+                  performSearch(incomingShare);
+              }
+          }
+          window.history.replaceState(null, '', window.location.pathname);
       }
 
       if (localStorage.getItem('serenity_disclaimer_dismissed') === 'true') {
@@ -1363,7 +1382,6 @@
       const activeLibs = selectedSources.length === 0 ? LIBRARY_SOURCES.join(", ") : selectedSources.join(", ");
       let sys = `You are SerenitySearch, an expert A.A. literature guide. Available Library: ${LIBRARY_SOURCES.join(", ")}. The user explicitly selected to search ONLY within these books: [${activeLibs}]. You MUST pull quotes explicitly prioritizing variety among the selected books. For the 'literatureSource' field, provide the book name AND the structural location (e.g., "Big Book • Chapter 5" or "12 & 12 • Step Four"). For compilation books like As Bill Sees It and Daily Reflections, identify the core Index Theme instead (e.g., "As Bill Sees It • Theme: Acceptance" or "Daily Reflections • Theme: Humility"). STRICT RULE: NEVER output page numbers, topic numbers, or dates under any circumstances. Return EXACTLY ${count} highly relevant passages.`;
       
-      // Inject Active Focus Step Context for Search
       const activeStepIdx = localStorage.getItem('serenity_active_step');
       if (activeStepIdx !== null) {
           const stepNum = parseInt(activeStepIdx) + 1;
@@ -1470,7 +1488,6 @@
       });
     }
 
-    // --- 10th Step Logic ---
     function setTenthTab(tab) {
         document.getElementById('tenth-write-section').classList.toggle('hidden', tab !== 'write');
         document.getElementById('tenth-insights-section').classList.toggle('hidden', tab !== 'insights');
@@ -1549,7 +1566,6 @@
       saveToDailyMemory('tenth_step', text);
       const l = document.getElementById('tenth-loading'); const r = document.getElementById('tenth-result'); r.classList.add('hidden'); l.classList.remove('hidden');
       
-      // Inject Active Focus Step Context for 10th Step
       const activeStepIdx = localStorage.getItem('serenity_active_step');
       let focusContext = "";
       if (activeStepIdx !== null) {
@@ -1597,7 +1613,6 @@
       }
     }
 
-    // --- TOPIC GENERATION & STORAGE LOGIC ---
     function renderTopicHTML(item, isTailored, itemId) {
       const c = document.getElementById('topics-result');
       globalMemoryStore[itemId] = item; 
@@ -1660,7 +1675,6 @@
         else tail = "No specific recent user input found, generate a highly insightful random topic. ";
       }
 
-      // Inject Active Focus Step Context for Topics
       const activeStepIdx = localStorage.getItem('serenity_active_step');
       let focusContext = "";
       if (activeStepIdx !== null) {
@@ -1795,9 +1809,77 @@
       });
     }
 
+    function showSavedDetail(idx) {
+        triggerHaptic();
+        const item = filteredSavedItems()[idx];
+        if (!item) return;
+        
+        const pane = document.getElementById('saved-detail-pane');
+        if (!pane) return;
+
+        document.querySelectorAll('#saved-list .swipe-card').forEach(c => {
+            c.classList.remove('border-app-brand', 'ring-1', 'ring-app-brand');
+            c.classList.add('border-app-border');
+        });
+        
+        const container = document.querySelector(`#saved-list .swipe-container[data-index="${idx}"]`);
+        if(container) {
+            const card = container.querySelector('.swipe-card');
+            if (card) {
+                card.classList.remove('border-app-border');
+                card.classList.add('border-app-brand', 'ring-1', 'ring-app-brand');
+            }
+        }
+        
+        let fullTextBlock = '';
+        if (currentSavedTab === 'tenth') {
+          let defectBadge = item.primaryDefect ? `<span class="inline-block px-3 py-1 bg-app-brandSoft text-app-brand text-[10px] font-bold uppercase tracking-widest rounded-full float-right">${item.primaryDefect}</span>` : '';
+          fullTextBlock = `<div class="text-left w-full"><span class="text-xs font-bold text-app-brand uppercase tracking-widest block mb-4 w-full">Spot Check ${defectBadge}</span>
+                     <p class="font-bold text-app-text text-xl mb-4 clear-right">${item.validation}</p>
+                     <p class="text-lg text-app-muted font-serif italic mb-6 border-l-4 border-app-brand pl-4">"${item.theTurnaround}"</p>
+                     <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-2">Next Right Thing</span>
+                     <p class="text-base text-app-text">${item.actionStep}</p></div>`;
+        } else if (currentSavedTab === 'topic') {
+          const qHtml = item.questions ? item.questions.map(q => `<li class="flex items-start gap-3"><i class="fa-solid fa-circle-question text-app-brand mt-1.5 text-sm"></i><span class="text-base text-app-text">${q}</span></li>`).join('') : '';
+          fullTextBlock = `<div class="text-left w-full"><span class="text-xs font-bold text-app-brand uppercase tracking-widest block mb-2">Meeting Topic</span>
+                     <h4 class="font-bold text-app-text text-2xl mb-6">${item.title}</h4>
+                     <p class="text-lg text-app-muted font-serif italic border-l-4 border-app-brand pl-4 mb-8">"${item.quote}"</p>
+                     <div class="bg-app-bg p-6 rounded-2xl border border-app-border">
+                       <h5 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-4">Discussion Questions</h5>
+                       <ul class="space-y-4">${qHtml}</ul>
+                     </div></div>`;
+        } else { 
+          fullTextBlock = `<div class="text-left w-full"><span class="text-xs font-bold text-app-brand uppercase tracking-widest block mb-2">${item.literatureSource}</span>
+                     <h4 class="font-bold text-app-text text-2xl mb-6">${item.title}</h4>
+                     <p class="text-xl text-app-text leading-relaxed font-serif italic border-l-4 border-app-brand pl-6">"${item.keyQuote}"</p></div>`;
+        }
+
+        const tempId = 'temp_detail_' + idx;
+        globalMemoryStore[tempId] = item;
+
+        pane.classList.remove('justify-center', 'items-center', 'text-center');
+        pane.classList.add('justify-start', 'items-start');
+
+        pane.innerHTML = `
+            <div class="w-full flex justify-end gap-3 mb-6 border-b border-app-border pb-4 shrink-0">
+                <button onclick="speakText('${tempId}')" class="w-10 h-10 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center" title="Read Aloud"><i class="fa-solid fa-volume-high"></i></button>
+                <button onclick="downloadQuoteCard(${idx})" class="w-10 h-10 rounded-full bg-app-bg text-app-muted hover:text-app-brand border border-app-border hover:border-app-brand transition-colors flex items-center justify-center" title="Download Quote Card"><i class="fa-solid fa-image"></i></button>
+                <button onclick="removeSaved(${idx}); document.getElementById('saved-detail-pane').innerHTML = '<div class=\\'flex flex-col items-center justify-center w-full h-full text-center m-auto\\'><i class=\\'fa-regular fa-bookmark text-4xl text-app-border mb-4\\'></i><p class=\\'text-app-muted italic text-sm\\'>Select an item from your library to view its details, read aloud, or generate a quote card.</p></div>'; document.getElementById('saved-detail-pane').classList.remove('justify-start', 'items-start'); document.getElementById('saved-detail-pane').classList.add('justify-center', 'items-center', 'text-center');" class="w-10 h-10 rounded-full bg-app-bg text-app-muted hover:text-red-500 border border-app-border hover:border-red-500 transition-colors flex items-center justify-center" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+            <div class="overflow-y-auto custom-scrollbar w-full pr-2 flex-1">${fullTextBlock}</div>
+        `;
+    }
+
     function renderSavedList() {
       const c = document.getElementById('saved-list');
       const filteredItems = filteredSavedItems();
+      const detailPane = document.getElementById('saved-detail-pane');
+
+      if(detailPane) {
+         detailPane.classList.remove('justify-start', 'items-start');
+         detailPane.classList.add('justify-center', 'items-center', 'text-center');
+         detailPane.innerHTML = `<div class="flex flex-col items-center justify-center w-full h-full text-center m-auto"><i class="fa-regular fa-bookmark text-4xl text-app-border mb-4"></i><p class="text-app-muted italic text-sm">Select an item from your library to view its details, read aloud, or generate a quote card.</p></div>`;
+      }
 
       if (filteredItems.length === 0) {
         let msg = currentSavedTab === 'tenth' ? "No saved Spot Checks." : currentSavedTab === 'topic' ? "No saved Topics." : "Your library is empty.";
@@ -1807,27 +1889,29 @@
       
       c.innerHTML = '';
       filteredItems.forEach((item, idx) => {
-        let content = '';
+        let titleBlock = '';
+        let fullTextBlock = '';
+        
         if (currentSavedTab === 'tenth') {
           let defectBadge = item.primaryDefect ? `<span class="inline-block px-2 py-0.5 bg-app-brandSoft text-app-brand text-[8px] font-bold uppercase tracking-widest rounded-full float-right">${item.primaryDefect}</span>` : '';
-          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-2 w-full">Spot Check ${defectBadge}</span>
-                     <p class="font-bold text-app-text text-sm mb-2 clear-right">${item.validation}</p>
-                     <p class="text-sm text-app-muted font-serif italic mb-3 border-l-2 border-app-brand pl-3">"${item.theTurnaround}"</p>
+          titleBlock = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-2 w-full">Spot Check ${defectBadge}</span>
+                     <p class="font-bold text-app-text text-sm mb-2 clear-right">${item.validation}</p>`;
+          fullTextBlock = `<p class="text-sm text-app-muted font-serif italic mb-3 border-l-2 border-app-brand pl-3">"${item.theTurnaround}"</p>
                      <span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">Next Right Thing</span>
                      <p class="text-sm text-app-text">${item.actionStep}</p>`;
         } else if (currentSavedTab === 'topic') {
           const qHtml = item.questions ? item.questions.map(q => `<li class="flex items-start gap-2"><i class="fa-solid fa-circle-question text-app-brand mt-1 text-xs"></i><span class="text-sm text-app-text">${q}</span></li>`).join('') : '';
-          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-2">Meeting Topic</span>
-                     <h4 class="font-bold text-app-text text-lg">${item.title}</h4>
-                     <p class="text-sm text-app-muted mt-2 font-serif italic border-l-2 border-app-brand pl-3 mb-4">"${item.quote}"</p>
+          titleBlock = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-2">Meeting Topic</span>
+                     <h4 class="font-bold text-app-text text-lg">${item.title}</h4>`;
+          fullTextBlock = `<p class="text-sm text-app-muted mt-2 font-serif italic border-l-2 border-app-brand pl-3 mb-4">"${item.quote}"</p>
                      <div class="bg-app-bg p-4 rounded-xl border border-app-border mt-3">
                        <h5 class="text-[10px] font-bold text-app-brand uppercase tracking-widest mb-3">Discussion Questions</h5>
                        <ul class="space-y-2">${qHtml}</ul>
                      </div>`;
         } else { 
-          content = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">${item.literatureSource}</span>
-                     <h4 class="font-bold text-app-text">${item.title}</h4>
-                     <p class="text-sm text-app-muted mt-2 font-serif italic">"${item.keyQuote}"</p>`;
+          titleBlock = `<span class="text-[10px] font-bold text-app-brand uppercase tracking-widest block mb-1">${item.literatureSource}</span>
+                     <h4 class="font-bold text-app-text">${item.title}</h4>`;
+          fullTextBlock = `<p class="text-sm text-app-muted mt-2 font-serif italic">"${item.keyQuote}"</p>`;
         }
 
        c.insertAdjacentHTML('beforeend', `
@@ -1836,11 +1920,14 @@
               <span class="text-xs font-bold uppercase tracking-widest mr-3">Delete</span>
               <i class="fa-solid fa-trash-can text-lg"></i>
             </div>
-            <div class="swipe-card relative z-10 w-full p-5 bg-app-card rounded-xl border border-app-border flex justify-between items-start gap-4 transition-transform duration-200" style="touch-action: pan-y;">
-              <div class="overflow-hidden w-full pointer-events-none">${content}</div>
-              <div class="flex flex-col gap-5 shrink-0 mt-1 pointer-events-auto items-center">
-                <button onclick="removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors"><i class="fa-solid fa-trash-can"></i></button>
-                <button onclick="downloadQuoteCard(${idx})" class="text-app-muted hover:text-app-brand transition-colors" title="Download Image"><i class="fa-solid fa-image"></i></button>
+            <div onclick="if(window.innerWidth >= 1024) showSavedDetail(${idx})" class="swipe-card relative z-10 w-full p-5 bg-app-card rounded-xl border border-app-border flex justify-between items-start gap-4 transition-transform duration-200 lg:cursor-pointer lg:hover:border-app-brand" style="touch-action: pan-y;">
+              <div class="overflow-hidden w-full pointer-events-none">
+                ${titleBlock}
+                <div class="lg:line-clamp-3 lg:opacity-75 transition-all mt-2">${fullTextBlock}</div>
+              </div>
+              <div class="flex flex-col gap-5 shrink-0 mt-1 pointer-events-auto items-center lg:hidden">
+                <button onclick="event.stopPropagation(); removeSaved(${idx})" class="text-app-muted hover:text-red-500 transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                <button onclick="event.stopPropagation(); downloadQuoteCard(${idx})" class="text-app-muted hover:text-app-brand transition-colors" title="Download Image"><i class="fa-solid fa-image"></i></button>
               </div>
             </div>
           </div>
@@ -1848,7 +1935,6 @@
       });
     }
 
-    // --- AUDIO WATERFALL LOGIC ---
     async function speakText(itemId) {
       triggerHaptic();
       const apiKey = getApiKey(); 
@@ -1972,7 +2058,6 @@
       w(v, 0, 'RIFF'); v.setUint32(4, 36 + s.length, true); w(v, 8, 'WAVE'); w(v, 12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(v, 36, 'data'); v.setUint32(40, s.length, true); const sv = new Uint8Array(b, 44); sv.set(s); return new Uint8Array(b); 
     }
 
-    // --- GLOBAL DICTATION LOGIC ---
     function showToast(message, isError = false) {
       const container = document.getElementById('toast-container');
       if (!container) return;
@@ -2059,7 +2144,6 @@
       }
     }
 
-    // --- EXPORT / IMPORT / SHARE ---
     function exportData() {
       const data = {
         savedPassages: savedPassages,
@@ -2123,6 +2207,7 @@
     window.openStepModal = openStepModal; window.closeStepModal = closeStepModal; window.searchStep = searchStep;
     window.exportData = exportData; window.importData = importData; window.shareItem = shareItem; window.initTopicTab = initTopicTab;
     window.downloadQuoteCard = downloadQuoteCard; window.setTenthTab = setTenthTab; window.renderDefectsChart = renderDefectsChart;
+    window.showSavedDetail = showSavedDetail;
   
     // ==========================================
     // NATIVE SWIPE-TO-DELETE GESTURES
