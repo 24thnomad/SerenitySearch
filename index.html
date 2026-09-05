@@ -1176,6 +1176,10 @@
             : `<button onclick="setFocusStep(${idx})" class="w-full py-3 bg-app-bg border border-app-border text-app-text font-bold rounded-xl text-sm transition-all hover:border-app-brand shadow-sm flex items-center justify-center gap-2"><i class="fa-regular fa-star text-app-brand"></i> Set as Current Focus</button>`
           }
         </div>
+        <p class="text-[10px] text-app-muted text-center mt-3 leading-relaxed px-4">
+          <i class="fa-solid fa-wand-magic-sparkles text-app-brand mr-1"></i>
+          Setting a focus gently tailors your AI Search, Spot Checks, and Meeting Topics to the principles of this step.
+        </p>
       `;
       
       document.getElementById('step-modal').classList.remove('hidden');
@@ -1186,7 +1190,7 @@
         localStorage.setItem('serenity_active_step', idx);
         renderStepsGrid();
         closeStepModal();
-        showToast(`Step ${TWELVE_STEPS[idx].step} set as current focus.`);
+        showToast(`Step ${TWELVE_STEPS[idx].step} in focus. AI will now personalize your insights.`);
     }
 
     function clearFocusStep() {
